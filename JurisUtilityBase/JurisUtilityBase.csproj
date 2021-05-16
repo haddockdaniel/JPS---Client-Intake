@@ -178,11 +178,11 @@
     <Compile Include="PrinterDialog.Designer.cs">
       <DependentUpon>PrinterDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="ReportDisplay.cs">
+    <Compile Include="PresetManager.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ReportDisplay.Designer.cs">
-      <DependentUpon>ReportDisplay.cs</DependentUpon>
+    <Compile Include="PresetManager.Designer.cs">
+      <DependentUpon>PresetManager.cs</DependentUpon>
     </Compile>
     <Compile Include="UtilityBaseMain.cs">
       <SubType>Form</SubType>
@@ -204,8 +204,8 @@
     <EmbeddedResource Include="PrinterDialog.resx">
       <DependentUpon>PrinterDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ReportDisplay.resx">
-      <DependentUpon>ReportDisplay.cs</DependentUpon>
+    <EmbeddedResource Include="PresetManager.resx">
+      <DependentUpon>PresetManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UtilityBaseMain.resx">
       <DependentUpon>UtilityBaseMain.cs</DependentUpon>

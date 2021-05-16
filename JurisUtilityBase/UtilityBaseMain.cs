@@ -100,7 +100,7 @@ namespace JurisUtilityBase
         {
             string sql = "";
 
-            ClientForm cf = new ClientForm();
+            ClientForm cf = new ClientForm(_jurisUtility);
             cf.ShowDialog();
             if (radioButtonCliOnly.Checked)
             {
