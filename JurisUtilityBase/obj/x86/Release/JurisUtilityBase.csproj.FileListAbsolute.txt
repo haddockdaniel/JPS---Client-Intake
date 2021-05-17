@@ -90,4 +90,4 @@ D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Costura.xml
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JPS - McCabe Trust Fix.exe.manifest
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JPS - McCabe Trust Fix.application
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.csproj.CopyComplete
-D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.DefaultManager.resources
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.PresetManager.resources

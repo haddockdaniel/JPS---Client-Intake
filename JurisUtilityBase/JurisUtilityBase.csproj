@@ -171,6 +171,7 @@
     <Compile Include="ClientForm.Designer.cs">
       <DependentUpon>ClientForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExceptionHandler.cs" />
     <Compile Include="JurisUtility.cs" />
     <Compile Include="PrinterDialog.cs">
       <SubType>Form</SubType>
