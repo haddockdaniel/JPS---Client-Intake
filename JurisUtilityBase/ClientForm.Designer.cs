@@ -44,9 +44,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.textBoxPhone = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
@@ -148,6 +146,8 @@
             this.comboBoxOT5 = new System.Windows.Forms.ComboBox();
             this.comboBoxRT = new System.Windows.Forms.ComboBox();
             this.checkBoxRT = new System.Windows.Forms.CheckBox();
+            this.checkBoxTaskXRef = new System.Windows.Forms.CheckBox();
+            this.checkBoxExpXRef = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -282,16 +282,6 @@
             this.label8.TabIndex = 104;
             this.label8.Text = "Phone Number";
             // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.ForeColor = System.Drawing.Color.Green;
-            this.label9.Location = new System.Drawing.Point(14, 627);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(103, 13);
-            this.label9.TabIndex = 117;
-            this.label9.Text = "Expense Code XRef";
-            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -300,16 +290,6 @@
             this.label10.Size = new System.Drawing.Size(96, 13);
             this.label10.TabIndex = 116;
             this.label10.Text = "Expense Schedule";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.ForeColor = System.Drawing.Color.Green;
-            this.label11.Location = new System.Drawing.Point(14, 571);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(86, 13);
-            this.label11.TabIndex = 115;
-            this.label11.Text = "Task Code XRef";
             // 
             // label12
             // 
@@ -1229,11 +1209,35 @@
             this.checkBoxRT.Text = "Resp Tkpr";
             this.checkBoxRT.UseVisualStyleBackColor = true;
             // 
+            // checkBoxTaskXRef
+            // 
+            this.checkBoxTaskXRef.AutoSize = true;
+            this.checkBoxTaskXRef.ForeColor = System.Drawing.Color.Green;
+            this.checkBoxTaskXRef.Location = new System.Drawing.Point(14, 570);
+            this.checkBoxTaskXRef.Name = "checkBoxTaskXRef";
+            this.checkBoxTaskXRef.Size = new System.Drawing.Size(93, 17);
+            this.checkBoxTaskXRef.TabIndex = 24;
+            this.checkBoxTaskXRef.Text = "Task Cd XRef";
+            this.checkBoxTaskXRef.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxExpXRef
+            // 
+            this.checkBoxExpXRef.AutoSize = true;
+            this.checkBoxExpXRef.ForeColor = System.Drawing.Color.Green;
+            this.checkBoxExpXRef.Location = new System.Drawing.Point(15, 626);
+            this.checkBoxExpXRef.Name = "checkBoxExpXRef";
+            this.checkBoxExpXRef.Size = new System.Drawing.Size(87, 17);
+            this.checkBoxExpXRef.TabIndex = 26;
+            this.checkBoxExpXRef.Text = "Exp Cd XRef";
+            this.checkBoxExpXRef.UseVisualStyleBackColor = true;
+            // 
             // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(786, 769);
+            this.Controls.Add(this.checkBoxExpXRef);
+            this.Controls.Add(this.checkBoxTaskXRef);
             this.Controls.Add(this.checkBoxRT);
             this.Controls.Add(this.comboBoxRT);
             this.Controls.Add(this.textBoxOTPct5);
@@ -1300,9 +1304,7 @@
             this.Controls.Add(this.comboBoxBT);
             this.Controls.Add(this.comboBoxPC);
             this.Controls.Add(this.comboBoxOffice);
-            this.Controls.Add(this.label9);
             this.Controls.Add(this.label10);
-            this.Controls.Add(this.label11);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label14);
@@ -1354,9 +1356,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBoxPhone;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
@@ -1458,5 +1458,7 @@
         private System.Windows.Forms.ComboBox comboBoxOT5;
         private System.Windows.Forms.ComboBox comboBoxRT;
         private System.Windows.Forms.CheckBox checkBoxRT;
+        private System.Windows.Forms.CheckBox checkBoxTaskXRef;
+        private System.Windows.Forms.CheckBox checkBoxExpXRef;
     }
 }

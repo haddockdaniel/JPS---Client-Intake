@@ -70,7 +70,7 @@ namespace JurisUtilityBase
                 comboBoxPC.SelectedIndex = 0;
             }
 
-            //BT and OT
+            //All Tkprs
             comboBoxBT.ClearItems();
             comboBoxOT1.ClearItems();
             comboBoxOT2.ClearItems();
@@ -110,6 +110,61 @@ namespace JurisUtilityBase
                 comboBoxOT5.SelectedIndex = 0;
             }
 
+            //FeeSch
+            string defFeeSched = "";
+            string defExpSch = "";
+            //get default from sysparam
+            myRSPC2.Clear();
+            SQLPC2 = "select SpTxtValue from sysparam where spname = 'CfgTransOpts'";
+            myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
+            if (myRSPC2.Tables[0].Rows.Count == 0)
+            {
+                error = new ExceptionHandler();
+                error.errorMessage = "Fee or Exp Schedule Standard in sysparam invalid (CfgTransOpts). Correct and run the tool again";
+                errorList.Add(error);
+            }
+            else
+            {
+                string[] items = myRSPC2.Tables[0].Rows[0][0].ToString().Split(',');
+                defFeeSched = items[6];
+                defExpSch = items[7];
+            }
+
+            comboBoxFeeSched.ClearItems();
+            myRSPC2.Clear();
+            SQLPC2 = "select FeeSchCode as FS from FeeSchedule where FeeSchActive = 'Y' order by FeeSchCode ";
+            myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
+
+            if (myRSPC2.Tables[0].Rows.Count == 0)
+            {
+                error = new ExceptionHandler();
+                error.errorMessage = "There are no Fee Schedules. Correct and run the tool again";
+                errorList.Add(error);
+            }
+            else
+            {
+                foreach (DataRow dr in myRSPC2.Tables[0].Rows)
+                    comboBoxFeeSched.Items.Add(dr["FS"].ToString());
+                comboBoxFeeSched.SelectedIndex = comboBoxFeeSched.FindStringExact(defFeeSched);
+            }
+
+            comboBoxExpSched.ClearItems();
+            myRSPC2.Clear();
+            SQLPC2 = "select ExpSchCode as ES from ExpenseSchedule order by ExpSchCode";
+            myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
+
+            if (myRSPC2.Tables[0].Rows.Count == 0)
+            {
+                error = new ExceptionHandler();
+                error.errorMessage = "There are no Expense Schedules. Correct and run the tool again";
+                errorList.Add(error);
+            }
+            else
+            {
+                foreach (DataRow dr in myRSPC2.Tables[0].Rows)
+                    comboBoxExpSched.Items.Add(dr["ES"].ToString());
+                comboBoxExpSched.SelectedIndex = comboBoxExpSched.FindStringExact(defExpSch);
+            }
 
 
 
@@ -143,11 +198,10 @@ namespace JurisUtilityBase
 
 
 
-
-
-
-
-
+            //                dtOpen.Visible = checkBoxSetDate.Checked;
+            //NewDR = dtOpen.Value.Date.ToString("MM/dd/yyyy");
+            //if (cbOT.SelectedIndex > 0)
+              //  OT = this.cbOT.GetItemText(this.cbOT.SelectedItem).Split(' ')[0];
         }
 
         private void moveToolStripMenuItem_Click(object sender, EventArgs e)

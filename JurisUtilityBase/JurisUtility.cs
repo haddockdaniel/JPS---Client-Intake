@@ -165,12 +165,21 @@ namespace JurisUtilityBase
         public DataSet ExecuteSqlCommand(int command, string sql)
         {
             DataSet ds = null;
-            _commands[command].CommandText = sql;
-            using (var da = new SqlDataAdapter())
+            try
             {
-                da.SelectCommand = _commands[command];
-                ds = new DataSet();
-                da.Fill(ds);
+                _commands[command].CommandText = sql;
+                using (var da = new SqlDataAdapter())
+                {
+                    da.SelectCommand = _commands[command];
+                    ds = new DataSet();
+                    da.Fill(ds);
+                }
+            }
+            catch (Exception ex111)
+            {
+                MessageBox.Show(sql + "\r\n" + ex111.Message);
+
+
             }
             return ds;
         }
