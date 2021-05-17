@@ -87,20 +87,20 @@
             this.label30 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.comboBoxRetainerType = new System.Windows.Forms.ComboBox();
-            this.label34 = new System.Windows.Forms.Label();
+            this.labelRet = new System.Windows.Forms.Label();
             this.checkBoxIncludeExp = new System.Windows.Forms.CheckBox();
             this.comboBoxExpFreq = new System.Windows.Forms.ComboBox();
             this.comboBoxFeeFreq = new System.Windows.Forms.ComboBox();
             this.label36 = new System.Windows.Forms.Label();
             this.label37 = new System.Windows.Forms.Label();
-            this.label38 = new System.Windows.Forms.Label();
+            this.labelCycle = new System.Windows.Forms.Label();
             this.label39 = new System.Windows.Forms.Label();
             this.textBoxMonth = new System.Windows.Forms.TextBox();
             this.textBoxCycle = new System.Windows.Forms.TextBox();
             this.textBoxExpThresh = new System.Windows.Forms.TextBox();
-            this.label40 = new System.Windows.Forms.Label();
+            this.labelExpThresh = new System.Windows.Forms.Label();
             this.textBoxFeeThresh = new System.Windows.Forms.TextBox();
-            this.label41 = new System.Windows.Forms.Label();
+            this.labelFeeThresh = new System.Windows.Forms.Label();
             this.comboBoxThreshMain = new System.Windows.Forms.ComboBox();
             this.label42 = new System.Windows.Forms.Label();
             this.dateTimePickerOpened = new System.Windows.Forms.DateTimePicker();
@@ -113,9 +113,9 @@
             this.label32 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.textBoxDiscPct = new System.Windows.Forms.TextBox();
-            this.label35 = new System.Windows.Forms.Label();
+            this.labelDPct = new System.Windows.Forms.Label();
             this.textBoxSurPct = new System.Windows.Forms.TextBox();
-            this.label43 = new System.Windows.Forms.Label();
+            this.labelSPct = new System.Windows.Forms.Label();
             this.textBoxIntDays = new System.Windows.Forms.TextBox();
             this.label44 = new System.Windows.Forms.Label();
             this.textBoxIntPct = new System.Windows.Forms.TextBox();
@@ -609,6 +609,7 @@
             this.comboBoxBAgree.Name = "comboBoxBAgree";
             this.comboBoxBAgree.Size = new System.Drawing.Size(121, 21);
             this.comboBoxBAgree.TabIndex = 29;
+            this.comboBoxBAgree.SelectedIndexChanged += new System.EventHandler(this.comboBoxBAgree_SelectedIndexChanged);
             // 
             // comboBoxPreBillLayout
             // 
@@ -660,15 +661,17 @@
             this.comboBoxRetainerType.Name = "comboBoxRetainerType";
             this.comboBoxRetainerType.Size = new System.Drawing.Size(121, 21);
             this.comboBoxRetainerType.TabIndex = 30;
+            this.comboBoxRetainerType.Visible = false;
             // 
-            // label34
+            // labelRet
             // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(14, 739);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(74, 13);
-            this.label34.TabIndex = 151;
-            this.label34.Text = "Retainer Type";
+            this.labelRet.AutoSize = true;
+            this.labelRet.Location = new System.Drawing.Point(14, 739);
+            this.labelRet.Name = "labelRet";
+            this.labelRet.Size = new System.Drawing.Size(74, 13);
+            this.labelRet.TabIndex = 151;
+            this.labelRet.Text = "Retainer Type";
+            this.labelRet.Visible = false;
             // 
             // checkBoxIncludeExp
             // 
@@ -679,6 +682,7 @@
             this.checkBoxIncludeExp.TabIndex = 154;
             this.checkBoxIncludeExp.Text = "Include Expenses";
             this.checkBoxIncludeExp.UseVisualStyleBackColor = true;
+            this.checkBoxIncludeExp.Visible = false;
             // 
             // comboBoxExpFreq
             // 
@@ -687,6 +691,7 @@
             this.comboBoxExpFreq.Name = "comboBoxExpFreq";
             this.comboBoxExpFreq.Size = new System.Drawing.Size(121, 21);
             this.comboBoxExpFreq.TabIndex = 50;
+            this.comboBoxExpFreq.SelectedIndexChanged += new System.EventHandler(this.comboBoxExpFreq_SelectedIndexChanged);
             // 
             // comboBoxFeeFreq
             // 
@@ -695,6 +700,7 @@
             this.comboBoxFeeFreq.Name = "comboBoxFeeFreq";
             this.comboBoxFeeFreq.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFeeFreq.TabIndex = 49;
+            this.comboBoxFeeFreq.SelectedIndexChanged += new System.EventHandler(this.comboBoxFeeFreq_SelectedIndexChanged);
             // 
             // label36
             // 
@@ -714,14 +720,15 @@
             this.label37.TabIndex = 159;
             this.label37.Text = "Fee Frequency";
             // 
-            // label38
+            // labelCycle
             // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(708, 463);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(33, 13);
-            this.label38.TabIndex = 162;
-            this.label38.Text = "Cycle";
+            this.labelCycle.AutoSize = true;
+            this.labelCycle.Location = new System.Drawing.Point(708, 463);
+            this.labelCycle.Name = "labelCycle";
+            this.labelCycle.Size = new System.Drawing.Size(33, 13);
+            this.labelCycle.TabIndex = 162;
+            this.labelCycle.Text = "Cycle";
+            this.labelCycle.Visible = false;
             // 
             // label39
             // 
@@ -739,6 +746,7 @@
             this.textBoxMonth.Name = "textBoxMonth";
             this.textBoxMonth.Size = new System.Drawing.Size(52, 20);
             this.textBoxMonth.TabIndex = 163;
+            this.textBoxMonth.Text = "1";
             // 
             // textBoxCycle
             // 
@@ -747,42 +755,48 @@
             this.textBoxCycle.Name = "textBoxCycle";
             this.textBoxCycle.Size = new System.Drawing.Size(52, 20);
             this.textBoxCycle.TabIndex = 164;
+            this.textBoxCycle.Text = "1";
+            this.textBoxCycle.Visible = false;
             // 
             // textBoxExpThresh
             // 
-            this.textBoxExpThresh.Location = new System.Drawing.Point(517, 592);
+            this.textBoxExpThresh.Location = new System.Drawing.Point(683, 560);
             this.textBoxExpThresh.MaxLength = 12;
             this.textBoxExpThresh.Name = "textBoxExpThresh";
-            this.textBoxExpThresh.Size = new System.Drawing.Size(132, 20);
+            this.textBoxExpThresh.Size = new System.Drawing.Size(83, 20);
             this.textBoxExpThresh.TabIndex = 100;
             this.textBoxExpThresh.Text = "0";
+            this.textBoxExpThresh.Visible = false;
             // 
-            // label40
+            // labelExpThresh
             // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(412, 595);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(98, 13);
-            this.label40.TabIndex = 168;
-            this.label40.Text = "Expense Threshold";
+            this.labelExpThresh.AutoSize = true;
+            this.labelExpThresh.Location = new System.Drawing.Point(606, 563);
+            this.labelExpThresh.Name = "labelExpThresh";
+            this.labelExpThresh.Size = new System.Drawing.Size(75, 13);
+            this.labelExpThresh.TabIndex = 168;
+            this.labelExpThresh.Text = "Exp Threshold";
+            this.labelExpThresh.Visible = false;
             // 
             // textBoxFeeThresh
             // 
             this.textBoxFeeThresh.Location = new System.Drawing.Point(517, 560);
             this.textBoxFeeThresh.MaxLength = 12;
             this.textBoxFeeThresh.Name = "textBoxFeeThresh";
-            this.textBoxFeeThresh.Size = new System.Drawing.Size(132, 20);
+            this.textBoxFeeThresh.Size = new System.Drawing.Size(83, 20);
             this.textBoxFeeThresh.TabIndex = 99;
             this.textBoxFeeThresh.Text = "0";
+            this.textBoxFeeThresh.Visible = false;
             // 
-            // label41
+            // labelFeeThresh
             // 
-            this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(412, 563);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(75, 13);
-            this.label41.TabIndex = 167;
-            this.label41.Text = "Fee Threshold";
+            this.labelFeeThresh.AutoSize = true;
+            this.labelFeeThresh.Location = new System.Drawing.Point(412, 563);
+            this.labelFeeThresh.Name = "labelFeeThresh";
+            this.labelFeeThresh.Size = new System.Drawing.Size(75, 13);
+            this.labelFeeThresh.TabIndex = 167;
+            this.labelFeeThresh.Text = "Fee Threshold";
+            this.labelFeeThresh.Visible = false;
             // 
             // comboBoxThreshMain
             // 
@@ -791,6 +805,7 @@
             this.comboBoxThreshMain.Name = "comboBoxThreshMain";
             this.comboBoxThreshMain.Size = new System.Drawing.Size(246, 21);
             this.comboBoxThreshMain.TabIndex = 51;
+            this.comboBoxThreshMain.SelectedIndexChanged += new System.EventHandler(this.comboBoxThreshMain_SelectedIndexChanged);
             // 
             // label42
             // 
@@ -851,23 +866,25 @@
             // comboBoxSurcharge
             // 
             this.comboBoxSurcharge.FormattingEnabled = true;
-            this.comboBoxSurcharge.Location = new System.Drawing.Point(517, 663);
+            this.comboBoxSurcharge.Location = new System.Drawing.Point(517, 637);
             this.comboBoxSurcharge.Name = "comboBoxSurcharge";
             this.comboBoxSurcharge.Size = new System.Drawing.Size(132, 21);
             this.comboBoxSurcharge.TabIndex = 53;
+            this.comboBoxSurcharge.SelectedIndexChanged += new System.EventHandler(this.comboBoxSurcharge_SelectedIndexChanged);
             // 
             // comboBoxDisc
             // 
             this.comboBoxDisc.FormattingEnabled = true;
-            this.comboBoxDisc.Location = new System.Drawing.Point(517, 628);
+            this.comboBoxDisc.Location = new System.Drawing.Point(517, 602);
             this.comboBoxDisc.Name = "comboBoxDisc";
             this.comboBoxDisc.Size = new System.Drawing.Size(132, 21);
             this.comboBoxDisc.TabIndex = 52;
+            this.comboBoxDisc.SelectedIndexChanged += new System.EventHandler(this.comboBoxDisc_SelectedIndexChanged);
             // 
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(412, 666);
+            this.label32.Location = new System.Drawing.Point(412, 640);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(90, 13);
             this.label32.TabIndex = 175;
@@ -876,7 +893,7 @@
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(412, 631);
+            this.label33.Location = new System.Drawing.Point(412, 605);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(83, 13);
             this.label33.TabIndex = 174;
@@ -884,43 +901,43 @@
             // 
             // textBoxDiscPct
             // 
-            this.textBoxDiscPct.Location = new System.Drawing.Point(665, 628);
+            this.textBoxDiscPct.Location = new System.Drawing.Point(665, 602);
             this.textBoxDiscPct.MaxLength = 6;
             this.textBoxDiscPct.Name = "textBoxDiscPct";
             this.textBoxDiscPct.Size = new System.Drawing.Size(61, 20);
             this.textBoxDiscPct.TabIndex = 177;
             this.textBoxDiscPct.Text = "0";
             // 
-            // label35
+            // labelDPct
             // 
-            this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(664, 612);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(62, 13);
-            this.label35.TabIndex = 176;
-            this.label35.Text = "Percentage";
+            this.labelDPct.AutoSize = true;
+            this.labelDPct.Location = new System.Drawing.Point(664, 586);
+            this.labelDPct.Name = "labelDPct";
+            this.labelDPct.Size = new System.Drawing.Size(62, 13);
+            this.labelDPct.TabIndex = 176;
+            this.labelDPct.Text = "Percentage";
             // 
             // textBoxSurPct
             // 
-            this.textBoxSurPct.Location = new System.Drawing.Point(665, 664);
+            this.textBoxSurPct.Location = new System.Drawing.Point(665, 638);
             this.textBoxSurPct.MaxLength = 6;
             this.textBoxSurPct.Name = "textBoxSurPct";
             this.textBoxSurPct.Size = new System.Drawing.Size(61, 20);
             this.textBoxSurPct.TabIndex = 179;
             this.textBoxSurPct.Text = "0";
             // 
-            // label43
+            // labelSPct
             // 
-            this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(664, 648);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(62, 13);
-            this.label43.TabIndex = 178;
-            this.label43.Text = "Percentage";
+            this.labelSPct.AutoSize = true;
+            this.labelSPct.Location = new System.Drawing.Point(664, 622);
+            this.labelSPct.Name = "labelSPct";
+            this.labelSPct.Size = new System.Drawing.Size(62, 13);
+            this.labelSPct.TabIndex = 178;
+            this.labelSPct.Text = "Percentage";
             // 
             // textBoxIntDays
             // 
-            this.textBoxIntDays.Location = new System.Drawing.Point(517, 703);
+            this.textBoxIntDays.Location = new System.Drawing.Point(517, 677);
             this.textBoxIntDays.MaxLength = 6;
             this.textBoxIntDays.Name = "textBoxIntDays";
             this.textBoxIntDays.Size = new System.Drawing.Size(132, 20);
@@ -930,7 +947,7 @@
             // label44
             // 
             this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(412, 706);
+            this.label44.Location = new System.Drawing.Point(412, 680);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(69, 13);
             this.label44.TabIndex = 181;
@@ -938,7 +955,7 @@
             // 
             // textBoxIntPct
             // 
-            this.textBoxIntPct.Location = new System.Drawing.Point(663, 703);
+            this.textBoxIntPct.Location = new System.Drawing.Point(663, 677);
             this.textBoxIntPct.MaxLength = 6;
             this.textBoxIntPct.Name = "textBoxIntPct";
             this.textBoxIntPct.Size = new System.Drawing.Size(61, 20);
@@ -948,7 +965,7 @@
             // label45
             // 
             this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(662, 687);
+            this.label45.Location = new System.Drawing.Point(662, 661);
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(62, 13);
             this.label45.TabIndex = 182;
@@ -1054,9 +1071,9 @@
             this.buttonCreateClient.BackColor = System.Drawing.Color.LightGray;
             this.buttonCreateClient.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCreateClient.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonCreateClient.Location = new System.Drawing.Point(409, 733);
+            this.buttonCreateClient.Location = new System.Drawing.Point(409, 723);
             this.buttonCreateClient.Name = "buttonCreateClient";
-            this.buttonCreateClient.Size = new System.Drawing.Size(128, 26);
+            this.buttonCreateClient.Size = new System.Drawing.Size(128, 36);
             this.buttonCreateClient.TabIndex = 56;
             this.buttonCreateClient.Text = "Create Client";
             this.buttonCreateClient.UseVisualStyleBackColor = false;
@@ -1067,9 +1084,9 @@
             this.buttonExit.BackColor = System.Drawing.Color.LightGray;
             this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonExit.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonExit.Location = new System.Drawing.Point(625, 732);
+            this.buttonExit.Location = new System.Drawing.Point(625, 723);
             this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(128, 27);
+            this.buttonExit.Size = new System.Drawing.Size(128, 36);
             this.buttonExit.TabIndex = 57;
             this.buttonExit.Text = "Exit";
             this.buttonExit.UseVisualStyleBackColor = false;
@@ -1212,6 +1229,7 @@
             // checkBoxTaskXRef
             // 
             this.checkBoxTaskXRef.AutoSize = true;
+            this.checkBoxTaskXRef.Enabled = false;
             this.checkBoxTaskXRef.ForeColor = System.Drawing.Color.Green;
             this.checkBoxTaskXRef.Location = new System.Drawing.Point(14, 570);
             this.checkBoxTaskXRef.Name = "checkBoxTaskXRef";
@@ -1261,9 +1279,9 @@
             this.Controls.Add(this.textBoxIntDays);
             this.Controls.Add(this.label44);
             this.Controls.Add(this.textBoxSurPct);
-            this.Controls.Add(this.label43);
+            this.Controls.Add(this.labelSPct);
             this.Controls.Add(this.textBoxDiscPct);
-            this.Controls.Add(this.label35);
+            this.Controls.Add(this.labelDPct);
             this.Controls.Add(this.comboBoxSurcharge);
             this.Controls.Add(this.comboBoxDisc);
             this.Controls.Add(this.label32);
@@ -1276,12 +1294,12 @@
             this.Controls.Add(this.comboBoxThreshMain);
             this.Controls.Add(this.label42);
             this.Controls.Add(this.textBoxExpThresh);
-            this.Controls.Add(this.label40);
+            this.Controls.Add(this.labelExpThresh);
             this.Controls.Add(this.textBoxFeeThresh);
-            this.Controls.Add(this.label41);
+            this.Controls.Add(this.labelFeeThresh);
             this.Controls.Add(this.textBoxCycle);
             this.Controls.Add(this.textBoxMonth);
-            this.Controls.Add(this.label38);
+            this.Controls.Add(this.labelCycle);
             this.Controls.Add(this.label39);
             this.Controls.Add(this.comboBoxExpFreq);
             this.Controls.Add(this.comboBoxFeeFreq);
@@ -1289,7 +1307,7 @@
             this.Controls.Add(this.label37);
             this.Controls.Add(this.checkBoxIncludeExp);
             this.Controls.Add(this.comboBoxRetainerType);
-            this.Controls.Add(this.label34);
+            this.Controls.Add(this.labelRet);
             this.Controls.Add(this.comboBoxBAgree);
             this.Controls.Add(this.comboBoxPreBillLayout);
             this.Controls.Add(this.comboBoxBillLayout);
@@ -1399,20 +1417,20 @@
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.ComboBox comboBoxRetainerType;
-        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label labelRet;
         private System.Windows.Forms.CheckBox checkBoxIncludeExp;
         private System.Windows.Forms.ComboBox comboBoxExpFreq;
         private System.Windows.Forms.ComboBox comboBoxFeeFreq;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Label label37;
-        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.Label labelCycle;
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.TextBox textBoxMonth;
         private System.Windows.Forms.TextBox textBoxCycle;
         private System.Windows.Forms.TextBox textBoxExpThresh;
-        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.Label labelExpThresh;
         private System.Windows.Forms.TextBox textBoxFeeThresh;
-        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label labelFeeThresh;
         private System.Windows.Forms.ComboBox comboBoxThreshMain;
         private System.Windows.Forms.Label label42;
         private System.Windows.Forms.DateTimePicker dateTimePickerOpened;
@@ -1425,9 +1443,9 @@
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.TextBox textBoxDiscPct;
-        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.Label labelDPct;
         private System.Windows.Forms.TextBox textBoxSurPct;
-        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.Label labelSPct;
         private System.Windows.Forms.TextBox textBoxIntDays;
         private System.Windows.Forms.Label label44;
         private System.Windows.Forms.TextBox textBoxIntPct;
