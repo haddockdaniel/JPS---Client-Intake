@@ -98,39 +98,10 @@ namespace JurisUtilityBase
 
         private void DoDaFix()
         {
-            string sql = "";
+
 
             ClientForm cf = new ClientForm(_jurisUtility);
-            cf.ShowDialog();
-            if (radioButtonCliOnly.Checked)
-            {
-                sql = "  insert into trustledger ([TLMatter],[TLBank] ,[TLType] ,[TLDate] ,[TLCheckNbr] ,[TLAmount] ,[TLMemo], tlsysnbr) " +
-            " values(65258, 'T10', 1, convert(DateTime, '02/13/2020', 102), 0, 442.24, 'Added To Ledger By Tool on: ' + convert(varchar, getdate(), 101), (select max(tlsysnbr) + 1 from trustledger)) ";
-                _jurisUtility.ExecuteNonQuery(0, sql);
-
-                UpdateStatus("TrustSumByPrd updated.", 1, 1);
-
-                MessageBox.Show("The process is complete. .", "Confirmation", MessageBoxButtons.OK, MessageBoxIcon.None);
-            }
-            else if (radioButtonMatOnly.Checked)
-            {
-                sql = "  insert into trustledger ([TLMatter],[TLBank] ,[TLType] ,[TLDate] ,[TLCheckNbr] ,[TLAmount] ,[TLMemo], tlsysnbr) " +
-                 " values(70123, 'T10', 1, convert(DateTime, '02/13/2020', 102), 0, 115.00, 'Added To Ledger By Tool on: ' + convert(varchar, getdate(), 101), (select max(tlsysnbr) + 1 from trustledger)) ";
-                _jurisUtility.ExecuteNonQuery(0, sql);
-
-                UpdateStatus("TrustSumByPrd updated.", 1, 1);
-
-                MessageBox.Show("The process is complete. .", "Confirmation", MessageBoxButtons.OK, MessageBoxIcon.None);
-            } 
-
-            else
-            {
-                MessageBox.Show("At Least One option must be selected", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            }
-
-            
-
+            cf.Show();
 
         }
         private bool VerifyFirmName()

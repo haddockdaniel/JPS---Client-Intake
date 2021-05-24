@@ -44,8 +44,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.buttonBrowse = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButtonCliOnly = new System.Windows.Forms.RadioButton();
             this.radioButtonMatOnly = new System.Windows.Forms.RadioButton();
+            this.radioButtonCliOnly = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.JurisLogoImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LexisNexisLogoPictureBox)).BeginInit();
             this.statusStrip.SuspendLayout();
@@ -202,17 +202,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
             // 
-            // radioButtonCliOnly
-            // 
-            this.radioButtonCliOnly.AutoSize = true;
-            this.radioButtonCliOnly.Location = new System.Drawing.Point(6, 21);
-            this.radioButtonCliOnly.Name = "radioButtonCliOnly";
-            this.radioButtonCliOnly.Size = new System.Drawing.Size(112, 20);
-            this.radioButtonCliOnly.TabIndex = 22;
-            this.radioButtonCliOnly.TabStop = true;
-            this.radioButtonCliOnly.Text = "Import Client";
-            this.radioButtonCliOnly.UseVisualStyleBackColor = true;
-            // 
             // radioButtonMatOnly
             // 
             this.radioButtonMatOnly.AutoSize = true;
@@ -220,9 +209,20 @@
             this.radioButtonMatOnly.Name = "radioButtonMatOnly";
             this.radioButtonMatOnly.Size = new System.Drawing.Size(116, 20);
             this.radioButtonMatOnly.TabIndex = 23;
-            this.radioButtonMatOnly.TabStop = true;
             this.radioButtonMatOnly.Text = "Import Matter";
             this.radioButtonMatOnly.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonCliOnly
+            // 
+            this.radioButtonCliOnly.AutoSize = true;
+            this.radioButtonCliOnly.Checked = true;
+            this.radioButtonCliOnly.Location = new System.Drawing.Point(6, 21);
+            this.radioButtonCliOnly.Name = "radioButtonCliOnly";
+            this.radioButtonCliOnly.Size = new System.Drawing.Size(112, 20);
+            this.radioButtonCliOnly.TabIndex = 22;
+            this.radioButtonCliOnly.TabStop = true;
+            this.radioButtonCliOnly.Text = "Import Client";
+            this.radioButtonCliOnly.UseVisualStyleBackColor = true;
             // 
             // UtilityBaseMain
             // 

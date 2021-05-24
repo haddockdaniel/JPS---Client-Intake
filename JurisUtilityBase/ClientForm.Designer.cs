@@ -126,7 +126,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.formToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearFieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveAsDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExitDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -160,6 +160,7 @@
             this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 100;
             this.label1.Text = "Client Code";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // textBoxCode
             // 
@@ -402,6 +403,7 @@
             // 
             // textBoxBAState
             // 
+            this.textBoxBAState.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxBAState.Location = new System.Drawing.Point(107, 232);
             this.textBoxBAState.MaxLength = 2;
             this.textBoxBAState.Name = "textBoxBAState";
@@ -420,6 +422,7 @@
             // 
             // textBoxBACity
             // 
+            this.textBoxBACity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxBACity.Location = new System.Drawing.Point(107, 206);
             this.textBoxBACity.MaxLength = 20;
             this.textBoxBACity.Name = "textBoxBACity";
@@ -438,6 +441,7 @@
             // 
             // textBoxBAContact
             // 
+            this.textBoxBAContact.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxBAContact.Location = new System.Drawing.Point(107, 180);
             this.textBoxBAContact.MaxLength = 30;
             this.textBoxBAContact.Name = "textBoxBAContact";
@@ -456,6 +460,7 @@
             // 
             // textBoxBAName
             // 
+            this.textBoxBAName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxBAName.Location = new System.Drawing.Point(107, 154);
             this.textBoxBAName.MaxLength = 50;
             this.textBoxBAName.Name = "textBoxBAName";
@@ -474,6 +479,7 @@
             // 
             // textBoxBAFax
             // 
+            this.textBoxBAFax.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxBAFax.Location = new System.Drawing.Point(108, 128);
             this.textBoxBAFax.MaxLength = 20;
             this.textBoxBAFax.Name = "textBoxBAFax";
@@ -493,6 +499,7 @@
             // 
             // textBoxBAPhone
             // 
+            this.textBoxBAPhone.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxBAPhone.Location = new System.Drawing.Point(108, 102);
             this.textBoxBAPhone.MaxLength = 20;
             this.textBoxBAPhone.Name = "textBoxBAPhone";
@@ -521,6 +528,7 @@
             // 
             // textBoxBANName
             // 
+            this.textBoxBANName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxBANName.Location = new System.Drawing.Point(108, 20);
             this.textBoxBANName.MaxLength = 30;
             this.textBoxBANName.Name = "textBoxBANName";
@@ -539,6 +547,7 @@
             // 
             // richTextBoxBAAddy
             // 
+            this.richTextBoxBAAddy.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBoxBAAddy.Location = new System.Drawing.Point(108, 46);
             this.richTextBoxBAAddy.MaxLength = 250;
             this.richTextBoxBAAddy.Name = "richTextBoxBAAddy";
@@ -548,6 +557,7 @@
             // 
             // textBoxBAEmail
             // 
+            this.textBoxBAEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxBAEmail.Location = new System.Drawing.Point(107, 310);
             this.textBoxBAEmail.MaxLength = 255;
             this.textBoxBAEmail.Name = "textBoxBAEmail";
@@ -567,6 +577,7 @@
             // 
             // textBoxBACountry
             // 
+            this.textBoxBACountry.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxBACountry.Location = new System.Drawing.Point(107, 284);
             this.textBoxBACountry.MaxLength = 20;
             this.textBoxBACountry.Name = "textBoxBACountry";
@@ -586,6 +597,7 @@
             // 
             // textBoxBAZip
             // 
+            this.textBoxBAZip.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxBAZip.Location = new System.Drawing.Point(107, 258);
             this.textBoxBAZip.MaxLength = 9;
             this.textBoxBAZip.Name = "textBoxBAZip";
@@ -765,7 +777,7 @@
             this.textBoxExpThresh.Name = "textBoxExpThresh";
             this.textBoxExpThresh.Size = new System.Drawing.Size(83, 20);
             this.textBoxExpThresh.TabIndex = 100;
-            this.textBoxExpThresh.Text = "0";
+            this.textBoxExpThresh.Text = "0.00";
             this.textBoxExpThresh.Visible = false;
             // 
             // labelExpThresh
@@ -785,7 +797,7 @@
             this.textBoxFeeThresh.Name = "textBoxFeeThresh";
             this.textBoxFeeThresh.Size = new System.Drawing.Size(83, 20);
             this.textBoxFeeThresh.TabIndex = 99;
-            this.textBoxFeeThresh.Text = "0";
+            this.textBoxFeeThresh.Text = "0.00";
             this.textBoxFeeThresh.Visible = false;
             // 
             // labelFeeThresh
@@ -906,7 +918,7 @@
             this.textBoxDiscPct.Name = "textBoxDiscPct";
             this.textBoxDiscPct.Size = new System.Drawing.Size(61, 20);
             this.textBoxDiscPct.TabIndex = 177;
-            this.textBoxDiscPct.Text = "0";
+            this.textBoxDiscPct.Text = "0.00";
             // 
             // labelDPct
             // 
@@ -924,7 +936,7 @@
             this.textBoxSurPct.Name = "textBoxSurPct";
             this.textBoxSurPct.Size = new System.Drawing.Size(61, 20);
             this.textBoxSurPct.TabIndex = 179;
-            this.textBoxSurPct.Text = "0";
+            this.textBoxSurPct.Text = "0.00";
             // 
             // labelSPct
             // 
@@ -960,7 +972,7 @@
             this.textBoxIntPct.Name = "textBoxIntPct";
             this.textBoxIntPct.Size = new System.Drawing.Size(61, 20);
             this.textBoxIntPct.TabIndex = 55;
-            this.textBoxIntPct.Text = "0";
+            this.textBoxIntPct.Text = "0.00";
             // 
             // label45
             // 
@@ -1016,7 +1028,7 @@
             // 
             this.formToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clearFieldsToolStripMenuItem,
-            this.saveAsDefaultToolStripMenuItem});
+            this.ExitDefaultToolStripMenuItem});
             this.formToolStripMenuItem.Name = "formToolStripMenuItem";
             this.formToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.formToolStripMenuItem.Text = "Form";
@@ -1028,12 +1040,12 @@
             this.clearFieldsToolStripMenuItem.Text = "Close and Create Matter";
             this.clearFieldsToolStripMenuItem.Click += new System.EventHandler(this.clearFieldsToolStripMenuItem_Click);
             // 
-            // saveAsDefaultToolStripMenuItem
+            // ExitDefaultToolStripMenuItem
             // 
-            this.saveAsDefaultToolStripMenuItem.Name = "saveAsDefaultToolStripMenuItem";
-            this.saveAsDefaultToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.saveAsDefaultToolStripMenuItem.Text = "Exit";
-            this.saveAsDefaultToolStripMenuItem.Click += new System.EventHandler(this.saveAsDefaultToolStripMenuItem_Click);
+            this.ExitDefaultToolStripMenuItem.Name = "ExitDefaultToolStripMenuItem";
+            this.ExitDefaultToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.ExitDefaultToolStripMenuItem.Text = "Exit";
+            this.ExitDefaultToolStripMenuItem.Click += new System.EventHandler(this.ExitDefaultToolStripMenuItem_Click);
             // 
             // dataToolStripMenuItem
             // 
@@ -1048,21 +1060,21 @@
             // moveToolStripMenuItem
             // 
             this.moveToolStripMenuItem.Name = "moveToolStripMenuItem";
-            this.moveToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.moveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.moveToolStripMenuItem.Text = "Save As Preset";
-            this.moveToolStripMenuItem.Click += new System.EventHandler(this.moveToolStripMenuItem_Click);
+            this.moveToolStripMenuItem.Click += new System.EventHandler(this.saveAsDefaultToolStripMenuItem_Click);
             // 
             // loadDefaultsToolStripMenuItem
             // 
             this.loadDefaultsToolStripMenuItem.Name = "loadDefaultsToolStripMenuItem";
-            this.loadDefaultsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.loadDefaultsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadDefaultsToolStripMenuItem.Text = "Manage Presets";
             this.loadDefaultsToolStripMenuItem.Click += new System.EventHandler(this.loadDefaultsToolStripMenuItem_Click);
             // 
             // clearFormToolStripMenuItem
             // 
             this.clearFormToolStripMenuItem.Name = "clearFormToolStripMenuItem";
-            this.clearFormToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.clearFormToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.clearFormToolStripMenuItem.Text = "Clear Form";
             this.clearFormToolStripMenuItem.Click += new System.EventHandler(this.clearFormToolStripMenuItem_Click);
             // 
@@ -1123,7 +1135,7 @@
             this.groupBox1.TabIndex = 31;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Billing Address";
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+
             // 
             // textBoxOTPct1
             // 
@@ -1132,7 +1144,7 @@
             this.textBoxOTPct1.Size = new System.Drawing.Size(52, 20);
             this.textBoxOTPct1.TabIndex = 13;
             this.textBoxOTPct1.Text = "100";
-            this.textBoxOTPct1.TextChanged += new System.EventHandler(this.textBox26_TextChanged);
+
             // 
             // label17
             // 
@@ -1229,7 +1241,6 @@
             // checkBoxTaskXRef
             // 
             this.checkBoxTaskXRef.AutoSize = true;
-            this.checkBoxTaskXRef.Enabled = false;
             this.checkBoxTaskXRef.ForeColor = System.Drawing.Color.Green;
             this.checkBoxTaskXRef.Location = new System.Drawing.Point(14, 570);
             this.checkBoxTaskXRef.Name = "checkBoxTaskXRef";
@@ -1456,7 +1467,7 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem formToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearFieldsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveAsDefaultToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ExitDefaultToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dataToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadDefaultsToolStripMenuItem;
