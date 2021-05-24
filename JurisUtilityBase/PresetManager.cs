@@ -19,7 +19,7 @@ namespace JurisUtilityBase
 {
     public partial class PresetManager : Form
     {
-        public PresetManager(DataSet ds, JurisUtility jutil)
+        public PresetManager(DataSet ds, JurisUtility jutil, string CliMat)
         {
             InitializeComponent();
             dataGridView1.DataSource = ds.Tables[0];
@@ -29,9 +29,11 @@ namespace JurisUtilityBase
             dataGridView1.Columns[3].Width = 100;
             dataGridView1.Columns[4].Width = 60;
             _jurisUtility = jutil;
+            ClientOrMatter = CliMat;
         }
 
         JurisUtility _jurisUtility;
+        string ClientOrMatter = "";
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
@@ -77,9 +79,9 @@ namespace JurisUtilityBase
                 {
                     sql = "update defaults set name = '" + name + "' where id = " + ID.ToString();
                     _jurisUtility.ExecuteSqlCommand(0, sql);
-                    sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
+                    sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = '" + ClientOrMatter + "'";
                     DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
-                    PresetManager DM = new PresetManager(ds, _jurisUtility);
+                    PresetManager DM = new PresetManager(ds, _jurisUtility, ClientOrMatter);
                     DM.Show();
                     this.Close();
                 }
@@ -107,9 +109,9 @@ namespace JurisUtilityBase
                     sql = "delete from defaults where id = " + id.ToString();
                     _jurisUtility.ExecuteSqlCommand(0, sql);
                 }
-                sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
+                sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = '" + ClientOrMatter + "'";
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
-                PresetManager DM = new PresetManager(ds, _jurisUtility);
+                PresetManager DM = new PresetManager(ds, _jurisUtility, ClientOrMatter);
                 DM.Show();
                 this.Close();
             }
@@ -125,13 +127,13 @@ namespace JurisUtilityBase
             else
             {
                 id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
-                sql = "update defaults set IsStandard = 'N' where DefType = 'C'";
+                sql = "update defaults set IsStandard = 'N' where DefType = '" + ClientOrMatter + "'";
                 _jurisUtility.ExecuteSqlCommand(0, sql);
                 sql = "update defaults set IsStandard = 'Y' where id = " + id.ToString();
                 _jurisUtility.ExecuteSqlCommand(0, sql);
                 sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
-                PresetManager DM = new PresetManager(ds, _jurisUtility);
+                PresetManager DM = new PresetManager(ds, _jurisUtility, ClientOrMatter);
                 DM.Show();
                 this.Close();
 
@@ -143,7 +145,6 @@ namespace JurisUtilityBase
 
         private void buttonModify_Click(object sender, EventArgs e)
         {
-            string sql = "";
             int id = 0;
             if (dataGridView1.SelectedRows.Count == 0 || dataGridView1.SelectedRows.Count > 1)
                 MessageBox.Show("One and only one Preset can be Modified at a time", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -163,7 +164,6 @@ namespace JurisUtilityBase
 
         private void buttonLoad_Click(object sender, EventArgs e)
         {
-            string sql = "";
             int id = 0;
             if (dataGridView1.SelectedRows.Count == 0 || dataGridView1.SelectedRows.Count > 1)
                 MessageBox.Show("One and only one Preset can be loaded at a time", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

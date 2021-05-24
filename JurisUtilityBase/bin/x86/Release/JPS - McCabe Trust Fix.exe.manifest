@@ -115,14 +115,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="JPS - McCabe Trust Fix.exe" size="911872">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="JPS - McCabe Trust Fix.exe" size="952832">
       <assemblyIdentity name="JPS - McCabe Trust Fix" version="2.71.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>oWcUbucYOwru5HbGpQrdlKjaGlc=</dsig:DigestValue>
+        <dsig:DigestValue>76GGrD0PoHhAo6tSJlagh3ZDfm4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -91,3 +91,4 @@ D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JPS - McCabe Tr
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JPS - McCabe Trust Fix.application
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.csproj.CopyComplete
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.PresetManager.resources
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.MatterForm.resources

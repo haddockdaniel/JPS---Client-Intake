@@ -19,9 +19,9 @@ using Microsoft.VisualBasic;
 
 namespace JurisUtilityBase
 {
-    public partial class ClientForm : Form
+    public partial class MatterForm : Form
     {
-        public ClientForm(JurisUtility jutil, int preID, bool modify)
+        public MatterForm(JurisUtility jutil, int preID, bool modify)
         {
             InitializeComponent();
             _jurisUtility = jutil;
@@ -481,9 +481,7 @@ namespace JurisUtilityBase
 
         private void clearFieldsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MatterForm cleared = new MatterForm(_jurisUtility, 0, false, 0, "");
-            cleared.Show();
-            this.Close();
+
         }
 
         private void saveAsDefaultToolStripMenuItem_Click(object sender, EventArgs e)
@@ -538,7 +536,7 @@ namespace JurisUtilityBase
 
             foreach (var textbox in this.Controls.OfType<TextBox>())
             {
-                if (!string.IsNullOrEmpty(textbox.Text) && !textbox.Name.Equals("textBoxCode") )
+                if (!string.IsNullOrEmpty(textbox.Text) && textbox.Name.Equals("textBoxCode"))
                 {
                     sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType) values (" + defID + ", '" + textbox.Name + "', '" + textbox.Text + "', 'textBox' )";
                     _jurisUtility.ExecuteNonQuery(0, sql);
@@ -580,7 +578,7 @@ namespace JurisUtilityBase
 
             foreach (var textbox in this.Controls.OfType<TextBox>())
             {
-                if (!string.IsNullOrEmpty(textbox.Text) && !textbox.Name.Equals("textBoxCode"))
+                if (!string.IsNullOrEmpty(textbox.Text) && textbox.Name.Equals("textBoxCode"))
                 {
                     sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType) values (" + presetID + ", '" + textbox.Name + "', '" + textbox.Text + "', 'textBox' )";
                     _jurisUtility.ExecuteNonQuery(0, sql);
@@ -928,7 +926,10 @@ namespace JurisUtilityBase
             }
 
 
-
+            // TextWriter ss = new StreamWriter(@"c:\intel\sql1.txt");
+            // ss.Write(sql);
+            // ss.Flush();
+            // ss.Close();
 
 
         }
@@ -1000,17 +1001,8 @@ namespace JurisUtilityBase
 
                 
 
-            DialogResult fc = MessageBox.Show("Client " + textBoxCode.Text + " was added successfully." + "\r\n" + "Would you like to Add a Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (fc == DialogResult.Yes)
-            {
-                MatterForm cleared = new MatterForm(_jurisUtility, presetID, false, clisysnbr, textBoxCode.Text);
-                cleared.Show();
-                //move data over
-                this.Close();
+            MessageBox.Show("Client xxxxx was added successfully." + "\r\n" + "Would you like to Add a Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-
-
-            }
         }
 
         private bool testOrigPct()
