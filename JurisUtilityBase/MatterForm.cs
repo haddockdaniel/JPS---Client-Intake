@@ -464,7 +464,7 @@ namespace JurisUtilityBase
 
         private void clearFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ClientForm cleared = new ClientForm(_jurisUtility, 0, false);
+            MatterForm cleared = new MatterForm(_jurisUtility, 0, false, 0 ,"");
             cleared.Show();
             this.Close();
         }
@@ -841,17 +841,16 @@ namespace JurisUtilityBase
                             MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
                         }
-                        else
-                        {
-                            if (testOrigPct())
-                                return true;
-                            else
-                                return false;
-                        }
+
                     }
 
                 }
-                return true;
+
+                    if (testOrigPct())
+                        return true;
+                    else
+                        return false;
+
             }
 
             else
@@ -1119,7 +1118,6 @@ namespace JurisUtilityBase
 
 
             sql = "select matsysnbr from matter where matclinbr = " + clisysnbr.ToString() + " and matcode = " + matcode;
-            MessageBox.Show(sql);
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
             if (dds != null && dds.Tables.Count > 0)
             {

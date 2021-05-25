@@ -778,24 +778,18 @@ namespace JurisUtilityBase
                 DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
                 if (dds != null && dds.Tables.Count > 0)
                 {
-                    foreach (DataRow dr in dds.Tables[0].Rows)
+                    foreach (DataRow dr in dds.Tables[0].Rows) //client already exists
                     {
-                        clisysnbr = Convert.ToInt32(dr[0].ToString());
+                        MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                        
                     }
 
                 }
 
-
-
             }
 
-            if (clisysnbr != 0)
-            {
-                MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-            else
-            {
+
                 List<string> incorrectFields = new List<string>();
                 if (!isNumeric(textBoxMonth.Text))
                 {
@@ -856,17 +850,15 @@ namespace JurisUtilityBase
                                 MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 return false;
                             }
-                            else
-                            {
-                                if (testOrigPct())
-                                    return true;
-                                else
-                                    return false;
-                            }
+
                         }
 
                     }
-                    return true;
+
+                    if (testOrigPct())
+                        return true;
+                    else
+                        return false;
                 }
 
                 else
@@ -879,7 +871,7 @@ namespace JurisUtilityBase
 
                     return false;
                 }
-            }
+            
 
         }
 
@@ -970,11 +962,9 @@ namespace JurisUtilityBase
 
                 createAddy();
 
-                addOrig();
-
                 string SQL = "Insert into DocumentTree(dtdocid, dtsystemcreated, dtdocclass,dtdoctype,  dtparentid, dttitle, dtkeyl) "
-           + " select((select max(dtdocid)  from documenttree) , 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
-           + " from Client where clisysnbr = " + clisysnbr.ToString();
++ " select (select max(dtdocid)  from documenttree) + 1 , 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
++ " from Client where clisysnbr = " + clisysnbr.ToString();
                 _jurisUtility.ExecuteNonQuery(0, SQL);
 
                 SQL = " Update sysparam set spnbrvalue=(select max(dtdocid) from documenttree) where spname='LastSysNbrDocTree'";
@@ -982,6 +972,10 @@ namespace JurisUtilityBase
 
                 SQL = " update sysparam set spnbrvalue = (select max(CliSysNbr) from client) where spname = 'LastSysNbrClient'";
                 _jurisUtility.ExecuteNonQuery(0, SQL);
+
+                addOrig();
+
+
 
                 if (presetID != 0)
                     loadDfaultPreset();
@@ -995,7 +989,7 @@ namespace JurisUtilityBase
 
         private void createAddy()
         {
-            string sql = "select max(CliSysNbr) from client";
+            string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + textBoxCode.Text + "'";
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
             if (dds != null && dds.Tables.Count > 0)
             {
@@ -1067,10 +1061,9 @@ namespace JurisUtilityBase
                 cleared.Show();
                 //move data over
                 this.Close();
-
-
-
             }
+            else
+                this.Close();
         }
 
         private bool testOrigPct()

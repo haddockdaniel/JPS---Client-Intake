@@ -67,13 +67,6 @@ D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBas
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.csproj.GenerateResource.cache
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.csproj.CoreCompileInputs.cache
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.csproj.Fody.CopyLocal.cache
-D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JPS - McCabe Trust Fix.exe
-D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JPS - McCabe Trust Fix.pdb
-D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\JPS - McCabe Trust Fix.exe.config
-D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\JPS - McCabe Trust Fix.exe.manifest
-D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\JPS - McCabe Trust Fix.application
-D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\JPS - McCabe Trust Fix.exe
-D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\JPS - McCabe Trust Fix.pdb
 D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\C1.C1Report.4.dll
 D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\C1.Win.C1Input.4.dll
 D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\C1.Win.C1Report.4.dll
@@ -87,8 +80,15 @@ D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\JurisStr21.dll
 D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\JurisStr221.dll
 D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\JurisSVR21.dll
 D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Costura.xml
-D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JPS - McCabe Trust Fix.exe.manifest
-D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JPS - McCabe Trust Fix.application
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.csproj.CopyComplete
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.PresetManager.resources
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.MatterForm.resources
+D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Intake.exe.config
+D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Intake.exe.manifest
+D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Intake.application
+D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Intake.exe
+D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Intake.pdb
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Intake.exe.manifest
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Intake.application
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Intake.exe
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Intake.pdb
