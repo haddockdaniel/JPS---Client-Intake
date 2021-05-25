@@ -65,7 +65,14 @@ namespace JurisUtilityBase
                 try //if isnumeric
                 {
                     int test = Convert.ToInt32(lastCliCode);
-                    textBoxCode.Text = (test + 1).ToString();
+                    string tt = (test + 1).ToString();
+                    sql = "select clisysnbr from client where clicode = '" + tt + "'";
+                    if (myRSPC2.Tables[0].Rows.Count != 0)
+                    {
+                        textBoxCode.Text = "";
+                    }
+                    else
+                        textBoxCode.Text = (test + 1).ToString();
                 }
                 catch (Exception ex1)
                 { }
@@ -739,88 +746,113 @@ namespace JurisUtilityBase
 
         private bool checkFields()
         {
-            List<string> incorrectFields = new List<string>();
-            if (!isNumeric(textBoxMonth.Text))
+            if (clisysnbr == 0)
             {
-                textBoxMonth.Text = "1";
-                incorrectFields.Add("Month");
-            }
-            if (!isNumeric(textBoxCycle.Text))
-            {
-                textBoxCycle.Text = "1";
-                incorrectFields.Add("Cycle");
-            }
-            if (!isNumeric(textBoxIntDays.Text))
-            {
-                textBoxIntDays.Text = "0";
-                incorrectFields.Add("Interest Days");
-            }
-            if (!isNumeric(textBoxIntPct.Text))
-            {
-                textBoxIntPct.Text = "0.00";
-                incorrectFields.Add("Interest Pct");
-            }
-            if (!isNumeric(textBoxDiscPct.Text))
-            {
-                textBoxDiscPct.Text = "0.00";
-                incorrectFields.Add("Discount Pct");
-            }
-            if (!isNumeric(textBoxSurPct.Text))
-            {
-                textBoxSurPct.Text = "0.00";
-                incorrectFields.Add("Surcharge Pct");
-            }
-            if (!isNumeric(textBoxExpThresh.Text))
-            {
-                textBoxExpThresh.Text = "0.00";
-                incorrectFields.Add("Expense Threshold");
-            }
-            if (!isNumeric(textBoxFeeThresh.Text))
-            {
-                textBoxFeeThresh.Text = "0.00";
-                incorrectFields.Add("Fee Threshold");
-            }
-
-            //ensure no apostrophes or double quotes as they break sql
-            foreach (var textbox in this.Controls.OfType<TextBox>())
-                textbox.Text = textbox.Text.Replace("'", "").Replace("\"", "");
-
-            foreach (var textbox in this.Controls.OfType<RichTextBox>())
-                textbox.Text = textbox.Text.Replace("'", "").Replace("\"", "");
-
-            if (incorrectFields.Count == 0)
-            {
-                foreach (var textbox in this.Controls.OfType<TextBox>())
+                string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + textBoxCode.Text + "'";
+                DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+                if (dds != null && dds.Tables.Count > 0)
                 {
-                    if (string.IsNullOrEmpty(textbox.Text)) //if there is nothing in it, is it required?
+                    foreach (DataRow dr in dds.Tables[0].Rows)
                     {
-                        if (!textbox.Name.Equals("textBoxSoB") && !textbox.Name.Equals("textBoxFax") && !textbox.Name.Equals("textBoxBAFax") && !textbox.Name.Equals("textBoxBACountry") && !textbox.Name.Equals("textBoxBAEmail"))
-                        {
-                            MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return false;
-                        }
-                        else
-                        {
-                            if (testOrigPct())
-                                return true;
-                            else
-                                return false;
-                        }
+                        clisysnbr = Convert.ToInt32(dr[0].ToString());
                     }
 
                 }
-                return true;
+
+
+
             }
 
+            if (clisysnbr != 0)
+            {
+                MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
             else
             {
-                string items = "";
-                foreach (string dd in incorrectFields)
-                    items = items + dd + " ";
-                MessageBox.Show("All numeric fields must have a number in them." + "\r\n" + "The following fields are invalid and will be reset" + "\r\n" + items + "\r\n" + "Please adjust if needed and continue.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                List<string> incorrectFields = new List<string>();
+                if (!isNumeric(textBoxMonth.Text))
+                {
+                    textBoxMonth.Text = "1";
+                    incorrectFields.Add("Month");
+                }
+                if (!isNumeric(textBoxCycle.Text))
+                {
+                    textBoxCycle.Text = "1";
+                    incorrectFields.Add("Cycle");
+                }
+                if (!isNumeric(textBoxIntDays.Text))
+                {
+                    textBoxIntDays.Text = "0";
+                    incorrectFields.Add("Interest Days");
+                }
+                if (!isNumeric(textBoxIntPct.Text))
+                {
+                    textBoxIntPct.Text = "0.00";
+                    incorrectFields.Add("Interest Pct");
+                }
+                if (!isNumeric(textBoxDiscPct.Text))
+                {
+                    textBoxDiscPct.Text = "0.00";
+                    incorrectFields.Add("Discount Pct");
+                }
+                if (!isNumeric(textBoxSurPct.Text))
+                {
+                    textBoxSurPct.Text = "0.00";
+                    incorrectFields.Add("Surcharge Pct");
+                }
+                if (!isNumeric(textBoxExpThresh.Text))
+                {
+                    textBoxExpThresh.Text = "0.00";
+                    incorrectFields.Add("Expense Threshold");
+                }
+                if (!isNumeric(textBoxFeeThresh.Text))
+                {
+                    textBoxFeeThresh.Text = "0.00";
+                    incorrectFields.Add("Fee Threshold");
+                }
+
+                //ensure no apostrophes or double quotes as they break sql
+                foreach (var textbox in this.Controls.OfType<TextBox>())
+                    textbox.Text = textbox.Text.Replace("'", "").Replace("\"", "");
+
+                foreach (var textbox in this.Controls.OfType<RichTextBox>())
+                    textbox.Text = textbox.Text.Replace("'", "").Replace("\"", "");
+
+                if (incorrectFields.Count == 0)
+                {
+                    foreach (var textbox in this.Controls.OfType<TextBox>())
+                    {
+                        if (string.IsNullOrEmpty(textbox.Text)) //if there is nothing in it, is it required?
+                        {
+                            if (!textbox.Name.Equals("textBoxSoB") && !textbox.Name.Equals("textBoxFax") && !textbox.Name.Equals("textBoxBAFax") && !textbox.Name.Equals("textBoxBACountry") && !textbox.Name.Equals("textBoxBAEmail"))
+                            {
+                                MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return false;
+                            }
+                            else
+                            {
+                                if (testOrigPct())
+                                    return true;
+                                else
+                                    return false;
+                            }
+                        }
+
+                    }
+                    return true;
+                }
+
+                else
+                {
+                    string items = "";
+                    foreach (string dd in incorrectFields)
+                        items = items + dd + " ";
+                    MessageBox.Show("All numeric fields must have a number in them." + "\r\n" + "The following fields are invalid and will be reset" + "\r\n" + items + "\r\n" + "Please adjust if needed and continue.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
 
-                return false;
+                    return false;
+                }
             }
 
         }
@@ -907,9 +939,16 @@ namespace JurisUtilityBase
 
                 _jurisUtility.ExecuteNonQuery(0, sql);
 
+
+
+
+                createAddy();
+
+                addOrig();
+
                 string SQL = "Insert into DocumentTree(dtdocid, dtsystemcreated, dtdocclass,dtdoctype,  dtparentid, dttitle, dtkeyl) "
-                           + " select(select max(dtdocid)  from documenttree) + rank() Over(order by clisysnbr) as DTID, 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
-                           + " from Client ";
+           + " select((select max(dtdocid)  from documenttree) , 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
+           + " from Client where clisysnbr = " + clisysnbr.ToString();
                 _jurisUtility.ExecuteNonQuery(0, SQL);
 
                 SQL = " Update sysparam set spnbrvalue=(select max(dtdocid) from documenttree) where spname='LastSysNbrDocTree'";
@@ -917,11 +956,6 @@ namespace JurisUtilityBase
 
                 SQL = " update sysparam set spnbrvalue = (select max(CliSysNbr) from client) where spname = 'LastSysNbrClient'";
                 _jurisUtility.ExecuteNonQuery(0, SQL);
-
-
-                createAddy();
-
-                addOrig();
 
                 if (presetID != 0)
                     loadDfaultPreset();

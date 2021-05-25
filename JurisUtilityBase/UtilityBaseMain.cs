@@ -99,9 +99,16 @@ namespace JurisUtilityBase
         private void DoDaFix()
         {
 
-
-            ClientForm cf = new ClientForm(_jurisUtility, 0, false);
-            cf.Show();
+            if (radioButtonCliOnly.Checked)
+            {
+                ClientForm cf = new ClientForm(_jurisUtility, 0, false);
+                cf.Show();
+            }
+            else
+            {
+                MatterForm mf = new MatterForm(_jurisUtility, 0, false, 0, "");
+                mf.Show();
+            }
 
         }
         private bool VerifyFirmName()

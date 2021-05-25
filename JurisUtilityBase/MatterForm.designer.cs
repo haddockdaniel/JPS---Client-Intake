@@ -169,6 +169,8 @@
             this.textBoxCode.Name = "textBoxCode";
             this.textBoxCode.Size = new System.Drawing.Size(77, 20);
             this.textBoxCode.TabIndex = 1;
+            this.textBoxCode.Leave += new System.EventHandler(this.textBoxCode_Leave);
+            this.textBoxCode.MouseLeave += new System.EventHandler(this.textBoxCode_MouseLeave);
             // 
             // textBoxNName
             // 
@@ -1236,6 +1238,7 @@
             this.textBoxMatterCode.Size = new System.Drawing.Size(77, 20);
             this.textBoxMatterCode.TabIndex = 1;
             this.textBoxMatterCode.Text = "0001";
+            this.textBoxMatterCode.TextChanged += new System.EventHandler(this.textBoxMatterCode_TextChanged);
             // 
             // label11
             // 

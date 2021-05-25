@@ -60,7 +60,7 @@ namespace JurisUtilityBase
                 }
             } //else its not there so add it
 
-            DataSet myRSPC2 = null;
+            DataSet myRSPC2 = new DataSet();
 
             //if clicode is Numeric then increment by 1
             if (clisysnbr != 0)
@@ -80,13 +80,13 @@ namespace JurisUtilityBase
                     catch (Exception ex1)
                     { }
                 }
-
+                myRSPC2.Clear();
             }
 
 
             //Office
             comboBoxOffice.ClearItems();
-            myRSPC2.Clear();
+            
             string SQLPC2 = "select OfcOfficeCode as OfficeCode from OfficeCode order by OfcOfficeCode";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
@@ -576,7 +576,7 @@ namespace JurisUtilityBase
 
         private void button1_Click(object sender, EventArgs e)
         {
-            createClient();
+            createMatter();
             
             //get clisysnbr and pass to matter form
         }
@@ -833,7 +833,7 @@ namespace JurisUtilityBase
 
         }
 
-        private void createClient()
+        private void createMatter()
         {
 
             if (checkFields())
@@ -915,13 +915,18 @@ namespace JurisUtilityBase
        + "       " + codesql + ", '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "',  '" + textBoxDesc.Text.Trim() + "', " +
        " '', '" + textBoxPhone.Text.Trim() + "', '" + textBoxFax.Text.Trim() + "', '" + textBoxContact.Text.Trim() + "', '" + dateTimePickerOpened.Value.ToString("MM/dd/yyyy") + "','O' ,'0', "
      + " '01/01/1900','" + this.comboBoxOffice.GetItemText(this.comboBoxOffice.SelectedItem).Split(' ')[0] + "','" + this.comboBoxPC.GetItemText(this.comboBoxPC.SelectedItem).Split(' ')[0] + "','" + this.comboBoxFeeSched.GetItemText(this.comboBoxFeeSched.SelectedItem).Split(' ')[0] + "'," + txref + ",'" + this.comboBoxExpSched.GetItemText(this.comboBoxExpSched.SelectedItem).Split(' ')[0] + "'," + exref + ",0, " 
-      +       this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0] + "','" + inclExp + "','" + retType + "', 0.00, '" + this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0] + "' ," + textBoxMonth.Text + "," + textBoxCycle.Text + ", " 
+      +     "'" +  this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0] + "','" + inclExp + "','" + retType + "', 0.00, '" + this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0] + "' ," + textBoxMonth.Text + "," + textBoxCycle.Text + ", " 
  + textBoxExpThresh.Text + "," + textBoxFeeThresh.Text + "," + textBoxIntPct.Text + "," + textBoxIntDays.Text + "," + this.comboBoxDisc.GetItemText(this.comboBoxDisc.SelectedItem).Split(' ')[0] + "," + textBoxDiscPct.Text + ", " + this.comboBoxSurcharge.GetItemText(this.comboBoxSurcharge.SelectedItem).Split(' ')[0] + ", " + textBoxSurPct.Text + ", 0, 0.00,"
-      + "0.00," + budg + ",0, 'N'," + reqTask + "','" + reqAct + "','" + reqTaskOnExp + "','" + tax1 + "','" + tax2 + "','" + tax3 + "',"
+      + "0.00," + budg + ",0, 'N','" + reqTask + "','" + reqAct + "','" + reqTaskOnExp + "','" + tax1 + "','" + tax2 + "','" + tax3 + "',"
 
     + " '01/01/1900','01/01/1900','01/01/1900','01/01/1900','01/01/1900',0.00,0.00,0.00,0.00,0.00,0,0,0,"
      + " '','','','','','','', '','','','','','','','','', '', '', '', '', 0, 0, '')";
 
+                     TextWriter ss = new StreamWriter(@"c:\intel\sql1.txt");
+                     ss.Write(sql);
+                     ss.Flush();
+                     ss.Close();
+                    _jurisUtility.ExecuteNonQuery(0, sql);
 
                     sql = "update sysparam set spnbrvalue = (select max(matsysnbr) from matter) where spname = 'LastSysNbrMatter'";
                     _jurisUtility.ExecuteNonQuery(0, sql);
@@ -945,84 +950,111 @@ namespace JurisUtilityBase
 
         private int createAddy()
         {
-            //see if this combo os nickname/clisys exists
-            string test = "select BilAdrSysNbr from BillingAddress where BilAdrNickName = '" + textBoxBANName.Text + "' and BilAdrCliNbr = " + clisysnbr.ToString(); ;
-            DataSet dds = _jurisUtility.RecordsetFromSQL(test);
-            if (dds != null && dds.Tables.Count > 0 && dds.Tables[0].Rows.Count != 0)
+            //get clisysbvr if we dont have it yet (clicked on matter only)
+
+            if (clisysnbr == 0)
             {
-                MessageBox.Show("That nickname is already used for that client" + "\r\n" + "Enter a new and unique nickname", "Constraint Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + textBoxCode.Text + "'";
+                DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+                if (dds != null && dds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in dds.Tables[0].Rows)
+                    {
+                        clisysnbr = Convert.ToInt32(dr[0].ToString());
+                    }
+
+                }
+
+
+
+            }
+
+            if (clisysnbr == 0)
+            {
+                MessageBox.Show("Client " + textBoxCode.Text + " does not exist. Enter a valid client code." + "\r\n" + "Keep in mind it must match exactly as it appears in Juris including leading zeroes", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return 0;
             }
             else
             {
-
-                string addy = richTextBoxBAAddy.Text.Replace("\r", "|").Replace("\n", "|");
-                addy = addy.Replace("||", "|");
-
-
-                string sql = "Insert into BillingAddress(BilAdrSysNbr, BilAdrCliNbr, BilAdrUsageFlg, BilAdrNickName, BilAdrPhone, " +
-                    " BilAdrFax, BilAdrContact, BilAdrName, BilAdrAddress, BilAdrCity, BilAdrState, BilAdrZip, BilAdrCountry, BilAdrType, BilAdrEmail) " +
-                    " values (case when(select max(biladrsysnbr) from billingaddress) is null then 1 else ((select max(biladrsysnbr) from billingaddress) +1) end, " + clisysnbr + ", " +
-                    " 'C', '" + textBoxBANName.Text + "', '" + textBoxBAPhone.Text + "', "
-                     + "  '" + textBoxBAFax.Text + "', '" + textBoxBAContact.Text + "', " +
-                    " '" + textBoxBAName.Text + "', " +
-                    "replace('" + addy + "', '|', char(13) + char(10)), "
-                    + " '" + textBoxBACity.Text + "', '" + textBoxBAState.Text + "', '" + textBoxBAZip.Text + "','" + textBoxBACountry.Text + "', 0, '" + textBoxBAEmail.Text + "')";
-
-                _jurisUtility.ExecuteNonQuery(0, sql);
-
-
-                sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
-                _jurisUtility.ExecuteNonQuery(0, sql);
-
-                sql = "select max(biladrsysnbr) from billingaddress";
-                dds.Clear();
-                int addyid = 0;
-                dds = _jurisUtility.RecordsetFromSQL(sql);
-                if (dds != null && dds.Tables.Count > 0)
+                //see if this combo os nickname/clisys exists
+                string test = "select BilAdrSysNbr from BillingAddress where BilAdrNickName = '" + textBoxBANName.Text + "' and BilAdrCliNbr = " + clisysnbr.ToString(); ;
+                DataSet dds = _jurisUtility.RecordsetFromSQL(test);
+                if (dds != null && dds.Tables.Count > 0 && dds.Tables[0].Rows.Count != 0)
                 {
-                    foreach (DataRow dr in dds.Tables[0].Rows)
+                    MessageBox.Show("That nickname is already used for that client" + "\r\n" + "Enter a new and unique nickname", "Constraint Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return 0;
+                }
+                else
+                {
+
+                    string addy = richTextBoxBAAddy.Text.Replace("\r", "|").Replace("\n", "|");
+                    addy = addy.Replace("||", "|");
+
+
+                    string sql = "Insert into BillingAddress(BilAdrSysNbr, BilAdrCliNbr, BilAdrUsageFlg, BilAdrNickName, BilAdrPhone, " +
+                        " BilAdrFax, BilAdrContact, BilAdrName, BilAdrAddress, BilAdrCity, BilAdrState, BilAdrZip, BilAdrCountry, BilAdrType, BilAdrEmail) " +
+                        " values (case when(select max(biladrsysnbr) from billingaddress) is null then 1 else ((select max(biladrsysnbr) from billingaddress) +1) end, " + clisysnbr + ", " +
+                        " 'C', '" + textBoxBANName.Text + "', '" + textBoxBAPhone.Text + "', "
+                         + "  '" + textBoxBAFax.Text + "', '" + textBoxBAContact.Text + "', " +
+                        " '" + textBoxBAName.Text + "', " +
+                        "replace('" + addy + "', '|', char(13) + char(10)), "
+                        + " '" + textBoxBACity.Text + "', '" + textBoxBAState.Text + "', '" + textBoxBAZip.Text + "','" + textBoxBACountry.Text + "', 0, '" + textBoxBAEmail.Text + "')";
+
+                    _jurisUtility.ExecuteNonQuery(0, sql);
+
+
+                    sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
+                    _jurisUtility.ExecuteNonQuery(0, sql);
+
+                    sql = "select max(biladrsysnbr) from billingaddress";
+                    dds.Clear();
+                    int addyid = 0;
+                    dds = _jurisUtility.RecordsetFromSQL(sql);
+                    if (dds != null && dds.Tables.Count > 0)
                     {
-                        addyid = Convert.ToInt32(dr[0].ToString());
+                        foreach (DataRow dr in dds.Tables[0].Rows)
+                        {
+                            addyid = Convert.ToInt32(dr[0].ToString());
+                        }
+
                     }
 
-                }
+                    string resp = "null";
+                    if (checkBoxRT.Checked)
+                        resp = " (select empsysnbr from employee where empid = '" + this.comboBoxRT.GetItemText(this.comboBoxRT.SelectedItem).Split(' ')[0] + "')";
 
-                string resp = "null";
-                if (checkBoxRT.Checked)
-                    resp = " (select empsysnbr from employee where empid = '" + this.comboBoxRT.GetItemText(this.comboBoxRT.SelectedItem).Split(' ')[0] + "')";
+                    //create billto
+                    sql = "Insert into BillTo (BillToSysNbr,BillToCliNbr,BillToUsageFlg,BillToNickName,BillToBillingAtty,BillToBillFormat,BillToEditFormat,BillToRespAtty) " +
+                        "values (case when(select max(billtosysnbr) from billto) is null then 1 else ((select max(billtosysnbr) from billto) +1) end, " + clisysnbr.ToString() +
+                        ",  'M', '" + textBoxBANName.Text + "', (select empsysnbr from employee where empid = '" + this.comboBoxBT.GetItemText(this.comboBoxBT.SelectedItem).Split(' ')[0] + "'), " +
+                        " '" + this.comboBoxBillLayout.GetItemText(this.comboBoxBillLayout.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxPreBillLayout.GetItemText(this.comboBoxPreBillLayout.SelectedItem).Split(' ')[0] + "', " + resp + ")";
 
-                //create billto
-                sql = "Insert into BillTo (BillToSysNbr,BillToCliNbr,BillToUsageFlg,BillToNickName,BillToBillingAtty,BillToBillFormat,BillToEditFormat,BillToRespAtty) " +
-                    "values (case when(select max(billtosysnbr) from billto) is null then 1 else ((select max(billtosysnbr) from billto) +1) end, " + clisysnbr.ToString() +
-                    ",  'M', '" + textBoxBANName.Text + "', (select empsysnbr from employee where empid = '" + this.comboBoxBT.GetItemText(this.comboBoxBT.SelectedItem).Split(' ')[0] + "'), " +
-                    " '" + this.comboBoxBillLayout.GetItemText(this.comboBoxBillLayout.SelectedItem).Split(' ')[0]  + "', '" + this.comboBoxPreBillLayout.GetItemText(this.comboBoxPreBillLayout.SelectedItem).Split(' ')[0] + "', " + resp + ")";
+                    _jurisUtility.ExecuteNonQuery(0, sql);
 
-                _jurisUtility.ExecuteNonQuery(0, sql);
-
-                sql = "select max(billtosysnbr) from billto";
-                dds.Clear();
-                int billto = 0;
-                dds = _jurisUtility.RecordsetFromSQL(sql);
-                if (dds != null && dds.Tables.Count > 0)
-                {
-                    foreach (DataRow dr in dds.Tables[0].Rows)
+                    sql = "select max(billtosysnbr) from billto";
+                    dds.Clear();
+                    int billto = 0;
+                    dds = _jurisUtility.RecordsetFromSQL(sql);
+                    if (dds != null && dds.Tables.Count > 0)
                     {
-                        billto = Convert.ToInt32(dr[0].ToString());
+                        foreach (DataRow dr in dds.Tables[0].Rows)
+                        {
+                            billto = Convert.ToInt32(dr[0].ToString());
+                        }
+
                     }
 
+                    sql = "update sysparam set spnbrvalue = (select max(billtosysnbr) from billto) where spname = 'LastSysNbrBillTo'";
+                    _jurisUtility.ExecuteNonQuery(0, sql);
+
+                    //billcopy
+                    sql = "Insert into BillCopy(BilCpyBillTo,BilCpyBilAdr,BilCpyComment,BilCpyNbrOfCopies,BilCpyPrintFormat,BilCpyEmailFormat,BilCpyExportFormat,BilCpyARFormat) "
+                    + " values ( " + billto.ToString() + ", " + addyid.ToString() + " ,'',1,1,0,0,0 )";
+
+                    _jurisUtility.ExecuteNonQuery(0, sql);
+
+                    return billto;
                 }
-
-                sql = "update sysparam set spnbrvalue = (select max(billtosysnbr) from billto) where spname = 'LastSysNbrBillTo'";
-                _jurisUtility.ExecuteNonQuery(0, sql);
-
-                //billcopy
-                sql = "Insert into BillCopy(BilCpyBillTo,BilCpyBilAdr,BilCpyComment,BilCpyNbrOfCopies,BilCpyPrintFormat,BilCpyEmailFormat,BilCpyExportFormat,BilCpyARFormat) "
-                + " values ( " + billto.ToString() + ", " + addyid.ToString() + " ,'',1,1,0,0,0 )";
-
-                _jurisUtility.ExecuteNonQuery(0, sql);
-
-                return billto;
             }
 
         }
@@ -1032,7 +1064,8 @@ namespace JurisUtilityBase
             string sql = "";
 
 
-            sql = "select matsysnbr from matter where matclinbr = " + clisysnbr.ToString() + " and matcode = '" + matcode + "'";
+            sql = "select matsysnbr from matter where matclinbr = " + clisysnbr.ToString() + " and matcode = " + matcode;
+            MessageBox.Show(sql);
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
             if (dds != null && dds.Tables.Count > 0)
             {
@@ -1111,6 +1144,87 @@ namespace JurisUtilityBase
         private void ExitDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void textBoxMatterCode_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxCode_MouseLeave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxCode_Leave(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBoxCode.Text) && clisysnbr == 0)
+            {
+                string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + textBoxCode.Text + "'";
+                DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+                if (dds != null && dds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in dds.Tables[0].Rows)
+                    {
+                        clisysnbr = Convert.ToInt32(dr[0].ToString());
+                    }
+                }
+
+                if (clisysnbr != 0)
+                {
+                    string sysparam = "  select SpTxtValue from sysparam where SpName = 'FldMatter'";
+                    DataSet dds2 = _jurisUtility.RecordsetFromSQL(sysparam);
+                    int clientLength = 5;
+                    string cell = "";
+                    if (dds2 != null && dds.Tables.Count > 0)
+                    {
+                        foreach (DataRow dr in dds2.Tables[0].Rows)
+                        {
+                            cell = dr[0].ToString();
+                        }
+
+                    }
+                    string[] test = cell.Split(',');
+                    string codesql = "";
+
+
+                    sql = " SELECT top 1 matcode, matsysnbr" +
+                       "   FROM Matter" +
+                       "   where matclinbr = " + clisysnbr +
+                        "  order by matsysnbr desc";
+                    DataSet dds1 = _jurisUtility.RecordsetFromSQL(sql);
+                    if (dds1 != null && dds1.Tables.Count > 0)
+                    {
+                        foreach (DataRow dr in dds1.Tables[0].Rows)
+                        {
+                            if (isNumeric(dr[0].ToString()))
+                            {
+                                if (test[1].Equals("C"))
+                                {
+                                    clientLength = Convert.ToInt32(test[2]);
+                                    codesql = "000000000000" + (Convert.ToInt32(dr[0].ToString()) + 1).ToString();
+                                    codesql = codesql.Substring(codesql.Length - clientLength, clientLength);
+                                }
+                                else
+                                {
+
+                                    codesql = "000000000000" + (Convert.ToInt32(dr[0].ToString()) + 1).ToString();
+                                    codesql = codesql.Substring(codesql.Length - 12, 12);
+                                }
+
+
+
+                                textBoxMatterCode.Text = codesql;
+                            }
+                        }
+                    }
+
+
+                }
+
+
+
+            }
         }
     }
 }
