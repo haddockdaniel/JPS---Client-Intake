@@ -54,29 +54,55 @@ namespace JurisUtilityBase
                 }
             } //else its not there so add it
 
+            DataSet myRSPC2 = new DataSet();
             //if clicode is Numeric then increment by 1
-            sql = "SELECT CliCode as CL from ( select max(clisysnbr) as MC FROM Client) kkf inner join client on kkf.MC = client.clisysnbr";
-            DataSet myRSPC2 = _jurisUtility.RecordsetFromSQL(sql);
-            if (myRSPC2.Tables[0].Rows.Count != 0)
-            {
-                string lastCliCode = "";
-                foreach (DataRow dr in myRSPC2.Tables[0].Rows)
-                    lastCliCode = dr["CL"].ToString();
-                try //if isnumeric
+
+            string sysparam = "  select SpTxtValue from sysparam where SpName = 'FldMatter'";
+                DataSet dds2 = _jurisUtility.RecordsetFromSQL(sysparam);
+                int clientLength = 5;
+                string cell = "";
+                if (dds2 != null && dds.Tables.Count > 0)
                 {
-                    int test = Convert.ToInt32(lastCliCode);
-                    string tt = (test + 1).ToString();
-                    sql = "select clisysnbr from client where clicode = '" + tt + "'";
-                    if (myRSPC2.Tables[0].Rows.Count != 0)
+                    foreach (DataRow dr in dds2.Tables[0].Rows)
                     {
-                        textBoxCode.Text = "";
+                        cell = dr[0].ToString();
                     }
-                    else
-                        textBoxCode.Text = (test + 1).ToString();
+
                 }
-                catch (Exception ex1)
-                { }
-            }
+                string[] test = cell.Split(',');
+                string codesql = "";
+
+
+                sql = " SELECT max(clicode) as cc FROM Client";
+                DataSet dds1 = _jurisUtility.RecordsetFromSQL(sql);
+                if (dds1 != null && dds1.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in dds1.Tables[0].Rows)
+                    {
+                        if (isNumeric(dr[0].ToString()))
+                        {
+                            if (test[1].Equals("C"))
+                            {
+                                clientLength = Convert.ToInt32(test[2]);
+                                codesql = "000000000000" + (Convert.ToInt32(dr[0].ToString()) + 1).ToString();
+                                codesql = codesql.Substring(codesql.Length - clientLength, clientLength);
+                            }
+                            else
+                            {
+
+                                codesql = "000000000000" + (Convert.ToInt32(dr[0].ToString()) + 1).ToString();
+                                codesql = codesql.Substring(codesql.Length - 12, 12);
+                            }
+
+
+
+                            textBoxCode.Text = codesql;
+                        }
+                    }
+                }
+
+
+            
 
 
 
