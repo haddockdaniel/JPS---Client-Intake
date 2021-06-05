@@ -44,6 +44,7 @@ namespace JurisUtilityBase
             dateTimePickerOpened.Value = DateTime.Now; //OpenedDate
 
             //see if a default exists and keep the ID for later use
+            checkForTables();
             string sql = "select id from defaults where IsStandard = 'Y'";
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
             if (dds != null && dds.Tables.Count > 0)
@@ -57,7 +58,7 @@ namespace JurisUtilityBase
             DataSet myRSPC2 = new DataSet();
             //if clicode is Numeric then increment by 1
 
-            string sysparam = "  select SpTxtValue from sysparam where SpName = 'FldMatter'";
+            string sysparam = "  select SpTxtValue from sysparam where SpName = 'FldClient'";
                 DataSet dds2 = _jurisUtility.RecordsetFromSQL(sysparam);
                 int clientLength = 5;
                 string cell = "";
@@ -102,15 +103,42 @@ namespace JurisUtilityBase
                 }
 
 
-            
+            //get number of originators
+            sysparam = "  select SpTxtValue from sysparam where SpName = 'CfgTkprOpts'";
+            dds2.Clear();
+            dds2 = _jurisUtility.RecordsetFromSQL(sysparam); //the first character should be a number...if not, do nothing
+            int numOfOrig = 5;
+            string[] temp = null;
+            try
+            {
+                
+                if (dds2 != null && dds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in dds2.Tables[0].Rows)
+                    {
+                        cell = dr[0].ToString();
+                    }
+                    temp = cell.Split(',');
+                    numOfOrig = Convert.ToInt32(temp[0]);
+                }
 
+
+
+            }
+            catch (Exception vv)
+            {
+
+
+            }
+
+            hideOrShowOriginators(numOfOrig);
 
 
 
             //Office
             comboBoxOffice.ClearItems();
             myRSPC2.Clear();
-            string SQLPC2 = "select OfcOfficeCode as OfficeCode from OfficeCode order by OfcOfficeCode";
+            string SQLPC2 = "select OfcOfficeCode + '    ' + right(OfcDesc, 30) as OfficeCode from OfficeCode order by OfcOfficeCode";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
             if (myRSPC2.Tables[0].Rows.Count == 0)
@@ -129,7 +157,7 @@ namespace JurisUtilityBase
             //pract Class
             comboBoxPC.ClearItems();
             myRSPC2.Clear();
-            SQLPC2 = "select PrctClsCode as PC from PracticeClass order by PrctClsCode";
+            SQLPC2 = "select PrctClsCode  + '    ' + right(PrctClsDesc, 30) as PC from PracticeClass order by PrctClsCode";
              myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
             if (myRSPC2.Tables[0].Rows.Count == 0)
@@ -409,8 +437,34 @@ namespace JurisUtilityBase
             //  OT = this.cbOT.GetItemText(this.cbOT.SelectedItem).Split(' ')[0];
         }
 
+        private void hideOrShowOriginators(int number)
+        {
+            if (number > 1)
+            {
+                comboBoxOT2.Visible = true;
+                textBoxOTPct2.Visible = true;
+            }
+            if (number > 2)
+            {
+                comboBoxOT3.Visible = true;
+                textBoxOTPct3.Visible = true;
+            }
+            if (number > 3)
+            {
+                comboBoxOT4.Visible = true;
+                textBoxOTPct4.Visible = true;
+            }
+            if (number > 4)
+            {
+                comboBoxOT5.Visible = true;
+                textBoxOTPct5.Visible = true;
+            }
+
+        }
+
         private void loadDfaultPreset()
         {
+            checkForTables();
             string sql = "select name, data, entrytype from DefaultSettings where defaultid = " + presetID.ToString();
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
             if (dds != null && dds.Tables.Count > 0)
@@ -514,7 +568,7 @@ namespace JurisUtilityBase
 
         private void clearFieldsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MatterForm cleared = new MatterForm(_jurisUtility, 0, false, 0, "");
+            MatterForm cleared = new MatterForm(_jurisUtility,  0, "");
             cleared.Show();
             this.Close();
         }
@@ -531,6 +585,7 @@ namespace JurisUtilityBase
             if (!string.IsNullOrEmpty(name))
             {
                 //see if default name already exists
+                checkForTables();
                 string sql = "select name from defaults";
                 DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
                 bool exists = false;
@@ -553,6 +608,7 @@ namespace JurisUtilityBase
 
         private void createDefault(string name)
         {
+            checkForTables();
             string sql = "insert into defaults (ID, name, PopulateMatter, CreationDate, IsStandard, DefType ) " +
                 " values ((case when (select max(ID) from defaults) is null then 1 else ((select max(ID) from defaults) + 1) end), '" + name + "', 'N', getdate(), 'N', 'C')";
 
@@ -608,6 +664,7 @@ namespace JurisUtilityBase
 
         private void buttonModify(object sender, EventArgs e)
         {
+            checkForTables();
             string sql = "delete from DefaultSettings where defaultid = " + presetID.ToString();
             _jurisUtility.ExecuteNonQuery(0, sql);
 
@@ -666,19 +723,26 @@ namespace JurisUtilityBase
                 checkBoxReqTaskCodes.Checked = preCheckedState; // returns it to whatever state it was before the change
             }
             if (this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0].Equals("F")) // flat fee gives them the option to include exps
+            {
                 checkBoxIncludeExp.Visible = true;
+
+            }
             else
+            {
                 checkBoxIncludeExp.Visible = false;
+            }
             if (this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0].Equals("R")) //retainer requires retainer type
             {
                 labelRet.Visible = true;
                 comboBoxRetainerType.Visible = true;
+
             }
             else
             {
                 labelRet.Visible = false;
                 comboBoxRetainerType.Visible = false;
             }
+
         }
 
         private void comboBoxFeeFreq_SelectedIndexChanged(object sender, EventArgs e)
@@ -832,12 +896,13 @@ namespace JurisUtilityBase
                     incorrectFields.Add("Fee Threshold");
                 }
 
-                //ensure no apostrophes or double quotes as they break sql
-                foreach (var textbox in this.Controls.OfType<TextBox>())
-                    textbox.Text = textbox.Text.Replace("'", "").Replace("\"", "");
+
+            //ensure no apostrophes or double quotes as they break sql
+            foreach (var textbox in this.Controls.OfType<TextBox>())
+                    textbox.Text = textbox.Text.Replace("'", "").Replace("\"", "").Replace(@"\", " ").Replace("%", "").Replace("[", "").Replace("]", "").Replace("_", " ").Replace("^", ""); ;
 
                 foreach (var textbox in this.Controls.OfType<RichTextBox>())
-                    textbox.Text = textbox.Text.Replace("'", "").Replace("\"", "");
+                    textbox.Text = textbox.Text.Replace("'", "").Replace("\"", "").Replace(@"\", " ").Replace("%", "").Replace("[", "").Replace("]", "").Replace("_", " ").Replace("^", ""); ;
 
                 if (incorrectFields.Count == 0)
                 {
@@ -958,8 +1023,8 @@ namespace JurisUtilityBase
                 _jurisUtility.ExecuteNonQuery(0, sql);
 
 
-
-
+                if (!resp.Equals("null"))
+                    addRespToTable(resp); //you have to add it twice for some reason...in client and ClientResponsibleTimekeeper
                 createAddy();
 
                 string SQL = "Insert into DocumentTree(dtdocid, dtsystemcreated, dtdocclass,dtdoctype,  dtparentid, dttitle, dtkeyl) "
@@ -978,8 +1043,34 @@ namespace JurisUtilityBase
 
 
                 if (presetID != 0)
+                {
+                    checkForTables();
                     loadDfaultPreset();
+                }
             }
+
+
+
+
+
+        }
+
+        private void addRespToTable(string empsys)
+        {
+            string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + textBoxCode.Text + "'";
+            DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+            if (dds != null && dds.Tables.Count > 0)
+            {
+                foreach (DataRow dr in dds.Tables[0].Rows)
+                {
+                    clisysnbr = Convert.ToInt32(dr[0].ToString());
+                }
+
+            }
+
+            sql = "insert into ClientResponsibleTimekeeper (CRTClientID, CRTEmployeeID, CRTPercent) values ( " + 
+                   clisysnbr.ToString() + ", " + empsys + ", 100.0000 )" ;
+            _jurisUtility.ExecuteNonQuery(0, sql);
 
 
 
@@ -1000,6 +1091,7 @@ namespace JurisUtilityBase
 
             }
 
+
             string addy = richTextBoxBAAddy.Text.Replace("\r", "|").Replace("\n", "|");
             addy = addy.Replace("||", "|");
 
@@ -1016,7 +1108,56 @@ namespace JurisUtilityBase
             _jurisUtility.ExecuteNonQuery(0, sql);
 
 
+            sql = "select max(biladrsysnbr) from billingaddress";
+            dds.Clear();
+            int addyid = 0;
+            dds = _jurisUtility.RecordsetFromSQL(sql);
+            if (dds != null && dds.Tables.Count > 0)
+            {
+                foreach (DataRow dr in dds.Tables[0].Rows)
+                {
+                    addyid = Convert.ToInt32(dr[0].ToString());
+                }
+
+            }
+
+
             sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
+            _jurisUtility.ExecuteNonQuery(0, sql);
+            //create billto
+
+
+            string resp = "0";
+            if (checkBoxRT.Checked)
+                resp = " (select empsysnbr from employee where empid = '" + this.comboBoxRT.GetItemText(this.comboBoxRT.SelectedItem).Split(' ')[0] + "')";
+
+            sql = "Insert into BillTo (BillToSysNbr,BillToCliNbr,BillToUsageFlg,BillToNickName,BillToBillingAtty,BillToBillFormat,BillToEditFormat,BillToRespAtty) " +
+                "values (case when(select max(billtosysnbr) from billto) is null then 1 else ((select max(billtosysnbr) from billto) +1) end, " + clisysnbr.ToString() +
+                ",  'M', '" + textBoxBANName.Text + "', (select empsysnbr from employee where empid = '" + this.comboBoxBT.GetItemText(this.comboBoxBT.SelectedItem).Split(' ')[0] + "'), " +
+                " '" + this.comboBoxBillLayout.GetItemText(this.comboBoxBillLayout.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxPreBillLayout.GetItemText(this.comboBoxPreBillLayout.SelectedItem).Split(' ')[0] + "', " + resp + ")";
+
+            _jurisUtility.ExecuteNonQuery(0, sql);
+
+            sql = "select max(billtosysnbr) from billto";
+            dds.Clear();
+            int billto = 0;
+            dds = _jurisUtility.RecordsetFromSQL(sql);
+            if (dds != null && dds.Tables.Count > 0)
+            {
+                foreach (DataRow dr in dds.Tables[0].Rows)
+                {
+                    billto = Convert.ToInt32(dr[0].ToString());
+                }
+
+            }
+
+            sql = "update sysparam set spnbrvalue = (select max(billtosysnbr) from billto) where spname = 'LastSysNbrBillTo'";
+            _jurisUtility.ExecuteNonQuery(0, sql);
+
+            //billcopy
+            sql = "Insert into BillCopy(BilCpyBillTo,BilCpyBilAdr,BilCpyComment,BilCpyNbrOfCopies,BilCpyPrintFormat,BilCpyEmailFormat,BilCpyExportFormat,BilCpyARFormat) "
+            + " values ( " + billto.ToString() + ", " + addyid.ToString() + " ,'" + textBoxBANName.Text + "',1,1,0,0,0 )";
+
             _jurisUtility.ExecuteNonQuery(0, sql);
 
         }
@@ -1057,13 +1198,53 @@ namespace JurisUtilityBase
             DialogResult fc = MessageBox.Show("Client " + textBoxCode.Text + " was added successfully." + "\r\n" + "Would you like to Add a Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (fc == DialogResult.Yes)
             {
-                MatterForm cleared = new MatterForm(_jurisUtility, presetID, false, clisysnbr, textBoxCode.Text);
+                //save info to move over to matter
+                saveInfoToMoveToMatter();
+                MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text);
                 cleared.Show();
                 //move data over
                 this.Close();
             }
             else
                 this.Close();
+        }
+
+        private void saveInfoToMoveToMatter()
+        {
+            checkForTables();
+            string sql = "insert into defaults (ID, name, PopulateMatter, CreationDate, IsStandard, DefType ) " +
+                " values (999999, 'MoveToMatter', 'N', getdate(), 'N', 'C')";
+
+            _jurisUtility.ExecuteNonQuery(0, sql);
+
+
+            foreach (var textbox in this.Controls.OfType<TextBox>())
+            {
+                if (!string.IsNullOrEmpty(textbox.Text) && !textbox.Name.Equals("textBoxCode"))
+                {
+                    sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType) values (999999, '" + textbox.Name + "', '" + textbox.Text + "', 'textBox' )";
+                    _jurisUtility.ExecuteNonQuery(0, sql);
+
+                }
+            }
+            foreach (var cbox in this.Controls.OfType<ComboBox>())
+            {
+                sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType) values (999999, '" + cbox.Name + "', '" + cbox.GetItemText(cbox.SelectedItem) + "', 'comboBox' )";
+                _jurisUtility.ExecuteNonQuery(0, sql);
+            }
+
+            foreach (var textbox in this.Controls.OfType<CheckBox>())
+            {
+                string isChecked = ((bool?)textbox.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
+                sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType) values (999999, '" + textbox.Name + "', '" + isChecked + "', 'checkBox' )";
+                _jurisUtility.ExecuteNonQuery(0, sql);
+            }
+
+            foreach (var textbox in this.Controls.OfType<RichTextBox>())
+            {
+                sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType) values (999999, '" + textbox.Name + "', '" + textbox.Text + "', 'richTextBox' )";
+                _jurisUtility.ExecuteNonQuery(0, sql);
+            }
         }
 
         private bool testOrigPct()

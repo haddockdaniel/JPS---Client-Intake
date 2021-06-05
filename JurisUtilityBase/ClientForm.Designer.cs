@@ -341,7 +341,7 @@
             this.comboBoxOffice.FormattingEnabled = true;
             this.comboBoxOffice.Location = new System.Drawing.Point(119, 277);
             this.comboBoxOffice.Name = "comboBoxOffice";
-            this.comboBoxOffice.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxOffice.Size = new System.Drawing.Size(246, 21);
             this.comboBoxOffice.TabIndex = 9;
             // 
             // comboBoxPC
@@ -349,7 +349,7 @@
             this.comboBoxPC.FormattingEnabled = true;
             this.comboBoxPC.Location = new System.Drawing.Point(119, 309);
             this.comboBoxPC.Name = "comboBoxPC";
-            this.comboBoxPC.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxPC.Size = new System.Drawing.Size(246, 21);
             this.comboBoxPC.TabIndex = 10;
             // 
             // comboBoxBT
@@ -1059,21 +1059,21 @@
             // moveToolStripMenuItem
             // 
             this.moveToolStripMenuItem.Name = "moveToolStripMenuItem";
-            this.moveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.moveToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.moveToolStripMenuItem.Text = "Save As Preset";
             this.moveToolStripMenuItem.Click += new System.EventHandler(this.saveAsDefaultToolStripMenuItem_Click);
             // 
             // loadDefaultsToolStripMenuItem
             // 
             this.loadDefaultsToolStripMenuItem.Name = "loadDefaultsToolStripMenuItem";
-            this.loadDefaultsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadDefaultsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.loadDefaultsToolStripMenuItem.Text = "Manage Presets";
             this.loadDefaultsToolStripMenuItem.Click += new System.EventHandler(this.loadDefaultsToolStripMenuItem_Click);
             // 
             // clearFormToolStripMenuItem
             // 
             this.clearFormToolStripMenuItem.Name = "clearFormToolStripMenuItem";
-            this.clearFormToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearFormToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.clearFormToolStripMenuItem.Text = "Clear Form";
             this.clearFormToolStripMenuItem.Click += new System.EventHandler(this.clearFormToolStripMenuItem_Click);
             // 
@@ -1127,6 +1127,7 @@
             this.textBoxOTPct2.Size = new System.Drawing.Size(52, 20);
             this.textBoxOTPct2.TabIndex = 15;
             this.textBoxOTPct2.Text = "0";
+            this.textBoxOTPct2.Visible = false;
             // 
             // comboBoxOT2
             // 
@@ -1135,6 +1136,7 @@
             this.comboBoxOT2.Name = "comboBoxOT2";
             this.comboBoxOT2.Size = new System.Drawing.Size(185, 21);
             this.comboBoxOT2.TabIndex = 14;
+            this.comboBoxOT2.Visible = false;
             // 
             // textBoxOTPct3
             // 
@@ -1143,6 +1145,7 @@
             this.textBoxOTPct3.Size = new System.Drawing.Size(52, 20);
             this.textBoxOTPct3.TabIndex = 17;
             this.textBoxOTPct3.Text = "0";
+            this.textBoxOTPct3.Visible = false;
             // 
             // comboBoxOT3
             // 
@@ -1151,6 +1154,7 @@
             this.comboBoxOT3.Name = "comboBoxOT3";
             this.comboBoxOT3.Size = new System.Drawing.Size(185, 21);
             this.comboBoxOT3.TabIndex = 16;
+            this.comboBoxOT3.Visible = false;
             // 
             // textBoxOTPct4
             // 
@@ -1159,6 +1163,7 @@
             this.textBoxOTPct4.Size = new System.Drawing.Size(52, 20);
             this.textBoxOTPct4.TabIndex = 19;
             this.textBoxOTPct4.Text = "0";
+            this.textBoxOTPct4.Visible = false;
             // 
             // comboBoxOT4
             // 
@@ -1167,6 +1172,7 @@
             this.comboBoxOT4.Name = "comboBoxOT4";
             this.comboBoxOT4.Size = new System.Drawing.Size(185, 21);
             this.comboBoxOT4.TabIndex = 18;
+            this.comboBoxOT4.Visible = false;
             // 
             // textBoxOTPct5
             // 
@@ -1175,6 +1181,7 @@
             this.textBoxOTPct5.Size = new System.Drawing.Size(52, 20);
             this.textBoxOTPct5.TabIndex = 21;
             this.textBoxOTPct5.Text = "0";
+            this.textBoxOTPct5.Visible = false;
             // 
             // comboBoxOT5
             // 
@@ -1183,6 +1190,7 @@
             this.comboBoxOT5.Name = "comboBoxOT5";
             this.comboBoxOT5.Size = new System.Drawing.Size(185, 21);
             this.comboBoxOT5.TabIndex = 20;
+            this.comboBoxOT5.Visible = false;
             // 
             // comboBoxRT
             // 
