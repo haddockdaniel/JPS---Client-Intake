@@ -696,7 +696,7 @@ namespace JurisUtilityBase
                 sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType) values (" +presetID + ", '" + textbox.Name + "', '" + textbox.Text + "', 'richTextBox' )";
                 _jurisUtility.ExecuteNonQuery(0, sql);
             }
-            sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
+            sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C' and id <> 999999";
             DataSet ds1 = _jurisUtility.RecordsetFromSQL(sql);
             PresetManager DM = new PresetManager(ds1, _jurisUtility, "C");
             DM.Show();
