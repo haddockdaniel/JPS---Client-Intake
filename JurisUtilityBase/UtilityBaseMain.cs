@@ -98,7 +98,12 @@ namespace JurisUtilityBase
 
         private void DoDaFix()
         {
-
+            //now delete it as it isnt a preset and is only temp because we arent moving client info over to a matter screen
+            string sql = "delete from DefaultSettings where defaultid = 999999";
+            _jurisUtility.ExecuteNonQuery(0, sql);
+            sql = "delete from Defaults where id = 999999";
+            _jurisUtility.ExecuteNonQuery(0, sql);
+            MatterForm mf = new MatterForm(_jurisUtility, 0, "", 0);
             if (radioButtonCliOnly.Checked)
             {
                 ClientForm cf = new ClientForm(_jurisUtility, 0, false);
@@ -106,7 +111,8 @@ namespace JurisUtilityBase
             }
             else
             {
-                MatterForm mf = new MatterForm(_jurisUtility,  0, "");
+               
+
                 mf.Show();
             }
 

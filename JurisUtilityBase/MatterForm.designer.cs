@@ -162,7 +162,6 @@
             this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 100;
             this.label1.Text = "Client Code";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // textBoxCode
             // 
@@ -171,8 +170,8 @@
             this.textBoxCode.Name = "textBoxCode";
             this.textBoxCode.Size = new System.Drawing.Size(77, 20);
             this.textBoxCode.TabIndex = 1;
+            this.textBoxCode.TextChanged += new System.EventHandler(this.textBoxCode_TextChanged);
             this.textBoxCode.Leave += new System.EventHandler(this.textBoxCode_Leave);
-            this.textBoxCode.MouseLeave += new System.EventHandler(this.textBoxCode_MouseLeave);
             // 
             // textBoxNName
             // 
@@ -1054,7 +1053,7 @@
             // clearFormToolStripMenuItem
             // 
             this.clearFormToolStripMenuItem.Name = "clearFormToolStripMenuItem";
-            this.clearFormToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearFormToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.clearFormToolStripMenuItem.Text = "Clear Form";
             this.clearFormToolStripMenuItem.Click += new System.EventHandler(this.clearFormToolStripMenuItem_Click);
             // 
@@ -1232,7 +1231,6 @@
             this.textBoxMatterCode.Size = new System.Drawing.Size(77, 20);
             this.textBoxMatterCode.TabIndex = 1;
             this.textBoxMatterCode.Text = "0001";
-            this.textBoxMatterCode.TextChanged += new System.EventHandler(this.textBoxMatterCode_TextChanged);
             // 
             // label11
             // 
@@ -1261,7 +1259,6 @@
             this.textBoxFlatRetAmt.TabIndex = 196;
             this.textBoxFlatRetAmt.Text = "100";
             this.textBoxFlatRetAmt.Visible = false;
-            this.textBoxFlatRetAmt.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // checkBoxChooseAddy
             // 
@@ -1274,6 +1271,7 @@
             this.checkBoxChooseAddy.TabIndex = 198;
             this.checkBoxChooseAddy.Text = "Choose an Existing Address";
             this.checkBoxChooseAddy.UseVisualStyleBackColor = true;
+            this.checkBoxChooseAddy.CheckedChanged += new System.EventHandler(this.checkBoxChooseAddy_CheckedChanged);
             // 
             // comboBoxAddyChoose
             // 
@@ -1282,6 +1280,7 @@
             this.comboBoxAddyChoose.Name = "comboBoxAddyChoose";
             this.comboBoxAddyChoose.Size = new System.Drawing.Size(187, 21);
             this.comboBoxAddyChoose.TabIndex = 199;
+            this.comboBoxAddyChoose.SelectedIndexChanged += new System.EventHandler(this.comboBoxAddyChoose_SelectedIndexChanged);
             // 
             // MatterForm
             // 

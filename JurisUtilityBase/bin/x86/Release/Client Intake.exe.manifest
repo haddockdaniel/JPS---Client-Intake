@@ -79,14 +79,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Client Intake.exe" size="960000">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Client Intake.exe" size="961536">
       <assemblyIdentity name="Client Intake" version="2.71.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>jG5qQvt47DqvRFLfbb1Nourmd7I=</dsig:DigestValue>
+        <dsig:DigestValue>ritmOhygAhbFqDFRwBcZ73MU3Rc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

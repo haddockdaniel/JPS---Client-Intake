@@ -41,6 +41,7 @@ namespace JurisUtilityBase
         //load all default items
         private void ClientForm_Load(object sender, EventArgs e)
         {
+
             dateTimePickerOpened.Value = DateTime.Now; //OpenedDate
 
             //see if a default exists and keep the ID for later use
@@ -568,7 +569,7 @@ namespace JurisUtilityBase
 
         private void clearFieldsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MatterForm cleared = new MatterForm(_jurisUtility,  0, "");
+            MatterForm cleared = new MatterForm(_jurisUtility,  0, "", 0);
             cleared.Show();
             this.Close();
         }
@@ -1025,7 +1026,7 @@ namespace JurisUtilityBase
 
                 if (!resp.Equals("null"))
                     addRespToTable(resp); //you have to add it twice for some reason...in client and ClientResponsibleTimekeeper
-                createAddy();
+                int addyid = createAddy();
 
                 string SQL = "Insert into DocumentTree(dtdocid, dtsystemcreated, dtdocclass,dtdoctype,  dtparentid, dttitle, dtkeyl) "
 + " select (select max(dtdocid)  from documenttree) + 1 , 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
@@ -1038,7 +1039,7 @@ namespace JurisUtilityBase
                 SQL = " update sysparam set spnbrvalue = (select max(CliSysNbr) from client) where spname = 'LastSysNbrClient'";
                 _jurisUtility.ExecuteNonQuery(0, SQL);
 
-                addOrig();
+                addOrig(addyid);
 
 
 
@@ -1078,7 +1079,7 @@ namespace JurisUtilityBase
 
         }
 
-        private void createAddy()
+        private int createAddy()
         {
             string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + textBoxCode.Text + "'";
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
@@ -1126,43 +1127,10 @@ namespace JurisUtilityBase
             _jurisUtility.ExecuteNonQuery(0, sql);
             //create billto
 
-
-            string resp = "0";
-            if (checkBoxRT.Checked)
-                resp = " (select empsysnbr from employee where empid = '" + this.comboBoxRT.GetItemText(this.comboBoxRT.SelectedItem).Split(' ')[0] + "')";
-
-            sql = "Insert into BillTo (BillToSysNbr,BillToCliNbr,BillToUsageFlg,BillToNickName,BillToBillingAtty,BillToBillFormat,BillToEditFormat,BillToRespAtty) " +
-                "values (case when(select max(billtosysnbr) from billto) is null then 1 else ((select max(billtosysnbr) from billto) +1) end, " + clisysnbr.ToString() +
-                ",  'M', '" + textBoxBANName.Text + "', (select empsysnbr from employee where empid = '" + this.comboBoxBT.GetItemText(this.comboBoxBT.SelectedItem).Split(' ')[0] + "'), " +
-                " '" + this.comboBoxBillLayout.GetItemText(this.comboBoxBillLayout.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxPreBillLayout.GetItemText(this.comboBoxPreBillLayout.SelectedItem).Split(' ')[0] + "', " + resp + ")";
-
-            _jurisUtility.ExecuteNonQuery(0, sql);
-
-            sql = "select max(billtosysnbr) from billto";
-            dds.Clear();
-            int billto = 0;
-            dds = _jurisUtility.RecordsetFromSQL(sql);
-            if (dds != null && dds.Tables.Count > 0)
-            {
-                foreach (DataRow dr in dds.Tables[0].Rows)
-                {
-                    billto = Convert.ToInt32(dr[0].ToString());
-                }
-
-            }
-
-            sql = "update sysparam set spnbrvalue = (select max(billtosysnbr) from billto) where spname = 'LastSysNbrBillTo'";
-            _jurisUtility.ExecuteNonQuery(0, sql);
-
-            //billcopy
-            sql = "Insert into BillCopy(BilCpyBillTo,BilCpyBilAdr,BilCpyComment,BilCpyNbrOfCopies,BilCpyPrintFormat,BilCpyEmailFormat,BilCpyExportFormat,BilCpyARFormat) "
-            + " values ( " + billto.ToString() + ", " + addyid.ToString() + " ,'" + textBoxBANName.Text + "',1,1,0,0,0 )";
-
-            _jurisUtility.ExecuteNonQuery(0, sql);
-
+            return addyid;
         }
 
-        private void addOrig()
+        private void addOrig(int addyid)
         {
             string sql = "";
                 
@@ -1200,7 +1168,7 @@ namespace JurisUtilityBase
             {
                 //save info to move over to matter
                 saveInfoToMoveToMatter();
-                MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text);
+                MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid);
                 cleared.Show();
                 //move data over
                 this.Close();
