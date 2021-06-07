@@ -36,9 +36,10 @@ namespace JurisUtilityBase
         bool isModification = false;
         public List<ExceptionHandler> errorList = new List<ExceptionHandler>();
         ExceptionHandler error = null;
-
+        bool codeIsNumeric = false;
         int clisysnbr = 0;
         bool isError = false;
+        int lengthOfCode = 4;
 
         //load all default items
         private void ClientForm_Load(object sender, EventArgs e)
@@ -60,58 +61,74 @@ namespace JurisUtilityBase
 
             DataSet myRSPC2 = new DataSet();
             //if clicode is Numeric then increment by 1
-
-            string sysparam = "  select SpTxtValue from sysparam where SpName = 'FldClient'";
-                DataSet dds2 = _jurisUtility.RecordsetFromSQL(sysparam);
-                int clientLength = 5;
+            dds.Clear();
+            sql = "  select SpTxtValue from sysparam where SpName = 'FldClient'";
+                dds = _jurisUtility.RecordsetFromSQL(sql);
                 string cell = "";
-                if (dds2 != null && dds.Tables.Count > 0)
+                if (dds != null && dds.Tables.Count > 0)
                 {
-                    foreach (DataRow dr in dds2.Tables[0].Rows)
+                    foreach (DataRow dr in dds.Tables[0].Rows)
                     {
                         cell = dr[0].ToString();
                     }
 
                 }
+
+
                 string[] test = cell.Split(',');
-                string codesql = "";
+            lengthOfCode = Convert.ToInt32(test[2]);
 
 
-                sql = " SELECT max(clicode) as cc FROM Client";
-                DataSet dds1 = _jurisUtility.RecordsetFromSQL(sql);
-                if (dds1 != null && dds1.Tables.Count > 0)
+            if (test[1].Equals("C"))
+                codeIsNumeric = false;
+            else
+                codeIsNumeric = true;
+
+            try
+            {
+                if (codeIsNumeric)
                 {
-                    foreach (DataRow dr in dds1.Tables[0].Rows)
+                    dds.Clear();
+                    sql = "SELECT top 1 cast(clicode as int) + 1" +
+                                 " FROM client " +
+                                 " WHERE cast(clicode as int) +1 NOT IN(SELECT DISTINCT cast(clicode as int) FROM client) and cast(clicode as int) > 1000 " +
+                                 " order by cast(clicode as int)";
+                    dds = _jurisUtility.RecordsetFromSQL(sql);
+                    if (dds != null && dds.Tables.Count > 0)
                     {
-                        if (isNumeric(dr[0].ToString()))
+                        foreach (DataRow dr in dds.Tables[0].Rows)
                         {
-                            if (!test[1].Equals("C"))
+                            if (isNumeric(dr[0].ToString()))
                             {
+                                if (!test[1].Equals("C"))
+                                {
 
-                                codesql = "000000000000" + (Convert.ToInt32(dr[0].ToString()) + 1).ToString();
-                                codesql = codesql.Substring(codesql.Length - 12, 12);
+                                    cell = "000000000000" + dr[0].ToString();
+                                    textBoxCode.Text =  cell.Substring(cell.Length - lengthOfCode, lengthOfCode);
+                                }
                             }
-
-
-
-                            textBoxCode.Text = codesql;
                         }
                     }
+
                 }
+                else
+                    textBoxCode.Text = "";
+            }catch (Exception nn)
+            { }
 
 
             //get number of originators
-            sysparam = "  select SpTxtValue from sysparam where SpName = 'CfgTkprOpts'";
-            dds2.Clear();
-            dds2 = _jurisUtility.RecordsetFromSQL(sysparam); //the first character should be a number...if not, do nothing
+            sql = "  select SpTxtValue from sysparam where SpName = 'CfgTkprOpts'";
+            dds.Clear();
+            dds = _jurisUtility.RecordsetFromSQL(sql); //the first character should be a number...if not, do nothing
             int numOfOrig = 5;
             string[] temp = null;
             try
             {
                 
-                if (dds2 != null && dds.Tables.Count > 0)
+                if (dds != null && dds.Tables.Count > 0)
                 {
-                    foreach (DataRow dr in dds2.Tables[0].Rows)
+                    foreach (DataRow dr in dds.Tables[0].Rows)
                     {
                         cell = dr[0].ToString();
                     }
@@ -373,18 +390,6 @@ namespace JurisUtilityBase
             comboBoxExpFreq.Items.Add("R    On Request");
             comboBoxExpFreq.SelectedIndex = 0;
 
-            //threshold
-            comboBoxThreshMain.ClearItems();
-            comboBoxThreshMain.Items.Add("0    No thresholds entered");
-            comboBoxThreshMain.Items.Add("1    Fee Amount, No Expense");
-            comboBoxThreshMain.Items.Add("2    Expense Amount, No Fee");
-            comboBoxThreshMain.Items.Add("3    Do not include fee/expense if threshold is met");
-            comboBoxThreshMain.Items.Add("5    Fee Threshold, Include Expense");
-            comboBoxThreshMain.Items.Add("7    Include expense, not fees if threshold is met");
-            comboBoxThreshMain.Items.Add("10   Expense Threshold, Include Fee");
-            comboBoxThreshMain.Items.Add("11   Include fee, not expense if threshold is met");
-            comboBoxThreshMain.Items.Add("15   Include fee and expense if threshold is met");
-            comboBoxThreshMain.SelectedIndex = 0;
 
             //discount options
             comboBoxDisc.ClearItems();
@@ -654,7 +659,31 @@ namespace JurisUtilityBase
 
         private void button1_Click(object sender, EventArgs e)
         {
-            createClient();
+            buttonCreateClient.Enabled = false;
+            if (codeIsNumeric) // is the sysparam setting a number?
+            {
+                if (isNumeric(textBoxCode.Text)) // if so, did they enter a number?
+                {
+                    if (textBoxCode.Text.Length > lengthOfCode) // is it too many characters?
+                        MessageBox.Show("Client Code" + textBoxCode.Text + " is too long. " + "\r\n" + "Your settings only allow for up to " + lengthOfCode.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    else
+                        createClient();
+                }
+                else
+                {
+                    MessageBox.Show("Client Code" + textBoxCode.Text + " is not numeric. Your settings require a number", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+            }
+            else // is it aplha? if so, we only care if its too long
+            {
+                if (textBoxCode.Text.Length > lengthOfCode)
+                    MessageBox.Show("Client Code" + textBoxCode.Text + " is too long. " + "\r\n" + "Your settings only allow for up to " + lengthOfCode.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                    createClient();
+
+            }
+            
             
             //get clisysnbr and pass to matter form
         }
@@ -754,6 +783,16 @@ namespace JurisUtilityBase
                 labelCycle.Visible = false;
                 textBoxCycle.Visible = false;
             }
+            if (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("M") || this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("R"))
+            {
+                label39.Visible = false;
+                textBoxMonth.Visible = false;
+            }
+            else
+            {
+                label39.Visible = true;
+                textBoxMonth.Visible = true;
+            }
         }
 
         private void comboBoxExpFreq_SelectedIndexChanged(object sender, EventArgs e)
@@ -768,25 +807,18 @@ namespace JurisUtilityBase
                 labelCycle.Visible = false;
                 textBoxCycle.Visible = false;
             }
-        }
-
-        private void comboBoxThreshMain_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!this.comboBoxThreshMain.GetItemText(this.comboBoxThreshMain.SelectedItem).Split(' ')[0].Equals("0")) //if not "no threshold"
+            if (this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("M") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("R"))
             {
-                labelExpThresh.Visible = true;
-                labelFeeThresh.Visible = true;
-                textBoxExpThresh.Visible = true;
-                textBoxFeeThresh.Visible = true;
+                label39.Visible = false;
+                textBoxMonth.Visible = false;
             }
             else
             {
-                labelExpThresh.Visible = false;
-                labelFeeThresh.Visible = false;
-                textBoxExpThresh.Visible = false;
-                textBoxFeeThresh.Visible = false;
+                label39.Visible = true;
+                textBoxMonth.Visible = true;
             }
         }
+
 
         private void comboBoxDisc_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -831,11 +863,22 @@ namespace JurisUtilityBase
         }
 
 
+        private string formatClientCode(string code)
+        {
+            string formattedCode = "000000000000" + code;
+            formattedCode = formattedCode.Substring(formattedCode.Length - lengthOfCode, lengthOfCode);
+            textBoxCode.Text = formattedCode;
+            return formattedCode;
+
+        }
+
+
         private bool checkFields()
         {
             if (clisysnbr == 0)
             {
-                string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + textBoxCode.Text + "'";
+                string code = formatClientCode(textBoxCode.Text);
+                string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + code + "'";
                 DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
                 if (dds != null && dds.Tables.Count > 0)
                 {
@@ -882,16 +925,6 @@ namespace JurisUtilityBase
                     textBoxSurPct.Text = "0.00";
                     incorrectFields.Add("Surcharge Pct");
                 }
-                if (!isNumeric(textBoxExpThresh.Text))
-                {
-                    textBoxExpThresh.Text = "0.00";
-                    incorrectFields.Add("Expense Threshold");
-                }
-                if (!isNumeric(textBoxFeeThresh.Text))
-                {
-                    textBoxFeeThresh.Text = "0.00";
-                    incorrectFields.Add("Fee Threshold");
-                }
 
 
             //ensure no apostrophes or double quotes as they break sql
@@ -903,19 +936,28 @@ namespace JurisUtilityBase
 
                 if (incorrectFields.Count == 0)
                 {
-                    foreach (var textbox in this.Controls.OfType<TextBox>())
+                    if (string.IsNullOrEmpty(richTextBoxBAAddy.Text))
                     {
-                        if (string.IsNullOrEmpty(textbox.Text)) //if there is nothing in it, is it required?
+                        MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
+                    else
+                    {
+                        foreach (var textbox in this.Controls.OfType<TextBox>())
                         {
-                            if (!textbox.Name.Equals("textBoxSoB") && !textbox.Name.Equals("textBoxFax") && !textbox.Name.Equals("textBoxBAFax") && !textbox.Name.Equals("textBoxBACountry") && !textbox.Name.Equals("textBoxBAEmail"))
+                            if (string.IsNullOrEmpty(textbox.Text)) //if there is nothing in it, is it required?
                             {
-                                MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return false;
+                                if (!textbox.Name.EndsWith("Opt"))
+                                {
+                                    MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    return false;
+                                }
+
                             }
 
-                        }
-
                     }
+                }
+
 
                     if (testOrigPct())
                         return true;
@@ -933,49 +975,12 @@ namespace JurisUtilityBase
 
                     return false;
                 }
-            
 
+           
         }
 
         private void createClient()
         {
-            //see if they use char or numeric codes and format the client code in the textbox accordingly so we can catch dupes accurately
-            string sysparam = "  select SpTxtValue from sysparam where SpName = 'FldClient'";
-            DataSet dds = _jurisUtility.RecordsetFromSQL(sysparam);
-            int clientLength = 5;
-            string cell = "";
-            if (dds != null && dds.Tables.Count > 0)
-            {
-                cell = dds.Tables[0].Rows[0].ToString();
-
-                foreach (DataRow dr in dds.Tables[0].Rows)
-                {
-                    cell = dr[0].ToString();
-                }
-
-            }
-            string[] test = cell.Split(',');
-            string codesql = "";
-            if (!test[1].Equals("C"))
-            {
-
-                codesql = " right('000000000000' + '" + textBoxCode.Text.Trim() + "', 12) ";
-                dds.Clear();
-                sysparam = "select " + codesql;
-                dds = _jurisUtility.RecordsetFromSQL(sysparam);
-                if (dds != null && dds.Tables.Count > 0)
-                {
-                    foreach (DataRow dr in dds.Tables[0].Rows)
-                    {
-                        textBoxCode.Text = dr[0].ToString();
-                    }
-
-                }
-            }
-
-
-
-            
             if (checkFields())
             {
 
@@ -1001,7 +1006,6 @@ namespace JurisUtilityBase
                 string budg = ((bool?)checkBoxBudget.Checked) == true ? '1'.ToString() : '0'.ToString();
                 string reqTask = ((bool?)checkBoxReqTaskCodes.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
                 string reqAct = ((bool?)checkBoxReqActCodes.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
-                string reqTaskOnExp = ((bool?)checkBoxReqTaskOnExp.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
 
 
 
@@ -1015,15 +1019,15 @@ namespace JurisUtilityBase
     + " CliReqTaskCdOnTime,CliReqActyCdOnTime,CliReqTaskCdOnExp,CliPrimaryAddr,CliType,CliEditFormat,CliThresholdOption,CliRespAtty," +
     "CliBillingField01,CliBillingField02,CliBillingField03,CliBillingField04,CliBillingField05, CliBillingField06,CliBillingField07,CliBillingField08,CliBillingField09,CliBillingField10,CliBillingField11,CliBillingField12,CliBillingField13,CliBillingField14,CliBillingField15,CliBillingField16,CliBillingField17,CliBillingField18,CliBillingField19, CliBillingField20, "
     + " CliCTerms,CliCStatus,CliCStatus2)  "
-    + " values( case when (select max(clisysnbr) from client) is null then 1 else ((select max(clisysnbr) from client) + 1) end, " + codesql + ", '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "', '" + textBoxSoB.Text.Trim() + "', "
-    + " '" + textBoxPhone.Text.Trim() + "', '" + textBoxFax.Text.Trim() + "', '" + textBoxContact.Text.Trim() + "', '" + dateTimePickerOpened.Value.ToString("MM/dd/yyyy") + "', '" + this.comboBoxOffice.GetItemText(this.comboBoxOffice.SelectedItem).Split(' ')[0] + "', "
+    + " values( case when (select max(clisysnbr) from client) is null then 1 else ((select max(clisysnbr) from client) + 1) end, '" + textBoxCode.Text + "', '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "', '" + textBoxSoBOpt.Text.Trim() + "', "
+    + " '" + textBoxPhoneOpt.Text.Trim() + "', '" + textBoxFaxOpt.Text.Trim() + "', '" + textBoxContactOpt.Text.Trim() + "', '" + dateTimePickerOpened.Value.ToString("MM/dd/yyyy") + "', '" + this.comboBoxOffice.GetItemText(this.comboBoxOffice.SelectedItem).Split(' ')[0] + "', "
     + " (select empsysnbr from employee where empid = '" + this.comboBoxBT.GetItemText(this.comboBoxBT.SelectedItem).Split(' ')[0] + "'), "
     + "'" + this.comboBoxPC.GetItemText(this.comboBoxPC.SelectedItem).Split(' ')[0] + "', "
     + " '" + this.comboBoxFeeSched.GetItemText(this.comboBoxFeeSched.SelectedItem).Split(' ')[0] + "'," + txref + ",'" + this.comboBoxExpSched.GetItemText(this.comboBoxExpSched.SelectedItem).Split(' ')[0] + "'," + exref + ", "
     + " '" + this.comboBoxBillLayout.GetItemText(this.comboBoxBillLayout.SelectedItem).Split(' ')[0] + "','" + this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0] + "','" + inclExp + "','" + retType + "', '" + this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0] + "' ," + textBoxMonth.Text + "," + textBoxCycle.Text + ", "
-    + " " + textBoxExpThresh.Text + "," + textBoxFeeThresh.Text + "," + textBoxIntPct.Text + "," + textBoxIntDays.Text + "," + this.comboBoxDisc.GetItemText(this.comboBoxDisc.SelectedItem).Split(' ')[0] + "," + textBoxDiscPct.Text + ", " + this.comboBoxSurcharge.GetItemText(this.comboBoxSurcharge.SelectedItem).Split(' ')[0] + ", " + textBoxSurPct.Text + ", "
-    + " '" + tax1 + "','" + tax2 + "','" + tax3 + "'," + budg + ",'N','" + reqTask + "','" + reqAct + "','" + reqTaskOnExp + "',null,0,'" + this.comboBoxPreBillLayout.GetItemText(this.comboBoxPreBillLayout.SelectedItem).Split(' ')[0] + "', "
-    + " " + this.comboBoxThreshMain.GetItemText(this.comboBoxThreshMain.SelectedItem).Split(' ')[0] + "," + resp + ",'','','','','','','','','','','','', "
+    + " 0.00,0.00," + textBoxIntPct.Text + "," + textBoxIntDays.Text + "," + this.comboBoxDisc.GetItemText(this.comboBoxDisc.SelectedItem).Split(' ')[0] + "," + textBoxDiscPct.Text + ", " + this.comboBoxSurcharge.GetItemText(this.comboBoxSurcharge.SelectedItem).Split(' ')[0] + ", " + textBoxSurPct.Text + ", "
+    + " '" + tax1 + "','" + tax2 + "','" + tax3 + "'," + budg + ",'N','" + reqTask + "','" + reqAct + "','N',null,0,'" + this.comboBoxPreBillLayout.GetItemText(this.comboBoxPreBillLayout.SelectedItem).Split(' ')[0] + "', "
+    + " 0," + resp + ",'','','','','','','','','','','','', "
     + " '','','','','','','','',0,0,'')";
 
                isError =  _jurisUtility.ExecuteNonQuery(0, sql);
@@ -1040,7 +1044,7 @@ namespace JurisUtilityBase
                             if (!isError) //was there an isue adding the address? If so, we need to remove the client
                             {
                                 sql = "select max(biladrsysnbr) from billingaddress";
-                                dds.Clear();
+                                DataSet dds = new DataSet();
                                 int addyid = 0;
                                 dds = _jurisUtility.RecordsetFromSQL(sql);
                                 if (dds != null && dds.Tables.Count > 0)
@@ -1113,6 +1117,11 @@ namespace JurisUtilityBase
                 {
                     MessageBox.Show("There was an issue adding the client. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     clisysnbr = 0;
+
+                     //TextWriter ss = new StreamWriter(@"c:\intel\sql1.txt");
+                     //ss.Write(_jurisUtility.errorMessage);
+                     //ss.Flush();
+                     //ss.Close();
                     isError = false;
                 }
             }
@@ -1178,11 +1187,11 @@ namespace JurisUtilityBase
             string sql = "Insert into BillingAddress(BilAdrSysNbr, BilAdrCliNbr, BilAdrUsageFlg, BilAdrNickName, BilAdrPhone, " +
                 " BilAdrFax, BilAdrContact, BilAdrName, BilAdrAddress, BilAdrCity, BilAdrState, BilAdrZip, BilAdrCountry, BilAdrType, BilAdrEmail) " +
     " values (case when(select max(biladrsysnbr) from billingaddress) is null then 1 else ((select max(biladrsysnbr) from billingaddress) +1) end, " + clisysnbr + ", " +
-    " 'C', '" + textBoxBANName.Text + "', '" + textBoxBAPhone.Text + "', "
-     + "  '" + textBoxBAFax.Text + "', '" + textBoxBAContact.Text + "', " +
-    " '" + textBoxBAName.Text + "', " +
+    " 'C', '" + textBoxBANName.Text + "', '" + textBoxBAPhoneOpt.Text + "', "
+     + "  '" + textBoxBAFaxOpt.Text + "', '" + textBoxBAContactOpt.Text + "', " +
+    " '" + textBoxBANameOpt.Text + "', " +
     "replace('" + addy + "', '|', char(13) + char(10)), "
-    + " '" + textBoxBACity.Text + "', '" + textBoxBAState.Text + "', '" + textBoxBAZip.Text + "','" + textBoxBACountry.Text + "', 0, '" + textBoxBAEmail.Text + "')";
+    + " '" + textBoxBACityOpt.Text + "', '" + textBoxBAStateOpt.Text + "', '" + textBoxBAZipOpt.Text + "','" + textBoxBACountryOpt.Text + "', 0, '" + textBoxBAEmailOpt.Text + "')";
 
             return _jurisUtility.ExecuteNonQuery(0, sql);
         }
@@ -1191,7 +1200,7 @@ namespace JurisUtilityBase
         private int getClisysnbr()
         {
             int sysnbr = 0;
-            string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + textBoxCode.Text + "'";
+            string sql = "select clisysnbr from client where clicode = '" + textBoxCode.Text + "'";
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
             if (dds != null && dds.Tables.Count > 0)
             {
@@ -1307,6 +1316,11 @@ namespace JurisUtilityBase
         private void ExitDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void textBoxNName_Leave(object sender, EventArgs e)
+        {
+            textBoxRName.Text = textBoxNName.Text;
         }
     }
 }
