@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using JurisSVR.ExpenseAttachments;
 using System.Runtime.CompilerServices;
 using Microsoft.VisualBasic;
+using System.Diagnostics;
 
 namespace JurisUtilityBase
 {
@@ -37,6 +38,7 @@ namespace JurisUtilityBase
         ExceptionHandler error = null;
 
         int clisysnbr = 0;
+        bool isError = false;
 
         //load all default items
         private void ClientForm_Load(object sender, EventArgs e)
@@ -83,13 +85,7 @@ namespace JurisUtilityBase
                     {
                         if (isNumeric(dr[0].ToString()))
                         {
-                            if (test[1].Equals("C"))
-                            {
-                                clientLength = Convert.ToInt32(test[2]);
-                                codesql = "000000000000" + (Convert.ToInt32(dr[0].ToString()) + 1).ToString();
-                                codesql = codesql.Substring(codesql.Length - clientLength, clientLength);
-                            }
-                            else
+                            if (!test[1].Equals("C"))
                             {
 
                                 codesql = "000000000000" + (Convert.ToInt32(dr[0].ToString()) + 1).ToString();
@@ -845,7 +841,7 @@ namespace JurisUtilityBase
                 {
                     foreach (DataRow dr in dds.Tables[0].Rows) //client already exists
                     {
-                        MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code." + "\r\n" + "Remember codes must match the format in which they appear in Juris." + "\r\n" + "This includes leading zeroes", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                         
                     }
@@ -943,38 +939,47 @@ namespace JurisUtilityBase
 
         private void createClient()
         {
+            //see if they use char or numeric codes and format the client code in the textbox accordingly so we can catch dupes accurately
+            string sysparam = "  select SpTxtValue from sysparam where SpName = 'FldClient'";
+            DataSet dds = _jurisUtility.RecordsetFromSQL(sysparam);
+            int clientLength = 5;
+            string cell = "";
+            if (dds != null && dds.Tables.Count > 0)
+            {
+                cell = dds.Tables[0].Rows[0].ToString();
 
-            if (checkFields())
+                foreach (DataRow dr in dds.Tables[0].Rows)
+                {
+                    cell = dr[0].ToString();
+                }
+
+            }
+            string[] test = cell.Split(',');
+            string codesql = "";
+            if (!test[1].Equals("C"))
             {
 
-                //see if they use char or numeric codes
-                string sysparam = "  select SpTxtValue from sysparam where SpName = 'FldClient'";
-                DataSet dds = _jurisUtility.RecordsetFromSQL(sysparam);
-                int clientLength = 5;
-                string cell = "";
+                codesql = " right('000000000000' + '" + textBoxCode.Text.Trim() + "', 12) ";
+                dds.Clear();
+                sysparam = "select " + codesql;
+                dds = _jurisUtility.RecordsetFromSQL(sysparam);
                 if (dds != null && dds.Tables.Count > 0)
                 {
-                    cell = dds.Tables[0].Rows[0].ToString();
-
                     foreach (DataRow dr in dds.Tables[0].Rows)
                     {
-                        cell = dr[0].ToString();
+                        textBoxCode.Text = dr[0].ToString();
                     }
 
                 }
-                string[] test = cell.Split(',');
-                string codesql = "";
-                if (test[1].Equals("C"))
-                {
-                    clientLength = Convert.ToInt32(test[2]);
-                    codesql = " right('000000000000' + '" + textBoxCode.Text.Trim() + "', " + clientLength + ") ";
-                }
-                else
-                {
+            }
 
-                    codesql = " right('000000000000' + '" + textBoxCode.Text.Trim() + "', 12) ";
 
-                }
+
+            
+            if (checkFields())
+            {
+
+
 
                 string txref = "null";
                 if (checkBoxTaskXRef.Checked)
@@ -1021,83 +1026,156 @@ namespace JurisUtilityBase
     + " " + this.comboBoxThreshMain.GetItemText(this.comboBoxThreshMain.SelectedItem).Split(' ')[0] + "," + resp + ",'','','','','','','','','','','','', "
     + " '','','','','','','','',0,0,'')";
 
+               isError =  _jurisUtility.ExecuteNonQuery(0, sql);
+                if (!isError) //was there an error adding the client? if so, we didnt make any changes so we are good
+                {
+                    clisysnbr = getClisysnbr();
+                    if (clisysnbr != 0)
+                    {
+                        if (!resp.Equals("null"))
+                            addRespToTable(resp); //you have to add it twice for some reason...in client and ClientResponsibleTimekeeper
+                        if (!isError) // was there an issue adding resp tkpr? if so, undo client and addy
+                        {
+                            isError = createAddy();
+                            if (!isError) //was there an isue adding the address? If so, we need to remove the client
+                            {
+                                sql = "select max(biladrsysnbr) from billingaddress";
+                                dds.Clear();
+                                int addyid = 0;
+                                dds = _jurisUtility.RecordsetFromSQL(sql);
+                                if (dds != null && dds.Tables.Count > 0)
+                                {
+                                    foreach (DataRow dr in dds.Tables[0].Rows)
+                                    {
+                                        addyid = Convert.ToInt32(dr[0].ToString());
+                                    }
+
+                                }
+                                isError = addOrig(addyid);
+                                if (!isError)
+                                {
+                                    string SQL = "Insert into DocumentTree(dtdocid, dtsystemcreated, dtdocclass,dtdoctype,  dtparentid, dttitle, dtkeyl) "
+                                    + " select (select max(dtdocid)  from documenttree) + 1 , 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
+                                    + " from Client where clisysnbr = " + clisysnbr.ToString();
+                                    _jurisUtility.ExecuteNonQuery(0, SQL);
+
+                                    SQL = " Update sysparam set spnbrvalue=(select max(dtdocid) from documenttree) where spname='LastSysNbrDocTree'";
+                                    _jurisUtility.ExecuteNonQuery(0, SQL);
+
+                                    SQL = " update sysparam set spnbrvalue = (select max(CliSysNbr) from client) where spname = 'LastSysNbrClient'";
+                                    _jurisUtility.ExecuteNonQuery(0, SQL);
+
+                                    sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
+                                    _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                    //after adding the client, load the preset back in
+                                    if (presetID != 0)
+                                    {
+                                        checkForTables();
+
+                                    }
+
+                                    DialogResult fc = MessageBox.Show("Client " + textBoxCode.Text + " was added successfully." + "\r\n" + "Would you like to Add a Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                    if (fc == DialogResult.Yes)
+                                    {
+                                        //save info to move over to matter
+                                        saveInfoToMoveToMatter();
+                                        MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid);
+                                        cleared.Show();
+                                        //move data over
+                                        this.Close();
+                                    }
+                                    else
+                                    {
+                                        ClientForm cleared = new ClientForm(_jurisUtility, presetID, false);
+                                        cleared.Show();
+                                        this.Close();
+
+                                    }
+                                        
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("There was an issue adding the address. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                undoClient();
+                                undoResp();
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("There was an issue adding the Responsible Timekeepers. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            undoClient();
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("There was an issue adding the client. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    clisysnbr = 0;
+                    isError = false;
+                }
+            }
+
+
+
+
+
+        }
+
+        private void undoClient()
+        {
+            try
+            {
+                string sql = "delete from client where clisysnbr = " + clisysnbr.ToString();
                 _jurisUtility.ExecuteNonQuery(0, sql);
+                clisysnbr = 0;
+                isError = false;
 
-
-                if (!resp.Equals("null"))
-                    addRespToTable(resp); //you have to add it twice for some reason...in client and ClientResponsibleTimekeeper
-                int addyid = createAddy();
-
-                string SQL = "Insert into DocumentTree(dtdocid, dtsystemcreated, dtdocclass,dtdoctype,  dtparentid, dttitle, dtkeyl) "
-+ " select (select max(dtdocid)  from documenttree) + 1 , 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
-+ " from Client where clisysnbr = " + clisysnbr.ToString();
-                _jurisUtility.ExecuteNonQuery(0, SQL);
-
-                SQL = " Update sysparam set spnbrvalue=(select max(dtdocid) from documenttree) where spname='LastSysNbrDocTree'";
-                _jurisUtility.ExecuteNonQuery(0, SQL);
-
-                SQL = " update sysparam set spnbrvalue = (select max(CliSysNbr) from client) where spname = 'LastSysNbrClient'";
-                _jurisUtility.ExecuteNonQuery(0, SQL);
-
-                addOrig(addyid);
-
-
-
-                if (presetID != 0)
-                {
-                    checkForTables();
-                    loadDfaultPreset();
-                }
             }
-
-
-
-
+            catch (Exception vvc)
+            { }
 
         }
 
-        private void addRespToTable(string empsys)
+        private void undoResp()
         {
-            string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + textBoxCode.Text + "'";
-            DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
-            if (dds != null && dds.Tables.Count > 0)
+            try
             {
-                foreach (DataRow dr in dds.Tables[0].Rows)
-                {
-                    clisysnbr = Convert.ToInt32(dr[0].ToString());
-                }
+                string sql = "delete from CliOrigAtty where COrigCli = " + clisysnbr.ToString();
+                _jurisUtility.ExecuteNonQuery(0, sql);
+                clisysnbr = 0;
+                isError = false;
 
             }
+            catch (Exception vvc)
+            { }
 
-            sql = "insert into ClientResponsibleTimekeeper (CRTClientID, CRTEmployeeID, CRTPercent) values ( " + 
+        }
+
+        private bool addRespToTable(string empsys)
+        {
+            isError = false;
+            string sql = "insert into ClientResponsibleTimekeeper (CRTClientID, CRTEmployeeID, CRTPercent) values ( " + 
                    clisysnbr.ToString() + ", " + empsys + ", 100.0000 )" ;
-            _jurisUtility.ExecuteNonQuery(0, sql);
+           isError =  _jurisUtility.ExecuteNonQuery(0, sql);
 
-
+            return isError;
 
 
 
         }
 
-        private int createAddy()
+        private bool createAddy()
         {
-            string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + textBoxCode.Text + "'";
-            DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
-            if (dds != null && dds.Tables.Count > 0)
-            {
-                foreach (DataRow dr in dds.Tables[0].Rows)
-                {
-                    clisysnbr = Convert.ToInt32(dr[0].ToString());
-                }
 
-            }
 
 
             string addy = richTextBoxBAAddy.Text.Replace("\r", "|").Replace("\n", "|");
             addy = addy.Replace("||", "|");
 
 
-            sql = "Insert into BillingAddress(BilAdrSysNbr, BilAdrCliNbr, BilAdrUsageFlg, BilAdrNickName, BilAdrPhone, " +
+            string sql = "Insert into BillingAddress(BilAdrSysNbr, BilAdrCliNbr, BilAdrUsageFlg, BilAdrNickName, BilAdrPhone, " +
                 " BilAdrFax, BilAdrContact, BilAdrName, BilAdrAddress, BilAdrCity, BilAdrState, BilAdrZip, BilAdrCountry, BilAdrType, BilAdrEmail) " +
     " values (case when(select max(biladrsysnbr) from billingaddress) is null then 1 else ((select max(biladrsysnbr) from billingaddress) +1) end, " + clisysnbr + ", " +
     " 'C', '" + textBoxBANName.Text + "', '" + textBoxBAPhone.Text + "', "
@@ -1106,75 +1184,63 @@ namespace JurisUtilityBase
     "replace('" + addy + "', '|', char(13) + char(10)), "
     + " '" + textBoxBACity.Text + "', '" + textBoxBAState.Text + "', '" + textBoxBAZip.Text + "','" + textBoxBACountry.Text + "', 0, '" + textBoxBAEmail.Text + "')";
 
-            _jurisUtility.ExecuteNonQuery(0, sql);
+            return _jurisUtility.ExecuteNonQuery(0, sql);
+        }
 
 
-            sql = "select max(biladrsysnbr) from billingaddress";
-            dds.Clear();
-            int addyid = 0;
-            dds = _jurisUtility.RecordsetFromSQL(sql);
+        private int getClisysnbr()
+        {
+            int sysnbr = 0;
+            string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + textBoxCode.Text + "'";
+            DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
             if (dds != null && dds.Tables.Count > 0)
             {
                 foreach (DataRow dr in dds.Tables[0].Rows)
                 {
-                    addyid = Convert.ToInt32(dr[0].ToString());
+                    sysnbr = Convert.ToInt32(dr[0].ToString());
                 }
 
             }
-
-
-            sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
-            _jurisUtility.ExecuteNonQuery(0, sql);
-            //create billto
-
-            return addyid;
+            return sysnbr;
         }
 
-        private void addOrig(int addyid)
+        private bool addOrig(int addyid)
         {
             string sql = "";
                 
                 if (!textBoxOTPct1.Text.Equals("0"))
                 {
                     sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT1.GetItemText(this.comboBoxOT1.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct1.Text + " as decimal(7,4)))";
-                    _jurisUtility.ExecuteNonQuery(0, sql);
+                if (_jurisUtility.ExecuteNonQuery(0, sql))
+                    return true;
                 }
                 if (!textBoxOTPct2.Text.Equals("0"))
                 {
                     sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT2.GetItemText(this.comboBoxOT2.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct2.Text + " as decimal(7,4)))";
-                    _jurisUtility.ExecuteNonQuery(0, sql);
-                }
+                if (_jurisUtility.ExecuteNonQuery(0, sql))
+                    return true;
+            }
                 if (!textBoxOTPct3.Text.Equals("0"))
                 {
                     sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT3.GetItemText(this.comboBoxOT3.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct3.Text + " as decimal(7,4)))";
-                    _jurisUtility.ExecuteNonQuery(0, sql);
-                }
+                if (_jurisUtility.ExecuteNonQuery(0, sql))
+                    return true;
+            }
                 if (!textBoxOTPct4.Text.Equals("0"))
                 {
                     sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT4.GetItemText(this.comboBoxOT4.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct4.Text + " as decimal(7,4)))";
-                    _jurisUtility.ExecuteNonQuery(0, sql);
-                }
+                if (_jurisUtility.ExecuteNonQuery(0, sql))
+                    return true;
+            }
                 if (!textBoxOTPct5.Text.Equals("0"))
                 {
                     sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT5.GetItemText(this.comboBoxOT5.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct5.Text + " as decimal(7,4)))";
-                    _jurisUtility.ExecuteNonQuery(0, sql);
-                }
-            
-
-                
-
-            DialogResult fc = MessageBox.Show("Client " + textBoxCode.Text + " was added successfully." + "\r\n" + "Would you like to Add a Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (fc == DialogResult.Yes)
-            {
-                //save info to move over to matter
-                saveInfoToMoveToMatter();
-                MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid);
-                cleared.Show();
-                //move data over
-                this.Close();
+                if (_jurisUtility.ExecuteNonQuery(0, sql))
+                    return true;
             }
-            else
-                this.Close();
+
+            return false;
+
         }
 
         private void saveInfoToMoveToMatter()

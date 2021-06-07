@@ -44,6 +44,8 @@ namespace JurisUtilityBase
 
         public bool DbOpen { get; set; }
 
+        public string errorMessage { get; set; }
+
         #endregion
 
         #region Constructor
@@ -125,16 +127,18 @@ namespace JurisUtilityBase
             return _connections[connection].Execute(sql);
         }
 
-        public int ExecuteNonQuery(int connection, string sql)
+        public bool ExecuteNonQuery(int connection, string sql)
         {
+            errorMessage = "";
             try
             {
-                return _connections[connection].ExecuteNonQuery(sql);
+                _connections[connection].ExecuteNonQuery(sql);
+                return false; //false means success (or isError = false) as in no error occurred
             }
             catch (Exception vv)
             {
-                MessageBox.Show(vv.Message + "\r\n" + sql);
-                return 0;
+                errorMessage = vv.Message + "\r\n" + sql;
+                return true;
             }
         }
 
