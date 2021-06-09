@@ -67,6 +67,7 @@
             // LexisNexisLogoPictureBox
             // 
             this.LexisNexisLogoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("LexisNexisLogoPictureBox.Image")));
+            this.LexisNexisLogoPictureBox.InitialImage = ((System.Drawing.Image)(resources.GetObject("LexisNexisLogoPictureBox.InitialImage")));
             this.LexisNexisLogoPictureBox.Location = new System.Drawing.Point(8, 343);
             this.LexisNexisLogoPictureBox.Name = "LexisNexisLogoPictureBox";
             this.LexisNexisLogoPictureBox.Size = new System.Drawing.Size(96, 28);

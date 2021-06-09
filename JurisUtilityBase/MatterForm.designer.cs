@@ -76,7 +76,7 @@
             this.richTextBoxBAAddy = new System.Windows.Forms.RichTextBox();
             this.textBoxBAEmailOpt = new System.Windows.Forms.TextBox();
             this.label26 = new System.Windows.Forms.Label();
-            this.textBoxBACountry = new System.Windows.Forms.TextBox();
+            this.textBoxBACountryOpt = new System.Windows.Forms.TextBox();
             this.label27 = new System.Windows.Forms.Label();
             this.textBoxBAZipOpt = new System.Windows.Forms.TextBox();
             this.label28 = new System.Windows.Forms.Label();
@@ -95,8 +95,8 @@
             this.label37 = new System.Windows.Forms.Label();
             this.labelCycle = new System.Windows.Forms.Label();
             this.label39 = new System.Windows.Forms.Label();
-            this.textBoxMonth = new System.Windows.Forms.TextBox();
-            this.textBoxCycle = new System.Windows.Forms.TextBox();
+            this.textBoxMonthOpt = new System.Windows.Forms.TextBox();
+            this.textBoxCycleOpt = new System.Windows.Forms.TextBox();
             this.dateTimePickerOpened = new System.Windows.Forms.DateTimePicker();
             this.checkBoxBudget = new System.Windows.Forms.CheckBox();
             this.checkBoxReqTaskCodes = new System.Windows.Forms.CheckBox();
@@ -105,13 +105,13 @@
             this.comboBoxDisc = new System.Windows.Forms.ComboBox();
             this.label32 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
-            this.textBoxDiscPct = new System.Windows.Forms.TextBox();
+            this.textBoxDiscPctOpt = new System.Windows.Forms.TextBox();
             this.labelDPct = new System.Windows.Forms.Label();
-            this.textBoxSurPct = new System.Windows.Forms.TextBox();
+            this.textBoxSurPctOpt = new System.Windows.Forms.TextBox();
             this.labelSPct = new System.Windows.Forms.Label();
-            this.textBoxIntDays = new System.Windows.Forms.TextBox();
+            this.textBoxIntDaysOpt = new System.Windows.Forms.TextBox();
             this.label44 = new System.Windows.Forms.Label();
-            this.textBoxIntPct = new System.Windows.Forms.TextBox();
+            this.textBoxIntPctOpt = new System.Windows.Forms.TextBox();
             this.label45 = new System.Windows.Forms.Label();
             this.checkBoxTax3 = new System.Windows.Forms.CheckBox();
             this.checkBoxTax2 = new System.Windows.Forms.CheckBox();
@@ -123,15 +123,15 @@
             this.clearFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonCreateClient = new System.Windows.Forms.Button();
             this.buttonExit = new System.Windows.Forms.Button();
-            this.textBoxOTPct1 = new System.Windows.Forms.TextBox();
+            this.textBoxOTPct1Opt = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.textBoxOTPct2 = new System.Windows.Forms.TextBox();
+            this.textBoxOTPct2Opt = new System.Windows.Forms.TextBox();
             this.comboBoxOT2 = new System.Windows.Forms.ComboBox();
-            this.textBoxOTPct3 = new System.Windows.Forms.TextBox();
+            this.textBoxOTPct3Opt = new System.Windows.Forms.TextBox();
             this.comboBoxOT3 = new System.Windows.Forms.ComboBox();
-            this.textBoxOTPct4 = new System.Windows.Forms.TextBox();
+            this.textBoxOTPct4Opt = new System.Windows.Forms.TextBox();
             this.comboBoxOT4 = new System.Windows.Forms.ComboBox();
-            this.textBoxOTPct5 = new System.Windows.Forms.TextBox();
+            this.textBoxOTPct5Opt = new System.Windows.Forms.TextBox();
             this.comboBoxOT5 = new System.Windows.Forms.ComboBox();
             this.comboBoxRT = new System.Windows.Forms.ComboBox();
             this.checkBoxRT = new System.Windows.Forms.CheckBox();
@@ -141,7 +141,7 @@
             this.textBoxMatterCode = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
-            this.textBoxFlatRetAmt = new System.Windows.Forms.TextBox();
+            this.textBoxFlatRetAmtOpt = new System.Windows.Forms.TextBox();
             this.checkBoxChooseAddy = new System.Windows.Forms.CheckBox();
             this.comboBoxAddyChoose = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
@@ -410,7 +410,7 @@
             // textBoxBAStateOpt
             // 
             this.textBoxBAStateOpt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxBAStateOpt.Location = new System.Drawing.Point(513, 291);
+            this.textBoxBAStateOpt.Location = new System.Drawing.Point(517, 291);
             this.textBoxBAStateOpt.MaxLength = 2;
             this.textBoxBAStateOpt.Name = "textBoxBAStateOpt";
             this.textBoxBAStateOpt.Size = new System.Drawing.Size(43, 20);
@@ -430,7 +430,7 @@
             // textBoxBACityOpt
             // 
             this.textBoxBACityOpt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxBACityOpt.Location = new System.Drawing.Point(513, 265);
+            this.textBoxBACityOpt.Location = new System.Drawing.Point(517, 265);
             this.textBoxBACityOpt.MaxLength = 20;
             this.textBoxBACityOpt.Name = "textBoxBACityOpt";
             this.textBoxBACityOpt.Size = new System.Drawing.Size(157, 20);
@@ -450,7 +450,7 @@
             // textBoxBAContactOpt
             // 
             this.textBoxBAContactOpt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxBAContactOpt.Location = new System.Drawing.Point(514, 212);
+            this.textBoxBAContactOpt.Location = new System.Drawing.Point(518, 212);
             this.textBoxBAContactOpt.MaxLength = 30;
             this.textBoxBAContactOpt.Name = "textBoxBAContactOpt";
             this.textBoxBAContactOpt.Size = new System.Drawing.Size(246, 20);
@@ -470,7 +470,7 @@
             // textBoxBANameOpt
             // 
             this.textBoxBANameOpt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxBANameOpt.Location = new System.Drawing.Point(513, 238);
+            this.textBoxBANameOpt.Location = new System.Drawing.Point(517, 238);
             this.textBoxBANameOpt.MaxLength = 50;
             this.textBoxBANameOpt.Name = "textBoxBANameOpt";
             this.textBoxBANameOpt.Size = new System.Drawing.Size(246, 20);
@@ -569,7 +569,7 @@
             // textBoxBAEmailOpt
             // 
             this.textBoxBAEmailOpt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxBAEmailOpt.Location = new System.Drawing.Point(513, 369);
+            this.textBoxBAEmailOpt.Location = new System.Drawing.Point(517, 369);
             this.textBoxBAEmailOpt.MaxLength = 255;
             this.textBoxBAEmailOpt.Name = "textBoxBAEmailOpt";
             this.textBoxBAEmailOpt.Size = new System.Drawing.Size(246, 20);
@@ -586,14 +586,14 @@
             this.label26.TabIndex = 141;
             this.label26.Text = "Email";
             // 
-            // textBoxBACountry
+            // textBoxBACountryOpt
             // 
-            this.textBoxBACountry.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxBACountry.Location = new System.Drawing.Point(513, 343);
-            this.textBoxBACountry.MaxLength = 20;
-            this.textBoxBACountry.Name = "textBoxBACountry";
-            this.textBoxBACountry.Size = new System.Drawing.Size(157, 20);
-            this.textBoxBACountry.TabIndex = 40;
+            this.textBoxBACountryOpt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxBACountryOpt.Location = new System.Drawing.Point(517, 343);
+            this.textBoxBACountryOpt.MaxLength = 20;
+            this.textBoxBACountryOpt.Name = "textBoxBACountryOpt";
+            this.textBoxBACountryOpt.Size = new System.Drawing.Size(157, 20);
+            this.textBoxBACountryOpt.TabIndex = 40;
             // 
             // label27
             // 
@@ -609,7 +609,7 @@
             // textBoxBAZipOpt
             // 
             this.textBoxBAZipOpt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxBAZipOpt.Location = new System.Drawing.Point(513, 317);
+            this.textBoxBAZipOpt.Location = new System.Drawing.Point(517, 317);
             this.textBoxBAZipOpt.MaxLength = 9;
             this.textBoxBAZipOpt.Name = "textBoxBAZipOpt";
             this.textBoxBAZipOpt.Size = new System.Drawing.Size(99, 20);
@@ -769,24 +769,24 @@
             this.label39.TabIndex = 161;
             this.label39.Text = "Month";
             // 
-            // textBoxMonth
+            // textBoxMonthOpt
             // 
-            this.textBoxMonth.Location = new System.Drawing.Point(645, 514);
-            this.textBoxMonth.MaxLength = 2;
-            this.textBoxMonth.Name = "textBoxMonth";
-            this.textBoxMonth.Size = new System.Drawing.Size(52, 20);
-            this.textBoxMonth.TabIndex = 163;
-            this.textBoxMonth.Text = "1";
+            this.textBoxMonthOpt.Location = new System.Drawing.Point(645, 514);
+            this.textBoxMonthOpt.MaxLength = 2;
+            this.textBoxMonthOpt.Name = "textBoxMonthOpt";
+            this.textBoxMonthOpt.Size = new System.Drawing.Size(52, 20);
+            this.textBoxMonthOpt.TabIndex = 163;
+            this.textBoxMonthOpt.Text = "1";
             // 
-            // textBoxCycle
+            // textBoxCycleOpt
             // 
-            this.textBoxCycle.Location = new System.Drawing.Point(710, 514);
-            this.textBoxCycle.MaxLength = 4;
-            this.textBoxCycle.Name = "textBoxCycle";
-            this.textBoxCycle.Size = new System.Drawing.Size(52, 20);
-            this.textBoxCycle.TabIndex = 164;
-            this.textBoxCycle.Text = "1";
-            this.textBoxCycle.Visible = false;
+            this.textBoxCycleOpt.Location = new System.Drawing.Point(710, 514);
+            this.textBoxCycleOpt.MaxLength = 4;
+            this.textBoxCycleOpt.Name = "textBoxCycleOpt";
+            this.textBoxCycleOpt.Size = new System.Drawing.Size(52, 20);
+            this.textBoxCycleOpt.TabIndex = 164;
+            this.textBoxCycleOpt.Text = "1";
+            this.textBoxCycleOpt.Visible = false;
             // 
             // dateTimePickerOpened
             // 
@@ -868,14 +868,14 @@
             this.label33.TabIndex = 174;
             this.label33.Text = "Discount Option";
             // 
-            // textBoxDiscPct
+            // textBoxDiscPctOpt
             // 
-            this.textBoxDiscPct.Location = new System.Drawing.Point(665, 551);
-            this.textBoxDiscPct.MaxLength = 6;
-            this.textBoxDiscPct.Name = "textBoxDiscPct";
-            this.textBoxDiscPct.Size = new System.Drawing.Size(61, 20);
-            this.textBoxDiscPct.TabIndex = 177;
-            this.textBoxDiscPct.Text = "0.00";
+            this.textBoxDiscPctOpt.Location = new System.Drawing.Point(665, 551);
+            this.textBoxDiscPctOpt.MaxLength = 6;
+            this.textBoxDiscPctOpt.Name = "textBoxDiscPctOpt";
+            this.textBoxDiscPctOpt.Size = new System.Drawing.Size(61, 20);
+            this.textBoxDiscPctOpt.TabIndex = 177;
+            this.textBoxDiscPctOpt.Text = "0.00";
             // 
             // labelDPct
             // 
@@ -886,14 +886,14 @@
             this.labelDPct.TabIndex = 176;
             this.labelDPct.Text = "Percentage";
             // 
-            // textBoxSurPct
+            // textBoxSurPctOpt
             // 
-            this.textBoxSurPct.Location = new System.Drawing.Point(665, 587);
-            this.textBoxSurPct.MaxLength = 6;
-            this.textBoxSurPct.Name = "textBoxSurPct";
-            this.textBoxSurPct.Size = new System.Drawing.Size(61, 20);
-            this.textBoxSurPct.TabIndex = 179;
-            this.textBoxSurPct.Text = "0.00";
+            this.textBoxSurPctOpt.Location = new System.Drawing.Point(665, 587);
+            this.textBoxSurPctOpt.MaxLength = 6;
+            this.textBoxSurPctOpt.Name = "textBoxSurPctOpt";
+            this.textBoxSurPctOpt.Size = new System.Drawing.Size(61, 20);
+            this.textBoxSurPctOpt.TabIndex = 179;
+            this.textBoxSurPctOpt.Text = "0.00";
             // 
             // labelSPct
             // 
@@ -904,14 +904,14 @@
             this.labelSPct.TabIndex = 178;
             this.labelSPct.Text = "Percentage";
             // 
-            // textBoxIntDays
+            // textBoxIntDaysOpt
             // 
-            this.textBoxIntDays.Location = new System.Drawing.Point(517, 626);
-            this.textBoxIntDays.MaxLength = 6;
-            this.textBoxIntDays.Name = "textBoxIntDays";
-            this.textBoxIntDays.Size = new System.Drawing.Size(132, 20);
-            this.textBoxIntDays.TabIndex = 54;
-            this.textBoxIntDays.Text = "0";
+            this.textBoxIntDaysOpt.Location = new System.Drawing.Point(517, 626);
+            this.textBoxIntDaysOpt.MaxLength = 6;
+            this.textBoxIntDaysOpt.Name = "textBoxIntDaysOpt";
+            this.textBoxIntDaysOpt.Size = new System.Drawing.Size(132, 20);
+            this.textBoxIntDaysOpt.TabIndex = 54;
+            this.textBoxIntDaysOpt.Text = "0";
             // 
             // label44
             // 
@@ -923,14 +923,14 @@
             this.label44.TabIndex = 181;
             this.label44.Text = "Interest Days";
             // 
-            // textBoxIntPct
+            // textBoxIntPctOpt
             // 
-            this.textBoxIntPct.Location = new System.Drawing.Point(663, 626);
-            this.textBoxIntPct.MaxLength = 6;
-            this.textBoxIntPct.Name = "textBoxIntPct";
-            this.textBoxIntPct.Size = new System.Drawing.Size(61, 20);
-            this.textBoxIntPct.TabIndex = 55;
-            this.textBoxIntPct.Text = "0.00";
+            this.textBoxIntPctOpt.Location = new System.Drawing.Point(663, 626);
+            this.textBoxIntPctOpt.MaxLength = 6;
+            this.textBoxIntPctOpt.Name = "textBoxIntPctOpt";
+            this.textBoxIntPctOpt.Size = new System.Drawing.Size(63, 20);
+            this.textBoxIntPctOpt.TabIndex = 55;
+            this.textBoxIntPctOpt.Text = "0.00";
             // 
             // label45
             // 
@@ -1041,13 +1041,13 @@
             this.buttonExit.UseVisualStyleBackColor = false;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
             // 
-            // textBoxOTPct1
+            // textBoxOTPct1Opt
             // 
-            this.textBoxOTPct1.Location = new System.Drawing.Point(313, 378);
-            this.textBoxOTPct1.Name = "textBoxOTPct1";
-            this.textBoxOTPct1.Size = new System.Drawing.Size(52, 20);
-            this.textBoxOTPct1.TabIndex = 13;
-            this.textBoxOTPct1.Text = "100";
+            this.textBoxOTPct1Opt.Location = new System.Drawing.Point(313, 378);
+            this.textBoxOTPct1Opt.Name = "textBoxOTPct1Opt";
+            this.textBoxOTPct1Opt.Size = new System.Drawing.Size(52, 20);
+            this.textBoxOTPct1Opt.TabIndex = 13;
+            this.textBoxOTPct1Opt.Text = "100";
             // 
             // label17
             // 
@@ -1058,14 +1058,14 @@
             this.label17.TabIndex = 192;
             this.label17.Text = "Percentage";
             // 
-            // textBoxOTPct2
+            // textBoxOTPct2Opt
             // 
-            this.textBoxOTPct2.Location = new System.Drawing.Point(313, 406);
-            this.textBoxOTPct2.Name = "textBoxOTPct2";
-            this.textBoxOTPct2.Size = new System.Drawing.Size(52, 20);
-            this.textBoxOTPct2.TabIndex = 15;
-            this.textBoxOTPct2.Text = "0";
-            this.textBoxOTPct2.Visible = false;
+            this.textBoxOTPct2Opt.Location = new System.Drawing.Point(313, 406);
+            this.textBoxOTPct2Opt.Name = "textBoxOTPct2Opt";
+            this.textBoxOTPct2Opt.Size = new System.Drawing.Size(52, 20);
+            this.textBoxOTPct2Opt.TabIndex = 15;
+            this.textBoxOTPct2Opt.Text = "0";
+            this.textBoxOTPct2Opt.Visible = false;
             // 
             // comboBoxOT2
             // 
@@ -1077,14 +1077,14 @@
             this.comboBoxOT2.TabIndex = 14;
             this.comboBoxOT2.Visible = false;
             // 
-            // textBoxOTPct3
+            // textBoxOTPct3Opt
             // 
-            this.textBoxOTPct3.Location = new System.Drawing.Point(313, 433);
-            this.textBoxOTPct3.Name = "textBoxOTPct3";
-            this.textBoxOTPct3.Size = new System.Drawing.Size(52, 20);
-            this.textBoxOTPct3.TabIndex = 17;
-            this.textBoxOTPct3.Text = "0";
-            this.textBoxOTPct3.Visible = false;
+            this.textBoxOTPct3Opt.Location = new System.Drawing.Point(313, 433);
+            this.textBoxOTPct3Opt.Name = "textBoxOTPct3Opt";
+            this.textBoxOTPct3Opt.Size = new System.Drawing.Size(52, 20);
+            this.textBoxOTPct3Opt.TabIndex = 17;
+            this.textBoxOTPct3Opt.Text = "0";
+            this.textBoxOTPct3Opt.Visible = false;
             // 
             // comboBoxOT3
             // 
@@ -1096,14 +1096,14 @@
             this.comboBoxOT3.TabIndex = 16;
             this.comboBoxOT3.Visible = false;
             // 
-            // textBoxOTPct4
+            // textBoxOTPct4Opt
             // 
-            this.textBoxOTPct4.Location = new System.Drawing.Point(313, 460);
-            this.textBoxOTPct4.Name = "textBoxOTPct4";
-            this.textBoxOTPct4.Size = new System.Drawing.Size(52, 20);
-            this.textBoxOTPct4.TabIndex = 19;
-            this.textBoxOTPct4.Text = "0";
-            this.textBoxOTPct4.Visible = false;
+            this.textBoxOTPct4Opt.Location = new System.Drawing.Point(313, 460);
+            this.textBoxOTPct4Opt.Name = "textBoxOTPct4Opt";
+            this.textBoxOTPct4Opt.Size = new System.Drawing.Size(52, 20);
+            this.textBoxOTPct4Opt.TabIndex = 19;
+            this.textBoxOTPct4Opt.Text = "0";
+            this.textBoxOTPct4Opt.Visible = false;
             // 
             // comboBoxOT4
             // 
@@ -1115,14 +1115,14 @@
             this.comboBoxOT4.TabIndex = 18;
             this.comboBoxOT4.Visible = false;
             // 
-            // textBoxOTPct5
+            // textBoxOTPct5Opt
             // 
-            this.textBoxOTPct5.Location = new System.Drawing.Point(313, 487);
-            this.textBoxOTPct5.Name = "textBoxOTPct5";
-            this.textBoxOTPct5.Size = new System.Drawing.Size(52, 20);
-            this.textBoxOTPct5.TabIndex = 21;
-            this.textBoxOTPct5.Text = "0";
-            this.textBoxOTPct5.Visible = false;
+            this.textBoxOTPct5Opt.Location = new System.Drawing.Point(313, 487);
+            this.textBoxOTPct5Opt.Name = "textBoxOTPct5Opt";
+            this.textBoxOTPct5Opt.Size = new System.Drawing.Size(52, 20);
+            this.textBoxOTPct5Opt.TabIndex = 21;
+            this.textBoxOTPct5Opt.Text = "0";
+            this.textBoxOTPct5Opt.Visible = false;
             // 
             // comboBoxOT5
             // 
@@ -1214,14 +1214,14 @@
             this.label34.Text = "Amount";
             this.label34.Visible = false;
             // 
-            // textBoxFlatRetAmt
+            // textBoxFlatRetAmtOpt
             // 
-            this.textBoxFlatRetAmt.Location = new System.Drawing.Point(301, 736);
-            this.textBoxFlatRetAmt.Name = "textBoxFlatRetAmt";
-            this.textBoxFlatRetAmt.Size = new System.Drawing.Size(64, 20);
-            this.textBoxFlatRetAmt.TabIndex = 196;
-            this.textBoxFlatRetAmt.Text = "100";
-            this.textBoxFlatRetAmt.Visible = false;
+            this.textBoxFlatRetAmtOpt.Location = new System.Drawing.Point(301, 736);
+            this.textBoxFlatRetAmtOpt.Name = "textBoxFlatRetAmtOpt";
+            this.textBoxFlatRetAmtOpt.Size = new System.Drawing.Size(64, 20);
+            this.textBoxFlatRetAmtOpt.TabIndex = 196;
+            this.textBoxFlatRetAmtOpt.Text = "100";
+            this.textBoxFlatRetAmtOpt.Visible = false;
             // 
             // checkBoxChooseAddy
             // 
@@ -1253,7 +1253,7 @@
             this.Controls.Add(this.comboBoxAddyChoose);
             this.Controls.Add(this.checkBoxChooseAddy);
             this.Controls.Add(this.label34);
-            this.Controls.Add(this.textBoxFlatRetAmt);
+            this.Controls.Add(this.textBoxFlatRetAmtOpt);
             this.Controls.Add(this.textBoxMatterCode);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label9);
@@ -1267,25 +1267,25 @@
             this.Controls.Add(this.textBoxBAPhoneOpt);
             this.Controls.Add(this.comboBoxRT);
             this.Controls.Add(this.label22);
-            this.Controls.Add(this.textBoxOTPct5);
+            this.Controls.Add(this.textBoxOTPct5Opt);
             this.Controls.Add(this.textBoxBAFaxOpt);
             this.Controls.Add(this.comboBoxOT5);
             this.Controls.Add(this.label21);
-            this.Controls.Add(this.textBoxOTPct4);
+            this.Controls.Add(this.textBoxOTPct4Opt);
             this.Controls.Add(this.textBoxBANameOpt);
             this.Controls.Add(this.comboBoxOT4);
             this.Controls.Add(this.label20);
-            this.Controls.Add(this.textBoxOTPct3);
+            this.Controls.Add(this.textBoxOTPct3Opt);
             this.Controls.Add(this.textBoxBAContactOpt);
             this.Controls.Add(this.comboBoxOT3);
             this.Controls.Add(this.label19);
-            this.Controls.Add(this.textBoxOTPct2);
+            this.Controls.Add(this.textBoxOTPct2Opt);
             this.Controls.Add(this.textBoxBACityOpt);
             this.Controls.Add(this.comboBoxOT2);
             this.Controls.Add(this.label18);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.textBoxBAStateOpt);
-            this.Controls.Add(this.textBoxOTPct1);
+            this.Controls.Add(this.textBoxOTPct1Opt);
             this.Controls.Add(this.richTextBoxBAAddy);
             this.Controls.Add(this.label28);
             this.Controls.Add(this.buttonCreateClient);
@@ -1293,18 +1293,18 @@
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.label27);
             this.Controls.Add(this.checkBoxTax3);
-            this.Controls.Add(this.textBoxBACountry);
+            this.Controls.Add(this.textBoxBACountryOpt);
             this.Controls.Add(this.checkBoxTax2);
             this.Controls.Add(this.label26);
             this.Controls.Add(this.checkBoxTax1);
             this.Controls.Add(this.textBoxBAEmailOpt);
-            this.Controls.Add(this.textBoxIntPct);
+            this.Controls.Add(this.textBoxIntPctOpt);
             this.Controls.Add(this.label45);
-            this.Controls.Add(this.textBoxIntDays);
+            this.Controls.Add(this.textBoxIntDaysOpt);
             this.Controls.Add(this.label44);
-            this.Controls.Add(this.textBoxSurPct);
+            this.Controls.Add(this.textBoxSurPctOpt);
             this.Controls.Add(this.labelSPct);
-            this.Controls.Add(this.textBoxDiscPct);
+            this.Controls.Add(this.textBoxDiscPctOpt);
             this.Controls.Add(this.labelDPct);
             this.Controls.Add(this.comboBoxSurcharge);
             this.Controls.Add(this.comboBoxDisc);
@@ -1314,8 +1314,8 @@
             this.Controls.Add(this.checkBoxReqTaskCodes);
             this.Controls.Add(this.checkBoxBudget);
             this.Controls.Add(this.dateTimePickerOpened);
-            this.Controls.Add(this.textBoxCycle);
-            this.Controls.Add(this.textBoxMonth);
+            this.Controls.Add(this.textBoxCycleOpt);
+            this.Controls.Add(this.textBoxMonthOpt);
             this.Controls.Add(this.labelCycle);
             this.Controls.Add(this.label39);
             this.Controls.Add(this.comboBoxExpFreq);
@@ -1421,7 +1421,7 @@
         private System.Windows.Forms.RichTextBox richTextBoxBAAddy;
         private System.Windows.Forms.TextBox textBoxBAEmailOpt;
         private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.TextBox textBoxBACountry;
+        private System.Windows.Forms.TextBox textBoxBACountryOpt;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.TextBox textBoxBAZipOpt;
         private System.Windows.Forms.Label label28;
@@ -1440,8 +1440,8 @@
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.Label labelCycle;
         private System.Windows.Forms.Label label39;
-        private System.Windows.Forms.TextBox textBoxMonth;
-        private System.Windows.Forms.TextBox textBoxCycle;
+        private System.Windows.Forms.TextBox textBoxMonthOpt;
+        private System.Windows.Forms.TextBox textBoxCycleOpt;
         private System.Windows.Forms.DateTimePicker dateTimePickerOpened;
         private System.Windows.Forms.CheckBox checkBoxBudget;
         private System.Windows.Forms.CheckBox checkBoxReqTaskCodes;
@@ -1450,13 +1450,13 @@
         private System.Windows.Forms.ComboBox comboBoxDisc;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label33;
-        private System.Windows.Forms.TextBox textBoxDiscPct;
+        private System.Windows.Forms.TextBox textBoxDiscPctOpt;
         private System.Windows.Forms.Label labelDPct;
-        private System.Windows.Forms.TextBox textBoxSurPct;
+        private System.Windows.Forms.TextBox textBoxSurPctOpt;
         private System.Windows.Forms.Label labelSPct;
-        private System.Windows.Forms.TextBox textBoxIntDays;
+        private System.Windows.Forms.TextBox textBoxIntDaysOpt;
         private System.Windows.Forms.Label label44;
-        private System.Windows.Forms.TextBox textBoxIntPct;
+        private System.Windows.Forms.TextBox textBoxIntPctOpt;
         private System.Windows.Forms.Label label45;
         private System.Windows.Forms.CheckBox checkBoxTax3;
         private System.Windows.Forms.CheckBox checkBoxTax2;
@@ -1468,15 +1468,15 @@
         private System.Windows.Forms.ToolStripMenuItem clearFormToolStripMenuItem;
         private System.Windows.Forms.Button buttonCreateClient;
         private System.Windows.Forms.Button buttonExit;
-        private System.Windows.Forms.TextBox textBoxOTPct1;
+        private System.Windows.Forms.TextBox textBoxOTPct1Opt;
         private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.TextBox textBoxOTPct2;
+        private System.Windows.Forms.TextBox textBoxOTPct2Opt;
         private System.Windows.Forms.ComboBox comboBoxOT2;
-        private System.Windows.Forms.TextBox textBoxOTPct3;
+        private System.Windows.Forms.TextBox textBoxOTPct3Opt;
         private System.Windows.Forms.ComboBox comboBoxOT3;
-        private System.Windows.Forms.TextBox textBoxOTPct4;
+        private System.Windows.Forms.TextBox textBoxOTPct4Opt;
         private System.Windows.Forms.ComboBox comboBoxOT4;
-        private System.Windows.Forms.TextBox textBoxOTPct5;
+        private System.Windows.Forms.TextBox textBoxOTPct5Opt;
         private System.Windows.Forms.ComboBox comboBoxOT5;
         private System.Windows.Forms.ComboBox comboBoxRT;
         private System.Windows.Forms.CheckBox checkBoxRT;
@@ -1486,7 +1486,7 @@
         private System.Windows.Forms.TextBox textBoxMatterCode;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.TextBox textBoxFlatRetAmt;
+        private System.Windows.Forms.TextBox textBoxFlatRetAmtOpt;
         private System.Windows.Forms.CheckBox checkBoxChooseAddy;
         private System.Windows.Forms.ComboBox comboBoxAddyChoose;
     }

@@ -444,22 +444,22 @@ namespace JurisUtilityBase
             if (number > 1)
             {
                 comboBoxOT2.Visible = true;
-                textBoxOTPct2.Visible = true;
+                textBoxOTPct2Opt.Visible = true;
             }
             if (number > 2)
             {
                 comboBoxOT3.Visible = true;
-                textBoxOTPct3.Visible = true;
+                textBoxOTPct3Opt.Visible = true;
             }
             if (number > 3)
             {
                 comboBoxOT4.Visible = true;
-                textBoxOTPct4.Visible = true;
+                textBoxOTPct4Opt.Visible = true;
             }
             if (number > 4)
             {
                 comboBoxOT5.Visible = true;
-                textBoxOTPct5.Visible = true;
+                textBoxOTPct5Opt.Visible = true;
             }
 
         }
@@ -773,50 +773,39 @@ namespace JurisUtilityBase
 
         private void comboBoxFeeFreq_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("C")) //task billing requires task codes
-            {
-                labelCycle.Visible = true;
-                textBoxCycle.Visible = true;
-            }
-            else
-            {
-                labelCycle.Visible = false;
-                textBoxCycle.Visible = false;
-            }
-            if (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("M") || this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("R"))
-            {
-                label39.Visible = false;
-                textBoxMonth.Visible = false;
-            }
-            else
-            {
-                label39.Visible = true;
-                textBoxMonth.Visible = true;
-            }
+            showHideMonthCycleBoxes();
         }
 
         private void comboBoxExpFreq_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("C")) //task billing requires task codes
+            showHideMonthCycleBoxes();
+        }
+
+
+        private void showHideMonthCycleBoxes()
+        {
+            if (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("C") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("C")) //task billing requires task codes
             {
                 labelCycle.Visible = true;
-                textBoxCycle.Visible = true;
+                textBoxCycleOpt.Visible = true;
             }
             else
             {
                 labelCycle.Visible = false;
-                textBoxCycle.Visible = false;
+                textBoxCycleOpt.Visible = false;
             }
-            if (this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("M") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("R"))
+            if (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("Q") || this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("S") || this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("A") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("Q") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("S") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("A"))
             {
-                label39.Visible = false;
-                textBoxMonth.Visible = false;
+                label39.Visible = true;
+                textBoxMonthOpt.Visible = true;
+
             }
             else
             {
-                label39.Visible = true;
-                textBoxMonth.Visible = true;
+                label39.Visible = false;
+                textBoxMonthOpt.Visible = false;
             }
+
         }
 
 
@@ -825,12 +814,12 @@ namespace JurisUtilityBase
             if (!this.comboBoxDisc.GetItemText(this.comboBoxDisc.SelectedItem).Split(' ')[0].Equals("0")) //if discount option selected (not 0)
             {
                 labelDPct.Visible = true;
-                textBoxDiscPct.Visible = true;
+                textBoxDiscPctOpt.Visible = true;
             }
             else
             {
                 labelDPct.Visible = false;
-                textBoxDiscPct.Visible = false;
+                textBoxDiscPctOpt.Visible = false;
             }
         }
 
@@ -839,12 +828,12 @@ namespace JurisUtilityBase
             if (!this.comboBoxSurcharge.GetItemText(this.comboBoxSurcharge.SelectedItem).Split(' ')[0].Equals("0")) //if surcharge option selected (not 0)
             {
                 labelSPct.Visible = true;
-                textBoxSurPct.Visible = true;
+                textBoxSurPctOpt.Visible = true;
             }
             else
             {
                 labelSPct.Visible = false;
-                textBoxSurPct.Visible = false;
+                textBoxSurPctOpt.Visible = false;
             }
         }
 
@@ -895,34 +884,34 @@ namespace JurisUtilityBase
 
 
                 List<string> incorrectFields = new List<string>();
-                if (!isNumeric(textBoxMonth.Text))
+                if (!isNumeric(textBoxMonthOpt.Text))
                 {
-                    textBoxMonth.Text = "1";
+                    textBoxMonthOpt.Text = "1";
                     incorrectFields.Add("Month");
                 }
-                if (!isNumeric(textBoxCycle.Text))
+                if (!isNumeric(textBoxCycleOpt.Text))
                 {
-                    textBoxCycle.Text = "1";
+                    textBoxCycleOpt.Text = "1";
                     incorrectFields.Add("Cycle");
                 }
-                if (!isNumeric(textBoxIntDays.Text))
+                if (!isNumeric(textBoxIntDaysOpt.Text))
                 {
-                    textBoxIntDays.Text = "0";
+                    textBoxIntDaysOpt.Text = "0";
                     incorrectFields.Add("Interest Days");
                 }
-                if (!isNumeric(textBoxIntPct.Text))
+                if (!isNumeric(textBoxIntPctOpt.Text))
                 {
-                    textBoxIntPct.Text = "0.00";
+                    textBoxIntPctOpt.Text = "0.00";
                     incorrectFields.Add("Interest Pct");
                 }
-                if (!isNumeric(textBoxDiscPct.Text))
+                if (!isNumeric(textBoxDiscPctOpt.Text))
                 {
-                    textBoxDiscPct.Text = "0.00";
+                    textBoxDiscPctOpt.Text = "0.00";
                     incorrectFields.Add("Discount Pct");
                 }
-                if (!isNumeric(textBoxSurPct.Text))
+                if (!isNumeric(textBoxSurPctOpt.Text))
                 {
-                    textBoxSurPct.Text = "0.00";
+                    textBoxSurPctOpt.Text = "0.00";
                     incorrectFields.Add("Surcharge Pct");
                 }
 
@@ -1024,8 +1013,8 @@ namespace JurisUtilityBase
     + " (select empsysnbr from employee where empid = '" + this.comboBoxBT.GetItemText(this.comboBoxBT.SelectedItem).Split(' ')[0] + "'), "
     + "'" + this.comboBoxPC.GetItemText(this.comboBoxPC.SelectedItem).Split(' ')[0] + "', "
     + " '" + this.comboBoxFeeSched.GetItemText(this.comboBoxFeeSched.SelectedItem).Split(' ')[0] + "'," + txref + ",'" + this.comboBoxExpSched.GetItemText(this.comboBoxExpSched.SelectedItem).Split(' ')[0] + "'," + exref + ", "
-    + " '" + this.comboBoxBillLayout.GetItemText(this.comboBoxBillLayout.SelectedItem).Split(' ')[0] + "','" + this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0] + "','" + inclExp + "','" + retType + "', '" + this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0] + "' ," + textBoxMonth.Text + "," + textBoxCycle.Text + ", "
-    + " 0.00,0.00," + textBoxIntPct.Text + "," + textBoxIntDays.Text + "," + this.comboBoxDisc.GetItemText(this.comboBoxDisc.SelectedItem).Split(' ')[0] + "," + textBoxDiscPct.Text + ", " + this.comboBoxSurcharge.GetItemText(this.comboBoxSurcharge.SelectedItem).Split(' ')[0] + ", " + textBoxSurPct.Text + ", "
+    + " '" + this.comboBoxBillLayout.GetItemText(this.comboBoxBillLayout.SelectedItem).Split(' ')[0] + "','" + this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0] + "','" + inclExp + "','" + retType + "', '" + this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0] + "' ," + textBoxMonthOpt.Text + "," + textBoxCycleOpt.Text + ", "
+    + " 0.00,0.00," + textBoxIntPctOpt.Text + "," + textBoxIntDaysOpt.Text + "," + this.comboBoxDisc.GetItemText(this.comboBoxDisc.SelectedItem).Split(' ')[0] + "," + textBoxDiscPctOpt.Text + ", " + this.comboBoxSurcharge.GetItemText(this.comboBoxSurcharge.SelectedItem).Split(' ')[0] + ", " + textBoxSurPctOpt.Text + ", "
     + " '" + tax1 + "','" + tax2 + "','" + tax3 + "'," + budg + ",'N','" + reqTask + "','" + reqAct + "','N',null,0,'" + this.comboBoxPreBillLayout.GetItemText(this.comboBoxPreBillLayout.SelectedItem).Split(' ')[0] + "', "
     + " 0," + resp + ",'','','','','','','','','','','','', "
     + " '','','','','','','','',0,0,'')";
@@ -1217,33 +1206,33 @@ namespace JurisUtilityBase
         {
             string sql = "";
                 
-                if (!textBoxOTPct1.Text.Equals("0"))
+                if (!textBoxOTPct1Opt.Text.Equals("0"))
                 {
-                    sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT1.GetItemText(this.comboBoxOT1.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct1.Text + " as decimal(7,4)))";
+                    sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT1.GetItemText(this.comboBoxOT1.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct1Opt.Text + " as decimal(7,4)))";
                 if (_jurisUtility.ExecuteNonQuery(0, sql))
                     return true;
                 }
-                if (!textBoxOTPct2.Text.Equals("0"))
+                if (!textBoxOTPct2Opt.Text.Equals("0"))
                 {
-                    sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT2.GetItemText(this.comboBoxOT2.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct2.Text + " as decimal(7,4)))";
+                    sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT2.GetItemText(this.comboBoxOT2.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct2Opt.Text + " as decimal(7,4)))";
                 if (_jurisUtility.ExecuteNonQuery(0, sql))
                     return true;
             }
-                if (!textBoxOTPct3.Text.Equals("0"))
+                if (!textBoxOTPct3Opt.Text.Equals("0"))
                 {
-                    sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT3.GetItemText(this.comboBoxOT3.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct3.Text + " as decimal(7,4)))";
+                    sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT3.GetItemText(this.comboBoxOT3.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct3Opt.Text + " as decimal(7,4)))";
                 if (_jurisUtility.ExecuteNonQuery(0, sql))
                     return true;
             }
-                if (!textBoxOTPct4.Text.Equals("0"))
+                if (!textBoxOTPct4Opt.Text.Equals("0"))
                 {
-                    sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT4.GetItemText(this.comboBoxOT4.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct4.Text + " as decimal(7,4)))";
+                    sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT4.GetItemText(this.comboBoxOT4.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct4Opt.Text + " as decimal(7,4)))";
                 if (_jurisUtility.ExecuteNonQuery(0, sql))
                     return true;
             }
-                if (!textBoxOTPct5.Text.Equals("0"))
+                if (!textBoxOTPct5Opt.Text.Equals("0"))
                 {
-                    sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT5.GetItemText(this.comboBoxOT5.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct5.Text + " as decimal(7,4)))";
+                    sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT5.GetItemText(this.comboBoxOT5.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct5Opt.Text + " as decimal(7,4)))";
                 if (_jurisUtility.ExecuteNonQuery(0, sql))
                     return true;
             }
@@ -1293,16 +1282,16 @@ namespace JurisUtilityBase
         private bool testOrigPct()
         {
 
-            if (isNumeric(textBoxOTPct1.Text) && isNumeric(textBoxOTPct2.Text) && isNumeric(textBoxOTPct3.Text) && isNumeric(textBoxOTPct4.Text) && isNumeric(textBoxOTPct5.Text) && (Convert.ToInt32(textBoxOTPct1.Text) + Convert.ToInt32(textBoxOTPct2.Text) + Convert.ToInt32(textBoxOTPct3.Text) + Convert.ToInt32(textBoxOTPct4.Text) + Convert.ToInt32(textBoxOTPct5.Text) == 100))
+            if (isNumeric(textBoxOTPct1Opt.Text) && isNumeric(textBoxOTPct2Opt.Text) && isNumeric(textBoxOTPct3Opt.Text) && isNumeric(textBoxOTPct4Opt.Text) && isNumeric(textBoxOTPct5Opt.Text) && (Convert.ToInt32(textBoxOTPct1Opt.Text) + Convert.ToInt32(textBoxOTPct2Opt.Text) + Convert.ToInt32(textBoxOTPct3Opt.Text) + Convert.ToInt32(textBoxOTPct4Opt.Text) + Convert.ToInt32(textBoxOTPct5Opt.Text) == 100))
                     return true;
             else
             {
                 MessageBox.Show("All 5 percentages for Originators must be numeric and add to 100." + "\r\n" + "Resetting percentages to default. Please adjust if needed.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textBoxOTPct1.Text = "100";
-                textBoxOTPct2.Text = "0";
-                textBoxOTPct3.Text = "0";
-                textBoxOTPct4.Text = "0";
-                textBoxOTPct5.Text = "0";
+                textBoxOTPct1Opt.Text = "100";
+                textBoxOTPct2Opt.Text = "0";
+                textBoxOTPct3Opt.Text = "0";
+                textBoxOTPct4Opt.Text = "0";
+                textBoxOTPct5Opt.Text = "0";
                 return false;
             }
 

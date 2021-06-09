@@ -46,6 +46,7 @@ namespace JurisUtilityBase
         bool codeIsNumericMatter = false;
         int lengthOfCodeClient = 4;
         int lengthOfCodeMatter = 4;
+        int numOfOrig = 5;
 
         //load all default items
         private void ClientForm_Load(object sender, EventArgs e)
@@ -78,7 +79,7 @@ namespace JurisUtilityBase
             //get number of originators
             string sysparam = "  select SpTxtValue from sysparam where SpName = 'CfgTkprOpts'";
             DataSet dds2 = _jurisUtility.RecordsetFromSQL(sysparam); //the first character should be a number...if not, do nothing
-            int numOfOrig = 5;
+            
             string[] temp = null;
             string cell = "";
             try
@@ -410,6 +411,7 @@ namespace JurisUtilityBase
                     foreach (DataRow dr in myRSPC2.Tables[0].Rows)
                         comboBoxAddyChoose.Items.Add(dr["PC"].ToString());
                     comboBoxAddyChoose.SelectedIndex = 0;
+                    checkBoxChooseAddy.Checked = true;
                 }
             }
         }
@@ -419,22 +421,22 @@ namespace JurisUtilityBase
             if (number > 1)
             {
                 comboBoxOT2.Visible = true;
-                textBoxOTPct2.Visible = true;
+                textBoxOTPct2Opt.Visible = true;
             }
             if (number > 2)
             {
                 comboBoxOT3.Visible = true;
-                textBoxOTPct3.Visible = true;
+                textBoxOTPct3Opt.Visible = true;
             }
             if (number > 3)
             {
                 comboBoxOT4.Visible = true;
-                textBoxOTPct4.Visible = true;
+                textBoxOTPct4Opt.Visible = true;
             }
             if (number > 4)
             {
                 comboBoxOT5.Visible = true;
-                textBoxOTPct5.Visible = true;
+                textBoxOTPct5Opt.Visible = true;
             }
 
         }
@@ -517,7 +519,7 @@ namespace JurisUtilityBase
 
         private void clearFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MatterForm cleared = new MatterForm(_jurisUtility,  0 ,"", 0 );
+            MatterForm cleared = new MatterForm(_jurisUtility, 0, "", 0);
             cleared.Show();
             this.Close();
         }
@@ -556,53 +558,57 @@ namespace JurisUtilityBase
         {
             buttonCreateClient.Enabled = false;
             if (testClientCode() && testMatterCode())
+            {
                 createMatter();
-            //get clisysnbr and pass to matter form
+                buttonCreateClient.Enabled = true;
+            }
+            else
+                buttonCreateClient.Enabled = true;
         }
 
         public bool testClientCode()
         {
-            
-                if (codeIsNumericClient) // is the sysparam setting a number?
-                {
-                    if (isNumeric(textBoxCode.Text)) // if so, did they enter a number?
-                    {
-                        if (textBoxCode.Text.Length > lengthOfCodeClient) // is it too many characters?
-                        {
-                            MessageBox.Show("Client Code" + textBoxCode.Text + " is too long. " + "\r\n" + "Your settings only allow for up to " + lengthOfCodeClient.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return false;
-                        }
-                        else
-                        {
-                            string code = formatMatterCode(textBoxCode.Text);
-                            return true;
 
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Client Code" + textBoxCode.Text + " is not numeric. Your settings require a number", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return false;
-                    }
-
-                }
-                else // is it aplha? if so, we only care if its too long
+            if (codeIsNumericClient) // is the sysparam setting a number?
+            {
+                if (isNumeric(textBoxCode.Text)) // if so, did they enter a number?
                 {
-                    if (textBoxCode.Text.Length > lengthOfCodeClient)
+                    if (textBoxCode.Text.Length > lengthOfCodeClient) // is it too many characters?
                     {
                         MessageBox.Show("Client Code" + textBoxCode.Text + " is too long. " + "\r\n" + "Your settings only allow for up to " + lengthOfCodeClient.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
                     else
                     {
-                        string code = formatMatterCode(textBoxCode.Text);
+                        string code = formatClientCode(textBoxCode.Text);
                         return true;
 
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Client Code" + textBoxCode.Text + " is not numeric. Your settings require a number", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
+            }
+            else // is it aplha? if so, we only care if its too long
+            {
+                if (textBoxCode.Text.Length > lengthOfCodeClient)
+                {
+                    MessageBox.Show("Client Code" + textBoxCode.Text + " is too long. " + "\r\n" + "Your settings only allow for up to " + lengthOfCodeClient.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                else
+                {
+                    string code = formatClientCode(textBoxCode.Text);
+                    return true;
 
                 }
 
-         }
+            }
+
+        }
 
         private bool testMatterCode()
         {
@@ -671,7 +677,7 @@ namespace JurisUtilityBase
             if (this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0].Equals("F")) // flat fee gives them the option to include exps
             {
                 checkBoxIncludeExp.Visible = true;
-                textBoxFlatRetAmt.Visible = true;
+                textBoxFlatRetAmtOpt.Visible = true;
                 label34.Visible = true;
             }
             else
@@ -682,7 +688,7 @@ namespace JurisUtilityBase
             {
                 labelRet.Visible = true;
                 comboBoxRetainerType.Visible = true;
-                textBoxFlatRetAmt.Visible = true;
+                textBoxFlatRetAmtOpt.Visible = true;
                 label34.Visible = true;
             }
             else
@@ -693,7 +699,7 @@ namespace JurisUtilityBase
 
             if (!this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0].Equals("R") && !this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0].Equals("F"))
             {
-                textBoxFlatRetAmt.Visible = false;
+                textBoxFlatRetAmtOpt.Visible = false;
                 label34.Visible = false;
 
             }
@@ -702,50 +708,38 @@ namespace JurisUtilityBase
 
         private void comboBoxFeeFreq_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("C")) //task billing requires task codes
-            {
-                labelCycle.Visible = true;
-                textBoxCycle.Visible = true;
-            }
-            else
-            {
-                labelCycle.Visible = false;
-                textBoxCycle.Visible = false;
-            }
-            if (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("M") || this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("R"))
-            {
-                label39.Visible = false;
-                textBoxMonth.Visible = false;
-            }
-            else
-            {
-                label39.Visible = true;
-                textBoxMonth.Visible = true;
-            }
+            showHideMonthCycleBoxes();
         }
 
         private void comboBoxExpFreq_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("C")) //task billing requires task codes
+            showHideMonthCycleBoxes();
+        }
+
+        private void showHideMonthCycleBoxes()
+        {
+            if (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("C") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("C")) //task billing requires task codes
             {
                 labelCycle.Visible = true;
-                textBoxCycle.Visible = true;
+                textBoxCycleOpt.Visible = true;
             }
             else
             {
                 labelCycle.Visible = false;
-                textBoxCycle.Visible = false;
+                textBoxCycleOpt.Visible = false;
             }
-            if (this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("M") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("R"))
+            if (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("Q") || this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("S") || this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("A") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("Q") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("S") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("A"))
             {
-                label39.Visible = false;
-                textBoxMonth.Visible = false;
+                label39.Visible = true;
+                textBoxMonthOpt.Visible = true;
+
             }
             else
             {
-                label39.Visible = true;
-                textBoxMonth.Visible = true;
+                label39.Visible = false;
+                textBoxMonthOpt.Visible = false;
             }
+
         }
 
 
@@ -754,12 +748,12 @@ namespace JurisUtilityBase
             if (!this.comboBoxDisc.GetItemText(this.comboBoxDisc.SelectedItem).Split(' ')[0].Equals("0")) //if discount option selected (not 0)
             {
                 labelDPct.Visible = true;
-                textBoxDiscPct.Visible = true;
+                textBoxDiscPctOpt.Visible = true;
             }
             else
             {
                 labelDPct.Visible = false;
-                textBoxDiscPct.Visible = false;
+                textBoxDiscPctOpt.Visible = false;
             }
         }
 
@@ -768,12 +762,12 @@ namespace JurisUtilityBase
             if (!this.comboBoxSurcharge.GetItemText(this.comboBoxSurcharge.SelectedItem).Split(' ')[0].Equals("0")) //if surcharge option selected (not 0)
             {
                 labelSPct.Visible = true;
-                textBoxSurPct.Visible = true;
+                textBoxSurPctOpt.Visible = true;
             }
             else
             {
                 labelSPct.Visible = false;
-                textBoxSurPct.Visible = false;
+                textBoxSurPctOpt.Visible = false;
             }
         }
 
@@ -795,46 +789,42 @@ namespace JurisUtilityBase
         private bool checkFields()
         {
             List<string> incorrectFields = new List<string>();
-            if (!isNumeric(textBoxMonth.Text))
+            if (!isNumeric(textBoxMonthOpt.Text))
             {
-                textBoxMonth.Text = "1";
+                textBoxMonthOpt.Text = "1";
                 incorrectFields.Add("Month");
             }
-            if (!isNumeric(textBoxCycle.Text))
+            if (!isNumeric(textBoxCycleOpt.Text))
             {
-                textBoxCycle.Text = "1";
+                textBoxCycleOpt.Text = "1";
                 incorrectFields.Add("Cycle");
             }
-            if (!isNumeric(textBoxIntDays.Text))
+            if (!isNumeric(textBoxIntDaysOpt.Text))
             {
-                textBoxIntDays.Text = "0";
+                textBoxIntDaysOpt.Text = "0";
                 incorrectFields.Add("Interest Days");
             }
-            if (!isNumeric(textBoxIntPct.Text))
+            if (!isNumeric(textBoxIntPctOpt.Text))
             {
-                textBoxIntPct.Text = "0.00";
+                textBoxIntPctOpt.Text = "0.00";
                 incorrectFields.Add("Interest Pct");
             }
-            if (!isNumeric(textBoxDiscPct.Text))
+            if (!isNumeric(textBoxDiscPctOpt.Text))
             {
-                textBoxDiscPct.Text = "0.00";
+                textBoxDiscPctOpt.Text = "0.00";
                 incorrectFields.Add("Discount Pct");
             }
-            if (!isNumeric(textBoxSurPct.Text))
+            if (!isNumeric(textBoxSurPctOpt.Text))
             {
-                textBoxSurPct.Text = "0.00";
+                textBoxSurPctOpt.Text = "0.00";
                 incorrectFields.Add("Surcharge Pct");
             }
-            if (!isNumeric(textBoxFlatRetAmt.Text))
+            if (!isNumeric(textBoxFlatRetAmtOpt.Text))
             {
-                textBoxFlatRetAmt.Text = "100";
+                textBoxFlatRetAmtOpt.Text = "100";
                 incorrectFields.Add("Flat Fee/Retainer Amt");
             }
-            if (!checkBoxChooseAddy.Checked && string.IsNullOrEmpty(richTextBoxBAAddy.Text))
-            {
-                MessageBox.Show("The Address Box must be populated when an existing address is not selected.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
+
 
             //ensure no apostrophes or double quotes as they break sql
             foreach (var textbox in this.Controls.OfType<TextBox>())
@@ -851,7 +841,7 @@ namespace JurisUtilityBase
 
             if (!checkBoxChooseAddy.Checked)
             {
-                string test = "select BilAdrSysNbr from BillingAddress where BilAdrNickName = '" + textBoxBANName.Text + "' and BilAdrCliNbr = " + clisysnbr.ToString(); 
+                string test = "select BilAdrSysNbr from BillingAddress where BilAdrNickName = '" + textBoxBANName.Text + "' and BilAdrCliNbr = " + clisysnbr.ToString();
                 DataSet dds1 = _jurisUtility.RecordsetFromSQL(test);
                 if (dds1 != null && dds1.Tables.Count > 0 && dds1.Tables[0].Rows.Count != 0)
                 {
@@ -859,25 +849,25 @@ namespace JurisUtilityBase
                     return false;
                 }
             }
-               
 
             if (incorrectFields.Count == 0)
             {
                 if (!checkBoxChooseAddy.Checked && (string.IsNullOrEmpty(richTextBoxBAAddy.Text) || string.IsNullOrEmpty(textBoxBANName.Text)))
                 {
-                    MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("When an existing address is not selected, the Nickname and Address field are required." + "\r\n" + "Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
                 foreach (var textbox in this.Controls.OfType<TextBox>())
                 {
                     if (string.IsNullOrEmpty(textbox.Text)) //if there is nothing in it, is it required?
                     {
-                        if (!textbox.Name.EndsWith("Opt") && string.IsNullOrEmpty(textbox.Text) && !textbox.Name.Equals("textBoxBANName"))
+                        if (!textbox.Name.Equals("textBoxBANName"))
                         {
-
+                            if (!textbox.Name.EndsWith("Opt"))
+                            {
                                 MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 return false;
-                                
+                            }
                         }
 
                     }
@@ -961,15 +951,15 @@ namespace JurisUtilityBase
        + "       " + formattedMatCode + ", '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "',  '" + textBoxDescOpt.Text.Trim() + "', " +
        " '', '" + textBoxPhoneOpt.Text.Trim() + "', '" + textBoxFaxOpt.Text.Trim() + "', '" + textBoxContactOpt.Text.Trim() + "', '" + dateTimePickerOpened.Value.ToString("MM/dd/yyyy") + "','O' ,'0', "
      + " '01/01/1900','" + this.comboBoxOffice.GetItemText(this.comboBoxOffice.SelectedItem).Split(' ')[0] + "','" + this.comboBoxPC.GetItemText(this.comboBoxPC.SelectedItem).Split(' ')[0] + "','" + this.comboBoxFeeSched.GetItemText(this.comboBoxFeeSched.SelectedItem).Split(' ')[0] + "'," + txref + ",'" + this.comboBoxExpSched.GetItemText(this.comboBoxExpSched.SelectedItem).Split(' ')[0] + "'," + exref + ",0, "
-      + "'" + this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0] + "','" + inclExp + "','" + retType + "', " + textBoxFlatRetAmt.Text + ", '" + this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0] + "' ," + textBoxMonth.Text + "," + textBoxCycle.Text + ", "
- + " 0.00,0.00," + textBoxIntPct.Text + "," + textBoxIntDays.Text + "," + this.comboBoxDisc.GetItemText(this.comboBoxDisc.SelectedItem).Split(' ')[0] + "," + textBoxDiscPct.Text + ", " + this.comboBoxSurcharge.GetItemText(this.comboBoxSurcharge.SelectedItem).Split(' ')[0] + ", " + textBoxSurPct.Text + ", 0, 0.00,"
+      + "'" + this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0] + "','" + inclExp + "','" + retType + "', " + textBoxFlatRetAmtOpt.Text + ", '" + this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0] + "' ," + textBoxMonthOpt.Text + "," + textBoxCycleOpt.Text + ", "
+ + " 0.00,0.00," + textBoxIntPctOpt.Text + "," + textBoxIntDaysOpt.Text + "," + this.comboBoxDisc.GetItemText(this.comboBoxDisc.SelectedItem).Split(' ')[0] + "," + textBoxDiscPctOpt.Text + ", " + this.comboBoxSurcharge.GetItemText(this.comboBoxSurcharge.SelectedItem).Split(' ')[0] + ", " + textBoxSurPctOpt.Text + ", 0, 0.00,"
       + "0.00," + budg + ",0, 'N','" + reqTask + "','" + reqAct + "','N','" + tax1 + "','" + tax2 + "','" + tax3 + "',"
 
     + " '01/01/1900','01/01/1900','01/01/1900','01/01/1900','01/01/1900',0.00,0.00,0.00,0.00,0.00,0,0,0,"
      + " '','','','','','','', '','','','','','','','','', '', '', '', '', 0, 0, '')";
 
 
-                   isError =  _jurisUtility.ExecuteNonQuery(0, sql);
+                    isError = _jurisUtility.ExecuteNonQuery(0, sql);
                     if (!isError) //error adding matter
                     {
                         if (!resp.Equals("Empty"))
@@ -1064,7 +1054,7 @@ namespace JurisUtilityBase
 
             sql = "insert into MatterResponsibleTimekeeper (MRTMatterID, MRTEmployeeID, MRTPercent) values ( " +
                    "((select max(matsysnbr) from matter), " + empsys + ", 100.0000 )";
-           return  _jurisUtility.ExecuteNonQuery(0, sql);
+            return _jurisUtility.ExecuteNonQuery(0, sql);
 
         }
 
@@ -1144,104 +1134,104 @@ namespace JurisUtilityBase
                 {
 
 
-                        if (checkBoxChooseAddy.Checked) //if checked we only add billto and billcopy
-                        {
+                    if (checkBoxChooseAddy.Checked) //if checked we only add billto and billcopy
+                    {
                         removeAddy = false;
-                            if (addySysNbr == 0)
-                                addySysNbr = getAddyID();
-                                if (addySysNbr != 0)
-                                {
-                                    string resp = "0";
-                                    if (checkBoxRT.Checked)
-                                        resp = " (select empsysnbr from employee where empid = '" + this.comboBoxRT.GetItemText(this.comboBoxRT.SelectedItem).Split(' ')[0] + "')";
-
-                                    //create billto
-                                    sql = "Insert into BillTo (BillToSysNbr,BillToCliNbr,BillToUsageFlg,BillToNickName,BillToBillingAtty,BillToBillFormat,BillToEditFormat,BillToRespAtty) " +
-                                        "values (case when(select max(billtosysnbr) from billto) is null then 1 else ((select max(billtosysnbr) from billto) +1) end, " + clisysnbr.ToString() +
-                                        ",  'M', '" + textBoxMatterCode.Text + "', (select empsysnbr from employee where empid = '" + this.comboBoxBT.GetItemText(this.comboBoxBT.SelectedItem).Split(' ')[0] + "'), " +
-                                        " '" + this.comboBoxBillLayout.GetItemText(this.comboBoxBillLayout.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxPreBillLayout.GetItemText(this.comboBoxPreBillLayout.SelectedItem).Split(' ')[0] + "', " + resp + ")";
-
-                                    isError = _jurisUtility.ExecuteNonQuery(0, sql); //did we enconter an error creating billto?
-                                    if (!isError)
-                                    {
-                                        sql = "select max(billtosysnbr) from billto";
-                                        dds.Clear();
-                                        int billto = 0;
-                                        dds = _jurisUtility.RecordsetFromSQL(sql);
-                                        if (dds != null && dds.Tables.Count > 0)
-                                        {
-                                            foreach (DataRow dr in dds.Tables[0].Rows)
-                                            {
-                                                billto = Convert.ToInt32(dr[0].ToString());
-                                            }
-
-                                        }
-
-
-
-                                        //billcopy
-                                        sql = "Insert into BillCopy(BilCpyBillTo,BilCpyBilAdr,BilCpyComment,BilCpyNbrOfCopies,BilCpyPrintFormat,BilCpyEmailFormat,BilCpyExportFormat,BilCpyARFormat) "
-                                        + " values ( " + billto.ToString() + ", " + addySysNbr.ToString() + " ,'" + textBoxMatterCode.Text + "',1,1,0,0,0 )";
-
-                                        isError = _jurisUtility.ExecuteNonQuery(0, sql);
-                                        if (!isError)
-                                        { return billto; }
-                                        else
-                                        {
-                                            MessageBox.Show("There was an issue adding Billing Reference (billcopy-Existing). No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                            isError = false;
-                                            undoBillTo(billto);
-                                            return 0;
-                                }
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("There was an issue adding Billing Reference (billto-Existing). No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        isError = false;
-                                        return 0;
-                                    }
-                                }
-                                else //they picked from the list but we didnt find it...?
-                                {
-                                    MessageBox.Show("We could not find that address. Please try another.", "LookUp Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    return 0;
-                                }
-
-                        
-                         }
-                        else
+                        if (addySysNbr == 0)
+                            addySysNbr = getAddyID();
+                        if (addySysNbr != 0)
                         {
-                        removeAddy = true;
-                            string addy = richTextBoxBAAddy.Text.Replace("\r", "|").Replace("\n", "|");
-                            addy = addy.Replace("||", "|");
+                            string resp = "0";
+                            if (checkBoxRT.Checked)
+                                resp = " (select empsysnbr from employee where empid = '" + this.comboBoxRT.GetItemText(this.comboBoxRT.SelectedItem).Split(' ')[0] + "')";
 
+                            //create billto
+                            sql = "Insert into BillTo (BillToSysNbr,BillToCliNbr,BillToUsageFlg,BillToNickName,BillToBillingAtty,BillToBillFormat,BillToEditFormat,BillToRespAtty) " +
+                                "values (case when(select max(billtosysnbr) from billto) is null then 1 else ((select max(billtosysnbr) from billto) +1) end, " + clisysnbr.ToString() +
+                                ",  'M', '" + textBoxMatterCode.Text + "', (select empsysnbr from employee where empid = '" + this.comboBoxBT.GetItemText(this.comboBoxBT.SelectedItem).Split(' ')[0] + "'), " +
+                                " '" + this.comboBoxBillLayout.GetItemText(this.comboBoxBillLayout.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxPreBillLayout.GetItemText(this.comboBoxPreBillLayout.SelectedItem).Split(' ')[0] + "', " + resp + ")";
 
-                            sql = "Insert into BillingAddress(BilAdrSysNbr, BilAdrCliNbr, BilAdrUsageFlg, BilAdrNickName, BilAdrPhone, " +
-                                " BilAdrFax, BilAdrContact, BilAdrName, BilAdrAddress, BilAdrCity, BilAdrState, BilAdrZip, BilAdrCountry, BilAdrType, BilAdrEmail) " +
-                                " values (case when(select max(biladrsysnbr) from billingaddress) is null then 1 else ((select max(biladrsysnbr) from billingaddress) +1) end, " + clisysnbr + ", " +
-                                " 'M', '" + textBoxBANName.Text + "', '" + textBoxBAPhoneOpt.Text + "', "
-                                 + "  '" + textBoxBAFaxOpt.Text + "', '" + textBoxBAContactOpt.Text + "', " +
-                                " '" + textBoxBANameOpt.Text + "', " +
-                                "replace('" + addy + "', '|', char(13) + char(10)), "
-                                + " '" + textBoxBACityOpt.Text + "', '" + textBoxBAStateOpt.Text + "', '" + textBoxBAZipOpt.Text + "','" + textBoxBACountry.Text + "', 0, '" + textBoxBAEmailOpt.Text + "')";
-
-                          isError =   _jurisUtility.ExecuteNonQuery(0, sql);
-
-
+                            isError = _jurisUtility.ExecuteNonQuery(0, sql); //did we enconter an error creating billto?
                             if (!isError)
                             {
-                                sql = "select max(biladrsysnbr) from billingaddress";
+                                sql = "select max(billtosysnbr) from billto";
                                 dds.Clear();
-                                int addyid = 0;
+                                int billto = 0;
                                 dds = _jurisUtility.RecordsetFromSQL(sql);
                                 if (dds != null && dds.Tables.Count > 0)
                                 {
                                     foreach (DataRow dr in dds.Tables[0].Rows)
                                     {
-                                        addyid = Convert.ToInt32(dr[0].ToString());
+                                        billto = Convert.ToInt32(dr[0].ToString());
                                     }
 
                                 }
+
+
+
+                                //billcopy
+                                sql = "Insert into BillCopy(BilCpyBillTo,BilCpyBilAdr,BilCpyComment,BilCpyNbrOfCopies,BilCpyPrintFormat,BilCpyEmailFormat,BilCpyExportFormat,BilCpyARFormat) "
+                                + " values ( " + billto.ToString() + ", " + addySysNbr.ToString() + " ,'" + textBoxMatterCode.Text + "',1,1,0,0,0 )";
+
+                                isError = _jurisUtility.ExecuteNonQuery(0, sql);
+                                if (!isError)
+                                { return billto; }
+                                else
+                                {
+                                    MessageBox.Show("There was an issue adding Billing Reference (billcopy-Existing). No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    isError = false;
+                                    undoBillTo(billto);
+                                    return 0;
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("There was an issue adding Billing Reference (billto-Existing). No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                isError = false;
+                                return 0;
+                            }
+                        }
+                        else //they picked from the list but we didnt find it...?
+                        {
+                            MessageBox.Show("We could not find that address. Please try another.", "LookUp Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return 0;
+                        }
+
+
+                    }
+                    else
+                    {
+                        removeAddy = true;
+                        string addy = richTextBoxBAAddy.Text.Replace("\r", "|").Replace("\n", "|");
+                        addy = addy.Replace("||", "|");
+
+
+                        sql = "Insert into BillingAddress(BilAdrSysNbr, BilAdrCliNbr, BilAdrUsageFlg, BilAdrNickName, BilAdrPhone, " +
+                            " BilAdrFax, BilAdrContact, BilAdrName, BilAdrAddress, BilAdrCity, BilAdrState, BilAdrZip, BilAdrCountry, BilAdrType, BilAdrEmail) " +
+                            " values (case when(select max(biladrsysnbr) from billingaddress) is null then 1 else ((select max(biladrsysnbr) from billingaddress) +1) end, " + clisysnbr + ", " +
+                            " 'M', '" + textBoxBANName.Text + "', '" + textBoxBAPhoneOpt.Text + "', "
+                             + "  '" + textBoxBAFaxOpt.Text + "', '" + textBoxBAContactOpt.Text + "', " +
+                            " '" + textBoxBANameOpt.Text + "', " +
+                            "replace('" + addy + "', '|', char(13) + char(10)), "
+                            + " '" + textBoxBACityOpt.Text + "', '" + textBoxBAStateOpt.Text + "', '" + textBoxBAZipOpt.Text + "','" + textBoxBACountryOpt.Text + "', 0, '" + textBoxBAEmailOpt.Text + "')";
+
+                        isError = _jurisUtility.ExecuteNonQuery(0, sql);
+
+
+                        if (!isError)
+                        {
+                            sql = "select max(biladrsysnbr) from billingaddress";
+                            dds.Clear();
+                            int addyid = 0;
+                            dds = _jurisUtility.RecordsetFromSQL(sql);
+                            if (dds != null && dds.Tables.Count > 0)
+                            {
+                                foreach (DataRow dr in dds.Tables[0].Rows)
+                                {
+                                    addyid = Convert.ToInt32(dr[0].ToString());
+                                }
+
+                            }
 
                             string resp = "0";
                             if (checkBoxRT.Checked)
@@ -1279,7 +1269,8 @@ namespace JurisUtilityBase
                                 if (!isError)
                                 {
                                     addySysNbr = addyid;
-                                    return billto; }
+                                    return billto;
+                                }
                                 else
                                 {
                                     MessageBox.Show("There was an issue adding Billing Reference (billcopy). No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1297,14 +1288,14 @@ namespace JurisUtilityBase
                                 return 0;
                             }
                         }
-                            else
-                            {
-                                MessageBox.Show("There was an issue adding the Address. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                isError = false;
-                                return 0;
-                            }
+                        else
+                        {
+                            MessageBox.Show("There was an issue adding the Address. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            isError = false;
+                            return 0;
+                        }
                     }
-                    
+
                 }
             }
 
@@ -1343,33 +1334,33 @@ namespace JurisUtilityBase
         {
             string sql = "";
 
-                if (!textBoxOTPct1.Text.Equals("0"))
-                {
-                    sql = "insert into MatOrigAtty (MOrigMat, MOrigAtty, MOrigPcnt) values ((select max(matsysnbr) from matter), (select empsysnbr from employee where empid = '" + this.comboBoxOT1.GetItemText(this.comboBoxOT1.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct1.Text + " as decimal(7,4)))";
+            if (!textBoxOTPct1Opt.Text.Equals("0"))
+            {
+                sql = "insert into MatOrigAtty (MOrigMat, MOrigAtty, MOrigPcnt) values ((select max(matsysnbr) from matter), (select empsysnbr from employee where empid = '" + this.comboBoxOT1.GetItemText(this.comboBoxOT1.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct1Opt.Text + " as decimal(7,4)))";
                 if (_jurisUtility.ExecuteNonQuery(0, sql))
                     return true;
             }
-                if (!textBoxOTPct2.Text.Equals("0"))
-                {
-                    sql = "insert into MatOrigAtty (MOrigMat, MOrigAtty, MOrigPcnt) values ((select max(matsysnbr) from matter), (select empsysnbr from employee where empid = '" + this.comboBoxOT2.GetItemText(this.comboBoxOT2.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct2.Text + " as decimal(7,4)))";
+            if (!textBoxOTPct2Opt.Text.Equals("0"))
+            {
+                sql = "insert into MatOrigAtty (MOrigMat, MOrigAtty, MOrigPcnt) values ((select max(matsysnbr) from matter), (select empsysnbr from employee where empid = '" + this.comboBoxOT2.GetItemText(this.comboBoxOT2.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct2Opt.Text + " as decimal(7,4)))";
                 if (_jurisUtility.ExecuteNonQuery(0, sql))
                     return true;
             }
-                if (!textBoxOTPct3.Text.Equals("0"))
-                {
-                    sql = "insert into MatOrigAtty (MOrigMat, MOrigAtty, MOrigPcnt) values ((select max(matsysnbr) from matter), (select empsysnbr from employee where empid = '" + this.comboBoxOT3.GetItemText(this.comboBoxOT3.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct3.Text + " as decimal(7,4)))";
+            if (!textBoxOTPct3Opt.Text.Equals("0"))
+            {
+                sql = "insert into MatOrigAtty (MOrigMat, MOrigAtty, MOrigPcnt) values ((select max(matsysnbr) from matter), (select empsysnbr from employee where empid = '" + this.comboBoxOT3.GetItemText(this.comboBoxOT3.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct3Opt.Text + " as decimal(7,4)))";
                 if (_jurisUtility.ExecuteNonQuery(0, sql))
                     return true;
             }
-                if (!textBoxOTPct4.Text.Equals("0"))
-                {
-                    sql = "insert into MatOrigAtty (MOrigMat, MOrigAtty, MOrigPcnt) values ((select max(matsysnbr) from matter), (select empsysnbr from employee where empid = '" + this.comboBoxOT4.GetItemText(this.comboBoxOT4.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct4.Text + " as decimal(7,4)))";
-                               if (_jurisUtility.ExecuteNonQuery(0, sql))
+            if (!textBoxOTPct4Opt.Text.Equals("0"))
+            {
+                sql = "insert into MatOrigAtty (MOrigMat, MOrigAtty, MOrigPcnt) values ((select max(matsysnbr) from matter), (select empsysnbr from employee where empid = '" + this.comboBoxOT4.GetItemText(this.comboBoxOT4.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct4Opt.Text + " as decimal(7,4)))";
+                if (_jurisUtility.ExecuteNonQuery(0, sql))
                     return true;
             }
-                if (!textBoxOTPct5.Text.Equals("0"))
-                {
-                    sql = "insert into MatOrigAtty (MOrigMat, MOrigAtty, MOrigPcnt) values ((select max(matsysnbr) from matter), (select empsysnbr from employee where empid = '" + this.comboBoxOT5.GetItemText(this.comboBoxOT5.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct5.Text + " as decimal(7,4)))";
+            if (!textBoxOTPct5Opt.Text.Equals("0"))
+            {
+                sql = "insert into MatOrigAtty (MOrigMat, MOrigAtty, MOrigPcnt) values ((select max(matsysnbr) from matter), (select empsysnbr from employee where empid = '" + this.comboBoxOT5.GetItemText(this.comboBoxOT5.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct5Opt.Text + " as decimal(7,4)))";
                 if (_jurisUtility.ExecuteNonQuery(0, sql))
                     return true;
             }
@@ -1380,16 +1371,16 @@ namespace JurisUtilityBase
         private bool testOrigPct()
         {
 
-            if (isNumeric(textBoxOTPct1.Text) && isNumeric(textBoxOTPct2.Text) && isNumeric(textBoxOTPct3.Text) && isNumeric(textBoxOTPct4.Text) && isNumeric(textBoxOTPct5.Text) && (Convert.ToInt32(textBoxOTPct1.Text) + Convert.ToInt32(textBoxOTPct2.Text) + Convert.ToInt32(textBoxOTPct3.Text) + Convert.ToInt32(textBoxOTPct4.Text) + Convert.ToInt32(textBoxOTPct5.Text) == 100))
-                    return true;
+            if (isNumeric(textBoxOTPct1Opt.Text) && isNumeric(textBoxOTPct2Opt.Text) && isNumeric(textBoxOTPct3Opt.Text) && isNumeric(textBoxOTPct4Opt.Text) && isNumeric(textBoxOTPct5Opt.Text) && (Convert.ToInt32(textBoxOTPct1Opt.Text) + Convert.ToInt32(textBoxOTPct2Opt.Text) + Convert.ToInt32(textBoxOTPct3Opt.Text) + Convert.ToInt32(textBoxOTPct4Opt.Text) + Convert.ToInt32(textBoxOTPct5Opt.Text) == 100))
+                return true;
             else
             {
                 MessageBox.Show("All 5 percentages for Originators must be numeric and add to 100." + "\r\n" + "Resetting percentages to default. Please adjust if needed.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textBoxOTPct1.Text = "100";
-                textBoxOTPct2.Text = "0";
-                textBoxOTPct3.Text = "0";
-                textBoxOTPct4.Text = "0";
-                textBoxOTPct5.Text = "0";
+                textBoxOTPct1Opt.Text = "100";
+                textBoxOTPct2Opt.Text = "0";
+                textBoxOTPct3Opt.Text = "0";
+                textBoxOTPct4Opt.Text = "0";
+                textBoxOTPct5Opt.Text = "0";
                 return false;
             }
 
@@ -1404,7 +1395,7 @@ namespace JurisUtilityBase
         private int getAddyID()
         {
             int addyid = 0;
-            string test = "select BilAdrSysNbr from BillingAddress where BilAdrNickName = '" + this.comboBoxAddyChoose.GetItemText(this.comboBoxAddyChoose.SelectedItem) + "' and BilAdrCliNbr = " + clisysnbr.ToString(); 
+            string test = "select BilAdrSysNbr from BillingAddress where BilAdrNickName = '" + this.comboBoxAddyChoose.GetItemText(this.comboBoxAddyChoose.SelectedItem) + "' and BilAdrCliNbr = " + clisysnbr.ToString();
             DataSet dds1 = _jurisUtility.RecordsetFromSQL(test);
             if (dds1 != null && dds1.Tables.Count > 0)
             {
@@ -1430,6 +1421,7 @@ namespace JurisUtilityBase
                 }
                 else
                 {
+                    loadClientInfoForMatter();
                     getNextMatterNumber();
                     loadAddys();
                 }
@@ -1564,6 +1556,147 @@ namespace JurisUtilityBase
         private void textBoxNName_Leave(object sender, EventArgs e)
         {
             textBoxRName.Text = textBoxNName.Text;
+        }
+
+        private void loadClientInfoForMatter()
+        {
+            //get client info to load into form
+            string sql = "SELECT   CliNickName ,CliReportingName ,CliSourceOfBusiness ,CliPhoneNbr  ,CliFaxNbr ,CliContactName  ,CliDateOpened  ,OfcOfficeCode + '    ' + right(OfcDesc, 30)  , " +
+                " empid + '    ' + empname ,PrctClsCode  + '    ' + right(PrctClsDesc, 30)  ,CliFeeSch " +
+                " ,case when CliTaskCodeXref is null then 'null' else CliTaskCodeXref end as CliTaskCodeXref ,CliExpSch  ,case when CliExpCodeXref is null then 'null' else CliExpCodeXref end as CliExpCodeXref "
+                + ",CliBillFormat  ,CliBillAgreeCode ,CliFlatFeeIncExp  ,CliRetainerType ,CliExpFreqCode  ,CliFeeFreqCode  ,CliBillMonth ,CliBillCycle ,CliInterestPcnt " +
+                " ,CliInterestDays ,CliDiscountOption ,CliDiscountPcnt ,CliSurchargeOption ,CliSurchargePcnt ,CliTax1Exempt ,CliTax2Exempt ,CliTax3Exempt ,CliBudgetOption ,CliReqTaskCdOnTime ,CliReqActyCdOnTime ," +
+                " CliEditFormat FROM Client inner join officecode on OfcOfficeCode = CliOfficeCode inner join PracticeClass on PrctClsCode = CliPracticeClass " +
+                " inner join employee on empsysnbr = CliBillingAtty where clisysnbr = " + clisysnbr.ToString();
+            DataSet client = _jurisUtility.RecordsetFromSQL(sql);
+            if (client != null && client.Tables.Count > 0)
+            {
+                foreach (DataRow dr in client.Tables[0].Rows)
+                {
+                    //hard code every field...ugh
+                    textBoxNName.Text = dr[0].ToString();
+                    textBoxRName.Text = dr[1].ToString();
+                    textBoxPhoneOpt.Text = dr[3].ToString();
+                    textBoxFaxOpt.Text = dr[4].ToString();
+                    textBoxContactOpt.Text = dr[5].ToString();
+                    textBoxMonthOpt.Text = dr[20].ToString();
+                    textBoxCycleOpt.Text = dr[21].ToString();
+                    textBoxDiscPctOpt.Text = dr[25].ToString();
+                    textBoxSurPctOpt.Text = dr[27].ToString();
+                    textBoxIntPctOpt.Text = dr[22].ToString();
+                    textBoxIntDaysOpt.Text = dr[23].ToString();
+                    if (dr[31].ToString().Equals("Y"))
+                        checkBoxBudget.Checked = true;
+                    else
+                        checkBoxBudget.Checked = false;
+                    if (dr[32].ToString().Equals("Y"))
+                        checkBoxReqTaskCodes.Checked = true;
+                    else
+                        checkBoxReqTaskCodes.Checked = false;
+                    if (dr[33].ToString().Equals("Y"))
+                        checkBoxReqActCodes.Checked = true;
+                    else
+                        checkBoxReqActCodes.Checked = false;
+                    if (dr[28].ToString().Equals("Y"))
+                        checkBoxTax1.Checked = true;
+                    else
+                        checkBoxTax1.Checked = false;
+                    if (dr[29].ToString().Equals("Y"))
+                        checkBoxTax2.Checked = true;
+                    else
+                        checkBoxTax2.Checked = false;
+                    if (dr[30].ToString().Equals("Y"))
+                        checkBoxTax3.Checked = true;
+                    else
+                        checkBoxTax3.Checked = false;
+                    if (!dr[11].ToString().Equals("null"))
+                        checkBoxTaskXRef.Checked = true;
+                    else
+                        checkBoxTaskXRef.Checked = false;
+                    if (!dr[13].ToString().Equals("null"))
+                        checkBoxExpXRef.Checked = true;
+                    else
+                        checkBoxExpXRef.Checked = false;
+                    comboBoxOffice.SelectedIndex = comboBoxOffice.FindStringExact(dr[7].ToString());
+                    comboBoxPC.SelectedIndex = comboBoxPC.FindStringExact(dr[9].ToString());
+                    comboBoxBT.SelectedIndex = comboBoxBT.FindStringExact(dr[8].ToString());
+                    comboBoxFeeSched.SelectedIndex = comboBoxFeeSched.FindStringExact(dr[10].ToString().Split(' ')[0]);
+                    comboBoxExpSched.SelectedIndex = comboBoxExpSched.FindStringExact(dr[12].ToString().Split(' ')[0]);
+                    comboBoxBillLayout.SelectedIndex = comboBoxBillLayout.FindStringExact(dr[14].ToString().Split(' ')[0]);
+                    comboBoxPreBillLayout.SelectedIndex = comboBoxPreBillLayout.FindStringExact(dr[34].ToString().Split(' ')[0]);
+
+                    comboBoxBAgree.SelectedIndex = comboBoxBAgree.FindString(dr[15].ToString());
+                    comboBoxRetainerType.SelectedIndex = comboBoxRetainerType.FindString(dr[17].ToString());
+                    comboBoxFeeFreq.SelectedIndex = comboBoxFeeFreq.FindString(dr[19].ToString());
+                    comboBoxExpFreq.SelectedIndex = comboBoxExpFreq.FindString(dr[18].ToString());
+
+                    comboBoxDisc.SelectedIndex = comboBoxDisc.FindString(dr[24].ToString());
+                    comboBoxSurcharge.SelectedIndex = comboBoxSurcharge.FindString(dr[26].ToString());
+                    if (!dr[11].ToString().Equals("null"))
+                        comboBoxTXRef.SelectedIndex = comboBoxTXRef.FindStringExact(dr[11].ToString().Split(' ')[0]);
+                    if (!dr[13].ToString().Equals("null"))
+                        comboBoxEXRef.SelectedIndex = comboBoxEXRef.FindStringExact(dr[13].ToString().Split(' ')[0]);
+
+                }
+
+            }
+
+            //dont forget about resp and orig
+            sql = "SELECT TOP 1 empid + '    ' + empname FROM ClientResponsibleTimekeeper inner join employee on empsysnbr = CRTEmployeeID where CRTClientID = " + clisysnbr.ToString();
+            client.Clear();
+            client = _jurisUtility.RecordsetFromSQL(sql);
+            if (client != null && client.Tables.Count > 0)
+            {
+                foreach (DataRow dr in client.Tables[0].Rows)
+                {
+                    checkBoxRT.Checked = true;
+                    comboBoxRT.SelectedIndex = comboBoxRT.FindStringExact(dr[0].ToString());
+                }
+            }
+            else
+                checkBoxRT.Checked = false;
+
+            sql = "SELECT empid + '    ' + empname, COrigPcnt FROM CliOrigAtty inner join employee on empsysnbr = COrigAtty where COrigCli = " + clisysnbr.ToString();
+            client.Clear();
+            int row = 1;
+            client = _jurisUtility.RecordsetFromSQL(sql);
+            if (client != null && client.Tables.Count > 0)
+            {
+                foreach (DataRow dr in client.Tables[0].Rows)
+                {
+                    if (row == 1)
+                    {
+                        comboBoxOT1.SelectedIndex = comboBoxOT1.FindString(dr[0].ToString());
+                        textBoxOTPct1Opt.Text = dr[1].ToString();
+                    }
+                    if (row == 2)
+                    {
+                        comboBoxOT2.SelectedIndex = comboBoxOT2.FindString(dr[0].ToString());
+                        textBoxOTPct2Opt.Text = dr[1].ToString();
+                    }
+                    if (row == 3)
+                    {
+                        comboBoxOT3.SelectedIndex = comboBoxOT3.FindString(dr[0].ToString());
+                        textBoxOTPct3Opt.Text = dr[1].ToString();
+                    }
+                    if (row == 4)
+                    {
+                        comboBoxOT4.SelectedIndex = comboBoxOT4.FindString(dr[0].ToString());
+                        textBoxOTPct4Opt.Text = dr[1].ToString();
+                    }
+                    if (row == 5)
+                    {
+                        comboBoxOT5.SelectedIndex = comboBoxOT5.FindString(dr[0].ToString());
+                        textBoxOTPct5Opt.Text = dr[1].ToString();
+                    }
+
+
+
+                    row++;
+                }
+            }
+            else
+                checkBoxRT.Checked = false;
         }
     }
 }
