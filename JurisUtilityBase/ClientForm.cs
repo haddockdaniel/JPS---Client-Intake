@@ -1243,6 +1243,29 @@ namespace JurisUtilityBase
 
         }
 
+        private bool checkForDupeOriginators()
+        {
+            List<ComboBox> cboxList = new List<ComboBox>();
+            foreach (var cbox in this.Controls.OfType<ComboBox>())
+            {//check to see if they have a percentage...if they dont, we dont care fi they dupe as they arent used
+                if ((cbox.Name.Equals("comboBoxOT1") && Convert.ToDecimal(textBoxOTPct1Opt.Text) != 0) || (cbox.Name.Equals("comboBoxOT2") && Convert.ToDecimal(textBoxOTPct2Opt.Text) != 0) ||
+                    (cbox.Name.Equals("comboBoxOT3") && Convert.ToDecimal(textBoxOTPct3Opt.Text) != 0) || (cbox.Name.Equals("comboBoxOT4") && Convert.ToDecimal(textBoxOTPct4Opt.Text) != 0) ||
+                    (cbox.Name.Equals("comboBoxOT5") && Convert.ToDecimal(textBoxOTPct5Opt.Text) != 0))
+                    cboxList.Add(cbox);
+            }
+
+
+            int vv = cboxList.Select(box => box.SelectedIndex).Distinct().Count(); //how many unique empids do we have?
+
+            if (cboxList.Count == vv)
+                return true;
+            else
+            {
+                MessageBox.Show("There are duplicate Originators. Either adjust the percentages or Originators." + "\r\n" + "Originators with 0 percent are ignored and not taken into consideration", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
         private void saveInfoToMoveToMatter()
         {
             checkForTables();
@@ -1285,7 +1308,10 @@ namespace JurisUtilityBase
         {
 
             if (isNumeric(textBoxOTPct1Opt.Text) && isNumeric(textBoxOTPct2Opt.Text) && isNumeric(textBoxOTPct3Opt.Text) && isNumeric(textBoxOTPct4Opt.Text) && isNumeric(textBoxOTPct5Opt.Text) && (Convert.ToDecimal(textBoxOTPct1Opt.Text) + Convert.ToDecimal(textBoxOTPct2Opt.Text) + Convert.ToDecimal(textBoxOTPct3Opt.Text) + Convert.ToDecimal(textBoxOTPct4Opt.Text) + Convert.ToDecimal(textBoxOTPct5Opt.Text) == 100))
-                return true;
+                if (checkForDupeOriginators())
+                    return true;
+                else
+                    return false;
             else
             {
                 MessageBox.Show("All 5 percentages for Originators must be numeric and add to 100." + "\r\n" + "Resetting percentages to default. Please adjust if needed.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1318,7 +1344,7 @@ namespace JurisUtilityBase
         {
 
                 string sql = "SELECT distinct number FROM master..spt_values " +
-                            " WHERE number BETWEEN (SELECT min(cast(clicode as int)) from client) and (SELECT max(cast(clicode as int)) FROM client)  " +
+                            " WHERE number BETWEEN (SELECT min(cast(clicode as int)) from client) and (SELECT max(cast(clicode as int)) + 1 FROM client)  " +
                             " AND number NOT IN(SELECT cast(clicode as int) FROM client)";
                 DataSet dds1 = _jurisUtility.RecordsetFromSQL(sql);
                 string nextcode = "";
