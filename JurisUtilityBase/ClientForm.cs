@@ -31,12 +31,10 @@ namespace JurisUtilityBase
             isModification = modify;
         }
 
-
         JurisUtility _jurisUtility;
         int presetID = 0;
         bool isModification = false;
-        public List<ExceptionHandler> errorList = new List<ExceptionHandler>();
-        ExceptionHandler error = null;
+        public List<string> errorList = new List<string>();
         bool codeIsNumeric = false;
         int clisysnbr = 0;
         bool isError = false;
@@ -56,28 +54,22 @@ namespace JurisUtilityBase
             if (dds != null && dds.Tables.Count > 0)
             {
                 foreach (DataRow dr in dds.Tables[0].Rows)
-                {
                     presetID = Convert.ToInt32(dr[0].ToString());
-                }
             } //else its not there so add it
 
             DataSet myRSPC2 = new DataSet();
             //if clicode is Numeric then increment by 1
             dds.Clear();
             sql = "  select SpTxtValue from sysparam where SpName = 'FldClient'";
-                dds = _jurisUtility.RecordsetFromSQL(sql);
-                string cell = "";
-                if (dds != null && dds.Tables.Count > 0)
-                {
-                    foreach (DataRow dr in dds.Tables[0].Rows)
-                    {
-                        cell = dr[0].ToString();
-                    }
+            dds = _jurisUtility.RecordsetFromSQL(sql);
+            string cell = "";
+            if (dds != null && dds.Tables.Count > 0)
+            {
+                foreach (DataRow dr in dds.Tables[0].Rows)
+                    cell = dr[0].ToString();
+            }
 
-                }
-
-
-                string[] test = cell.Split(',');
+            string[] test = cell.Split(',');
             lengthOfCode = Convert.ToInt32(test[2]);
 
 
@@ -97,7 +89,6 @@ namespace JurisUtilityBase
             string[] temp = null;
             try
             {
-                
                 if (dds != null && dds.Tables.Count > 0)
                 {
                     foreach (DataRow dr in dds.Tables[0].Rows)
@@ -107,19 +98,10 @@ namespace JurisUtilityBase
                     temp = cell.Split(',');
                     numOfOrig = Convert.ToInt32(temp[0]);
                 }
-
-
-
             }
-            catch (Exception vv)
-            {
-
-
-            }
+            catch (Exception)   { }
 
             hideOrShowOriginators(numOfOrig);
-
-
 
             //Office
             comboBoxOffice.ClearItems();
@@ -128,11 +110,7 @@ namespace JurisUtilityBase
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
             if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "There are no Office Codes. Correct and run the tool again";
-                errorList.Add(error);
-            }
+                errorList.Add("There are no Office Codes. Correct and run the tool again");
             else
             {
                 foreach (DataRow dr in myRSPC2.Tables[0].Rows)
@@ -147,11 +125,7 @@ namespace JurisUtilityBase
              myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
             if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "There are no Practice Classes. Correct and run the tool again";
-                errorList.Add(error);
-            }
+                errorList.Add("There are no Practice Classes. Correct and run the tool again");
             else
             {
                 foreach (DataRow dr in myRSPC2.Tables[0].Rows)
@@ -172,11 +146,7 @@ namespace JurisUtilityBase
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
             if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "There are no valid Timekeepers. Correct and run the tool again";
-                errorList.Add(error);
-            }
+                errorList.Add("There are no valid Timekeepers. Correct and run the tool again");
             else
             {
                 foreach (DataRow dr in myRSPC2.Tables[0].Rows)
@@ -207,11 +177,7 @@ namespace JurisUtilityBase
             SQLPC2 = "select SpTxtValue from sysparam where spname = 'CfgTransOpts'";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
             if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "Fee or Exp Schedule Standard in sysparam invalid (CfgTransOpts). Correct and run the tool again";
-                errorList.Add(error);
-            }
+                errorList.Add("Fee or Exp Schedule Standard in sysparam invalid (CfgTransOpts). Correct and run the tool again");
             else
             {
                 string[] items = myRSPC2.Tables[0].Rows[0][0].ToString().Split(',');
@@ -225,11 +191,7 @@ namespace JurisUtilityBase
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
             if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "There are no Fee Schedules. Correct and run the tool again";
-                errorList.Add(error);
-            }
+                errorList.Add("There are no Fee Schedules. Correct and run the tool again");
             else
             {
                 foreach (DataRow dr in myRSPC2.Tables[0].Rows)
@@ -243,11 +205,7 @@ namespace JurisUtilityBase
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
             if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "There are no Expense Schedules. Correct and run the tool again";
-                errorList.Add(error);
-            }
+                errorList.Add("There are no Expense Schedules. Correct and run the tool again");
             else
             {
                 foreach (DataRow dr in myRSPC2.Tables[0].Rows)
@@ -299,11 +257,7 @@ namespace JurisUtilityBase
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
             if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "There are no Bill Layouts. Correct and run the tool again";
-                errorList.Add(error);
-            }
+                errorList.Add("There are no Bill Layouts. Correct and run the tool again");
             else
             {
                 foreach (DataRow dr in myRSPC2.Tables[0].Rows)
@@ -378,15 +332,11 @@ namespace JurisUtilityBase
             comboBoxSurcharge.Items.Add("3    % of bill");
             comboBoxSurcharge.SelectedIndex = 0;
 
-
-
-
-
             if (errorList.Count > 0)
             {
                 string allErrors = "";
-                foreach (ExceptionHandler ee in errorList)
-                    allErrors = allErrors + error.errorMessage + "\r\n";
+                foreach (string ee in errorList)
+                    allErrors = allErrors + ee + "\r\n";
                 MessageBox.Show("There were issues loading the Form. See below for details:" + "\r\n" + allErrors, "Form Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 System.Environment.Exit(1);
             }
@@ -401,14 +351,6 @@ namespace JurisUtilityBase
                     buttonCreateClient.Click += buttonModify;
                 }
             }
-
-
-
-
-            //                dtOpen.Visible = checkBoxSetDate.Checked;
-            //NewDR = dtOpen.Value.Date.ToString("MM/dd/yyyy");
-            //if (cbOT.SelectedIndex > 0)
-            //  OT = this.cbOT.GetItemText(this.cbOT.SelectedItem).Split(' ')[0];
         }
 
         private void hideOrShowOriginators(int number)
@@ -488,15 +430,8 @@ namespace JurisUtilityBase
                 }
 
             } //else its not there so add it
-
-
-
         }
 
-        private void moveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void loadDefaultsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -594,9 +529,7 @@ namespace JurisUtilityBase
             if (dds != null && dds.Tables.Count > 0)
             {
                 foreach (DataRow dr in dds.Tables[0].Rows)
-                {
                     defID = Convert.ToInt32(dr[0].ToString());
-                }
             } //else its not there so add it
 
             foreach (var textbox in this.Controls.OfType<TextBox>())
@@ -642,10 +575,7 @@ namespace JurisUtilityBase
                         createClient();
                 }
                 else
-                {
                     MessageBox.Show("Client Code" + textBoxCode.Text + " is not numeric. Your settings require a number", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
             }
             else // is it aplha? if so, we only care if its too long
             {
@@ -655,9 +585,6 @@ namespace JurisUtilityBase
                     createClient();
 
             }
-            
-            
-            //get clisysnbr and pass to matter form
         }
 
         private void buttonModify(object sender, EventArgs e)
@@ -816,11 +743,7 @@ namespace JurisUtilityBase
                 decimal test = Convert.ToDecimal(value);
                 return true;
             }
-            catch (Exception exx2)
-            {
-                return false;
-            }
-
+            catch (Exception) { return false; }
         }
 
 
@@ -873,8 +796,6 @@ namespace JurisUtilityBase
                 }
 
             }
-
-
 
                 List<string> incorrectFields = new List<string>();
                 if (!isNumeric(textBoxMonthOpt.Text))
@@ -939,17 +860,15 @@ namespace JurisUtilityBase
 
                             }
 
+                        }   
                     }
-                }
-
-
-                if (testOrigPct())
-                    return true;
-                else
-                {
-                    buttonCreateClient.Enabled = true;
-                    return false;
-                }
+                    if (testOrigPct())
+                        return true;
+                    else
+                    {
+                        buttonCreateClient.Enabled = true;
+                        return false;
+                    }
                 }
 
                 else
@@ -962,17 +881,12 @@ namespace JurisUtilityBase
                 buttonCreateClient.Enabled = true;
                 return false;
                 }
-
-           
         }
 
         private void createClient()
         {
             if (checkFields())
             {
-
-
-
                 string txref = "null";
                 if (checkBoxTaskXRef.Checked)
                     txref = "'" + this.comboBoxTXRef.GetItemText(this.comboBoxTXRef.SelectedItem).Split(' ')[0] + "'";
@@ -980,7 +894,6 @@ namespace JurisUtilityBase
                 string exref = "null";
                 if (checkBoxExpXRef.Checked)
                     exref = "'" + this.comboBoxEXRef.GetItemText(this.comboBoxEXRef.SelectedItem).Split(' ')[0] + "'";
-
 
                 string resp = "null";
                 if (checkBoxRT.Checked)
@@ -993,8 +906,6 @@ namespace JurisUtilityBase
                 string budg = ((bool?)checkBoxBudget.Checked) == true ? '1'.ToString() : '0'.ToString();
                 string reqTask = ((bool?)checkBoxReqTaskCodes.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
                 string reqAct = ((bool?)checkBoxReqActCodes.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
-
-
 
                 string retType = ((bool?)comboBoxRetainerType.Visible) == true ? this.comboBoxRetainerType.GetItemText(this.comboBoxRetainerType.SelectedItem).Split(' ')[0] : string.Empty;
 
@@ -1037,9 +948,7 @@ namespace JurisUtilityBase
                                 if (dds != null && dds.Tables.Count > 0)
                                 {
                                     foreach (DataRow dr in dds.Tables[0].Rows)
-                                    {
                                         addyid = Convert.ToInt32(dr[0].ToString());
-                                    }
 
                                 }
                                 isError = addOrig(addyid);
@@ -1062,14 +971,9 @@ namespace JurisUtilityBase
                                         sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
                                         _jurisUtility.ExecuteNonQuery(0, sql);
 
-
-
                                         //after adding the client, load the preset back in
                                         if (presetID != 0)
-                                        {
                                             checkForTables();
-
-                                        }
 
                                         DialogResult fc = MessageBox.Show("Client " + textBoxCode.Text + " was added successfully." + "\r\n" + "Would you like to Add a Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                                         if (fc == DialogResult.Yes)
@@ -1086,7 +990,6 @@ namespace JurisUtilityBase
                                             ClientForm newClient = new ClientForm(_jurisUtility, presetID, false);
                                             newClient.Show();
                                             this.Close();
-
                                         }
                                     }
                                     else
@@ -1096,9 +999,6 @@ namespace JurisUtilityBase
                                         undoClient();
                                         undoOrig();
                                         undoResp();
-                                        
-
-
                                     }
 
                                 }
@@ -1130,11 +1030,6 @@ namespace JurisUtilityBase
                     isError = false;
                 }
             }
-
-
-
-
-
         }
 
         private void undoClient()
@@ -1145,10 +1040,8 @@ namespace JurisUtilityBase
                 _jurisUtility.ExecuteNonQuery(0, sql);
                 clisysnbr = 0;
                 isError = false;
-
             }
-            catch (Exception vvc)
-            { }
+            catch (Exception)  { }
 
         }
 
@@ -1160,10 +1053,8 @@ namespace JurisUtilityBase
                 _jurisUtility.ExecuteNonQuery(0, sql);
                 clisysnbr = 0;
                 isError = false;
-
             }
-            catch (Exception vvc)
-            { }
+            catch (Exception)  { }
 
         }
 
@@ -1174,10 +1065,8 @@ namespace JurisUtilityBase
                 string sql = "delete from CliOrigAtty where COrigCli = " + clisysnbr.ToString();
                 _jurisUtility.ExecuteNonQuery(0, sql);
                 isError = false;
-
             }
-            catch (Exception vvc)
-            { }
+            catch (Exception)   { }
         }
 
         private bool addRespToTable(string empsys)
@@ -1188,16 +1077,10 @@ namespace JurisUtilityBase
            isError =  _jurisUtility.ExecuteNonQuery(0, sql);
 
             return isError;
-
-
-
         }
 
         private bool createAddy()
         {
-
-
-
             string addy = richTextBoxBAAddy.Text.Replace("\r", "|").Replace("\n", "|");
             addy = addy.Replace("||", "|");
 
@@ -1222,10 +1105,7 @@ namespace JurisUtilityBase
             if (dds != null && dds.Tables.Count > 0)
             {
                 foreach (DataRow dr in dds.Tables[0].Rows)
-                {
                     sysnbr = Convert.ToInt32(dr[0].ToString());
-                }
-
             }
             return sysnbr;
         }
@@ -1264,7 +1144,6 @@ namespace JurisUtilityBase
                 if (_jurisUtility.ExecuteNonQuery(0, sql))
                     return true;
             }
-
             return false;
 
         }
@@ -1351,11 +1230,6 @@ namespace JurisUtilityBase
 
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void ExitDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -1394,9 +1268,7 @@ namespace JurisUtilityBase
         {
             CliBillingForm cliB = new CliBillingForm(_jurisUtility);
             if (cliB.loadFields())
-            {
                 cliB.ShowDialog();
-            }
             else
                 cliB.Close();
         }

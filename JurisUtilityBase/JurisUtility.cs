@@ -187,10 +187,8 @@ namespace JurisUtilityBase
                     da.Fill(ds);
                 }
             }
-            catch (Exception ex111)
+            catch (Exception)
             {
-
-
             }
             return ds;
         }

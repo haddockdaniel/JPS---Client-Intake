@@ -37,8 +37,7 @@ namespace JurisUtilityBase
 
         string clicode = "";
         int addySysNbr = 0;
-        public List<ExceptionHandler> errorList = new List<ExceptionHandler>();
-        ExceptionHandler error = null;
+        public List<string> errorList = new List<string>();
         int clisysnbr = 0;
         bool isError = false;
         bool removeAddy = false;
@@ -65,17 +64,10 @@ namespace JurisUtilityBase
             else
                 loadAddys();
 
-            DataSet myRSPC2 = new DataSet();
-
             getDefaultsForClientMatter(); // we need to know if they are numeric or alpha an how long they can be
 
             //if clicode is Numeric then increment by 1
             getNextMatterNumber();
-
-
-
-
-
 
             //get number of originators
             string sysparam = "  select SpTxtValue from sysparam where SpName = 'CfgTkprOpts'";
@@ -99,27 +91,19 @@ namespace JurisUtilityBase
 
 
             }
-            catch (Exception vv)
-            {
-
-
-            }
+            catch (Exception) { }
 
             hideOrShowOriginators(numOfOrig);
 
 
             //Office
             comboBoxOffice.ClearItems();
-
+            DataSet myRSPC2 = new DataSet();
             string SQLPC2 = "select OfcOfficeCode + '    ' + right(OfcDesc, 30) as OfficeCode from OfficeCode order by OfcOfficeCode";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
             if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "There are no Office Codes. Correct and run the tool again";
-                errorList.Add(error);
-            }
+                errorList.Add("There are no Office Codes. Correct and run the tool again");
             else
             {
                 foreach (DataRow dr in myRSPC2.Tables[0].Rows)
@@ -134,11 +118,7 @@ namespace JurisUtilityBase
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
             if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "There are no Practice Classes. Correct and run the tool again";
-                errorList.Add(error);
-            }
+                errorList.Add("There are no Practice Classes. Correct and run the tool again");
             else
             {
                 foreach (DataRow dr in myRSPC2.Tables[0].Rows)
@@ -165,12 +145,8 @@ namespace JurisUtilityBase
             SQLPC2 = "select empinitials,empid + '    ' + empname as emp from employee where empvalidastkpr='Y' order by empinitials, empid";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
-            if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "There are no valid Timekeepers. Correct and run the tool again";
-                errorList.Add(error);
-            }
+            if (myRSPC2.Tables[0].Rows.Count == 0)        
+                errorList.Add("There are no valid Timekeepers. Correct and run the tool again");
             else
             {
                 foreach (DataRow dr in myRSPC2.Tables[0].Rows)
@@ -201,11 +177,7 @@ namespace JurisUtilityBase
             SQLPC2 = "select SpTxtValue from sysparam where spname = 'CfgTransOpts'";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
             if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "Fee or Exp Schedule Standard in sysparam invalid (CfgTransOpts). Correct and run the tool again";
-                errorList.Add(error);
-            }
+                errorList.Add("Fee or Exp Schedule Standard in sysparam invalid (CfgTransOpts). Correct and run the tool again");
             else
             {
                 string[] items = myRSPC2.Tables[0].Rows[0][0].ToString().Split(',');
@@ -219,11 +191,7 @@ namespace JurisUtilityBase
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
             if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "There are no Fee Schedules. Correct and run the tool again";
-                errorList.Add(error);
-            }
+                errorList.Add("There are no Fee Schedules. Correct and run the tool again");
             else
             {
                 foreach (DataRow dr in myRSPC2.Tables[0].Rows)
@@ -237,11 +205,7 @@ namespace JurisUtilityBase
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
             if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "There are no Expense Schedules. Correct and run the tool again";
-                errorList.Add(error);
-            }
+                errorList.Add("There are no Expense Schedules. Correct and run the tool again");
             else
             {
                 foreach (DataRow dr in myRSPC2.Tables[0].Rows)
@@ -293,11 +257,7 @@ namespace JurisUtilityBase
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
             if (myRSPC2.Tables[0].Rows.Count == 0)
-            {
-                error = new ExceptionHandler();
-                error.errorMessage = "There are no Bill Layouts. Correct and run the tool again";
-                errorList.Add(error);
-            }
+                errorList.Add("There are no Bill Layouts. Correct and run the tool again");
             else
             {
                 foreach (DataRow dr in myRSPC2.Tables[0].Rows)
@@ -379,8 +339,8 @@ namespace JurisUtilityBase
             if (errorList.Count > 0)
             {
                 string allErrors = "";
-                foreach (ExceptionHandler ee in errorList)
-                    allErrors = allErrors + error.errorMessage + "\r\n";
+                foreach (string ee in errorList)
+                    allErrors = allErrors + ee + "\r\n";
                 MessageBox.Show("There were issues loading the Form. See below for details:" + "\r\n" + allErrors, "Form Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 System.Environment.Exit(1);
             }
@@ -498,11 +458,6 @@ namespace JurisUtilityBase
 
         }
 
-        private void moveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void loadDefaultsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult ds = MessageBox.Show("This will clear anything already on the Matter form. Are you sure?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -544,16 +499,6 @@ namespace JurisUtilityBase
             _jurisUtility.ExecuteSqlCommand(0, sql);
 
         }
-
-        private void clearFieldsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
-
-
-
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -779,10 +724,7 @@ namespace JurisUtilityBase
                 decimal test = Convert.ToDecimal(value);
                 return true;
             }
-            catch (Exception exx2)
-            {
-                return false;
-            }
+            catch (Exception ) {  return false;  }
 
         }
 
@@ -1138,8 +1080,7 @@ namespace JurisUtilityBase
                 isError = false;
 
             }
-            catch (Exception vvc)
-            { }
+            catch (Exception)   { }
 
 
         }
@@ -1153,8 +1094,7 @@ namespace JurisUtilityBase
                 isError = false;
 
             }
-            catch (Exception vvc)
-            { }
+            catch (Exception)   { }
         }
 
         private void undoResp()
@@ -1166,8 +1106,7 @@ namespace JurisUtilityBase
                 isError = false;
 
             }
-            catch (Exception vvc)
-            { }
+            catch (Exception)   { }
         }
 
         private void undoOrig()
@@ -1179,8 +1118,7 @@ namespace JurisUtilityBase
                 isError = false;
 
             }
-            catch (Exception vvc)
-            { }
+            catch (Exception)  { }
         }
 
         private int createAddy() // returns billto which is required to add the matter
@@ -1394,7 +1332,7 @@ namespace JurisUtilityBase
                 isError = false;
 
             }
-            catch (Exception vvc)
+            catch (Exception)
             { }
 
         }
@@ -1409,7 +1347,7 @@ namespace JurisUtilityBase
                 isError = false;
 
             }
-            catch (Exception vvc)
+            catch (Exception)
             { }
 
         }
@@ -1671,12 +1609,6 @@ namespace JurisUtilityBase
 
         }
 
-
-        private void checkBoxChooseAddy_CheckedChanged(object sender, EventArgs e)
-        {
-
-
-        }
 
         private void comboBoxAddyChoose_SelectedIndexChanged(object sender, EventArgs e)
         {

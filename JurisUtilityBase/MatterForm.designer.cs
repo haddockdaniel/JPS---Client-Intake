@@ -1236,7 +1236,6 @@
             this.checkBoxChooseAddy.TabIndex = 198;
             this.checkBoxChooseAddy.Text = "Choose an Existing Address";
             this.checkBoxChooseAddy.UseVisualStyleBackColor = true;
-            this.checkBoxChooseAddy.CheckedChanged += new System.EventHandler(this.checkBoxChooseAddy_CheckedChanged);
             // 
             // comboBoxAddyChoose
             // 
