@@ -141,7 +141,7 @@
             this.checkBoxTaskXRef = new System.Windows.Forms.CheckBox();
             this.checkBoxExpXRef = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonCliBilling = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -1208,24 +1208,25 @@
             this.label9.TabIndex = 193;
             this.label9.Text = "Billing Address";
             // 
-            // button1
+            // buttonCliBilling
             // 
-            this.button1.BackColor = System.Drawing.Color.LightGray;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.button1.Location = new System.Drawing.Point(415, 649);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(339, 26);
-            this.button1.TabIndex = 194;
-            this.button1.Text = "Create Client";
-            this.button1.UseVisualStyleBackColor = false;
+            this.buttonCliBilling.BackColor = System.Drawing.Color.LightGray;
+            this.buttonCliBilling.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonCliBilling.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.buttonCliBilling.Location = new System.Drawing.Point(415, 649);
+            this.buttonCliBilling.Name = "buttonCliBilling";
+            this.buttonCliBilling.Size = new System.Drawing.Size(339, 26);
+            this.buttonCliBilling.TabIndex = 194;
+            this.buttonCliBilling.Text = "Client Billing Fields";
+            this.buttonCliBilling.UseVisualStyleBackColor = false;
+            this.buttonCliBilling.Click += new System.EventHandler(this.buttonCliBilling_Click);
             // 
             // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(786, 769);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonCliBilling);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.textBoxBANName);
             this.Controls.Add(this.checkBoxExpXRef);
@@ -1456,6 +1457,6 @@
         private System.Windows.Forms.CheckBox checkBoxTaskXRef;
         private System.Windows.Forms.CheckBox checkBoxExpXRef;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonCliBilling;
     }
 }

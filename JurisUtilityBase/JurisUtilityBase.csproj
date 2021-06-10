@@ -34,7 +34,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>14</ApplicationRevision>
+    <ApplicationRevision>15</ApplicationRevision>
     <ApplicationVersion>3.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -166,6 +166,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillingField.cs" />
+    <Compile Include="CliBillingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CliBillingForm.Designer.cs">
+      <DependentUpon>CliBillingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ClientForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -174,6 +181,12 @@
     </Compile>
     <Compile Include="ExceptionHandler.cs" />
     <Compile Include="JurisUtility.cs" />
+    <Compile Include="MatBillingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MatBillingForm.Designer.cs">
+      <DependentUpon>MatBillingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MatterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -206,8 +219,14 @@
     <Compile Include="SplashScreen.Designer.cs">
       <DependentUpon>SplashScreen.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="CliBillingForm.resx">
+      <DependentUpon>CliBillingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ClientForm.resx">
       <DependentUpon>ClientForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MatBillingForm.resx">
+      <DependentUpon>MatBillingForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MatterForm.resx">
       <DependentUpon>MatterForm.cs</DependentUpon>

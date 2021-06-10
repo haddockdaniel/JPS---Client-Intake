@@ -144,6 +144,7 @@
             this.textBoxFlatRetAmtOpt = new System.Windows.Forms.TextBox();
             this.checkBoxChooseAddy = new System.Windows.Forms.CheckBox();
             this.comboBoxAddyChoose = new System.Windows.Forms.ComboBox();
+            this.buttonCliBilling = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -1245,11 +1246,25 @@
             this.comboBoxAddyChoose.TabIndex = 199;
             this.comboBoxAddyChoose.SelectedIndexChanged += new System.EventHandler(this.comboBoxAddyChoose_SelectedIndexChanged);
             // 
+            // buttonCliBilling
+            // 
+            this.buttonCliBilling.BackColor = System.Drawing.Color.LightGray;
+            this.buttonCliBilling.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonCliBilling.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.buttonCliBilling.Location = new System.Drawing.Point(415, 663);
+            this.buttonCliBilling.Name = "buttonCliBilling";
+            this.buttonCliBilling.Size = new System.Drawing.Size(339, 26);
+            this.buttonCliBilling.TabIndex = 200;
+            this.buttonCliBilling.Text = "Matter Billing Fields";
+            this.buttonCliBilling.UseVisualStyleBackColor = false;
+            this.buttonCliBilling.Click += new System.EventHandler(this.buttonCliBilling_Click);
+            // 
             // MatterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(783, 769);
+            this.Controls.Add(this.buttonCliBilling);
             this.Controls.Add(this.comboBoxAddyChoose);
             this.Controls.Add(this.checkBoxChooseAddy);
             this.Controls.Add(this.label34);
@@ -1489,5 +1504,6 @@
         private System.Windows.Forms.TextBox textBoxFlatRetAmtOpt;
         private System.Windows.Forms.CheckBox checkBoxChooseAddy;
         private System.Windows.Forms.ComboBox comboBoxAddyChoose;
+        private System.Windows.Forms.Button buttonCliBilling;
     }
 }

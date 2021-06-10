@@ -41,6 +41,7 @@ namespace JurisUtilityBase
         bool isError = false;
         int lengthOfCode = 4;
 
+
         //load all default items
         private void ClientForm_Load(object sender, EventArgs e)
         {
@@ -84,37 +85,7 @@ namespace JurisUtilityBase
             else
                 codeIsNumeric = true;
 
-            try
-            {
-                if (codeIsNumeric)
-                {
-                    dds.Clear();
-                    sql = "SELECT top 1 cast(clicode as int) + 1" +
-                                 " FROM client " +
-                                 " WHERE cast(clicode as int) +1 NOT IN(SELECT DISTINCT cast(clicode as int) FROM client) and cast(clicode as int) > 1000 " +
-                                 " order by cast(clicode as int)";
-                    dds = _jurisUtility.RecordsetFromSQL(sql);
-                    if (dds != null && dds.Tables.Count > 0)
-                    {
-                        foreach (DataRow dr in dds.Tables[0].Rows)
-                        {
-                            if (isNumeric(dr[0].ToString()))
-                            {
-                                if (!test[1].Equals("C"))
-                                {
-
-                                    cell = "000000000000" + dr[0].ToString();
-                                    textBoxCode.Text =  cell.Substring(cell.Length - lengthOfCode, lengthOfCode);
-                                }
-                            }
-                        }
-                    }
-
-                }
-                else
-                    textBoxCode.Text = "";
-            }catch (Exception nn)
-            { }
+            getNextClientNumber();
 
 
             //get number of originators
@@ -533,7 +504,7 @@ namespace JurisUtilityBase
             if (ds == DialogResult.Yes)
             {
                 checkForTables();
-                string sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
+                string sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C' ";
                 ds1 = _jurisUtility.RecordsetFromSQL(sql);
                 PresetManager DM = new PresetManager(ds1, _jurisUtility, "C");
                 DM.Show();
@@ -721,7 +692,7 @@ namespace JurisUtilityBase
                 sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType) values (" +presetID + ", '" + textbox.Name + "', '" + textbox.Text + "', 'richTextBox' )";
                 _jurisUtility.ExecuteNonQuery(0, sql);
             }
-            sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C' and id <> 999999";
+            sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
             DataSet ds1 = _jurisUtility.RecordsetFromSQL(sql);
             PresetManager DM = new PresetManager(ds1, _jurisUtility, "C");
             DM.Show();
@@ -874,6 +845,7 @@ namespace JurisUtilityBase
                     foreach (DataRow dr in dds.Tables[0].Rows) //client already exists
                     {
                         MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code." + "\r\n" + "Remember codes must match the format in which they appear in Juris." + "\r\n" + "This includes leading zeroes", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        buttonCreateClient.Enabled = true;
                         return false;
                         
                     }
@@ -918,10 +890,10 @@ namespace JurisUtilityBase
 
             //ensure no apostrophes or double quotes as they break sql
             foreach (var textbox in this.Controls.OfType<TextBox>())
-                    textbox.Text = textbox.Text.Replace("'", "").Replace("\"", "").Replace(@"\", " ").Replace("%", "").Replace("[", "").Replace("]", "").Replace("_", " ").Replace("^", ""); ;
+                    textbox.Text = textbox.Text.Replace("'", "").Replace("\"", "").Replace(@"\", " ").Replace("%", "").Replace("[", "").Replace("]", "").Replace("_", " ").Replace("^", ""); 
 
                 foreach (var textbox in this.Controls.OfType<RichTextBox>())
-                    textbox.Text = textbox.Text.Replace("'", "").Replace("\"", "").Replace(@"\", " ").Replace("%", "").Replace("[", "").Replace("]", "").Replace("_", " ").Replace("^", ""); ;
+                    textbox.Text = textbox.Text.Replace("'", "").Replace("\"", "").Replace(@"\", " ").Replace("%", "").Replace("[", "").Replace("]", "").Replace("_", " ").Replace("^", ""); 
 
                 if (incorrectFields.Count == 0)
                 {
@@ -1047,52 +1019,70 @@ namespace JurisUtilityBase
                                 isError = addOrig(addyid);
                                 if (!isError)
                                 {
-                                    string SQL = "Insert into DocumentTree(dtdocid, dtsystemcreated, dtdocclass,dtdoctype,  dtparentid, dttitle, dtkeyl) "
-                                    + " select (select max(dtdocid)  from documenttree) + 1 , 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
-                                    + " from Client where clisysnbr = " + clisysnbr.ToString();
-                                    _jurisUtility.ExecuteNonQuery(0, SQL);
-
-                                    SQL = " Update sysparam set spnbrvalue=(select max(dtdocid) from documenttree) where spname='LastSysNbrDocTree'";
-                                    _jurisUtility.ExecuteNonQuery(0, SQL);
-
-                                    SQL = " update sysparam set spnbrvalue = (select max(CliSysNbr) from client) where spname = 'LastSysNbrClient'";
-                                    _jurisUtility.ExecuteNonQuery(0, SQL);
-
-                                    sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
-                                    _jurisUtility.ExecuteNonQuery(0, sql);
-
-                                    //after adding the client, load the preset back in
-                                    if (presetID != 0)
+                                    isError = loadClientBillFields();
+                                    if (!isError)
                                     {
-                                        checkForTables();
+                                        string SQL = "Insert into DocumentTree(dtdocid, dtsystemcreated, dtdocclass,dtdoctype,  dtparentid, dttitle, dtkeyl) "
+                                        + " select (select max(dtdocid)  from documenttree) + 1 , 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
+                                        + " from Client where clisysnbr = " + clisysnbr.ToString();
+                                        _jurisUtility.ExecuteNonQuery(0, SQL);
 
-                                    }
+                                        SQL = " Update sysparam set spnbrvalue=(select max(dtdocid) from documenttree) where spname='LastSysNbrDocTree'";
+                                        _jurisUtility.ExecuteNonQuery(0, SQL);
 
-                                    DialogResult fc = MessageBox.Show("Client " + textBoxCode.Text + " was added successfully." + "\r\n" + "Would you like to Add a Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                                    if (fc == DialogResult.Yes)
-                                    {
-                                        //save info to move over to matter
-                                        saveInfoToMoveToMatter();
-                                        MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid);
-                                        cleared.Show();
-                                        //move data over
-                                        this.Close();
+                                        SQL = " update sysparam set spnbrvalue = (select max(CliSysNbr) from client) where spname = 'LastSysNbrClient'";
+                                        _jurisUtility.ExecuteNonQuery(0, SQL);
+
+                                        sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
+                                        _jurisUtility.ExecuteNonQuery(0, sql);
+
+
+
+                                        //after adding the client, load the preset back in
+                                        if (presetID != 0)
+                                        {
+                                            checkForTables();
+
+                                        }
+
+                                        DialogResult fc = MessageBox.Show("Client " + textBoxCode.Text + " was added successfully." + "\r\n" + "Would you like to Add a Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                        if (fc == DialogResult.Yes)
+                                        {
+                                            //save info to move over to matter
+                                            saveInfoToMoveToMatter();
+                                            MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid);
+                                            cleared.Show();
+                                            //move data over
+                                            this.Close();
+                                        }
+                                        else
+                                        {
+                                            ClientForm newClient = new ClientForm(_jurisUtility, presetID, false);
+                                            newClient.Show();
+                                            this.Close();
+
+                                        }
                                     }
                                     else
                                     {
-                                        ClientForm cleared = new ClientForm(_jurisUtility, presetID, false);
-                                        cleared.Show();
-                                        this.Close();
+                                        MessageBox.Show("There was an issue adding the Billing Fields. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        isError = false;
+                                        undoClient();
+                                        undoOrig();
+                                        undoResp();
+                                        
+
 
                                     }
-                                        
+
                                 }
                             }
                             else
                             {
                                 MessageBox.Show("There was an issue adding the address. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                undoResp(); 
                                 undoClient();
-                                undoResp();
+                                
                             }
                         }
                         else
@@ -1151,6 +1141,19 @@ namespace JurisUtilityBase
 
         }
 
+        private void undoOrig()
+        {
+            try
+            {
+                string sql = "delete from CliOrigAtty where COrigCli = " + clisysnbr.ToString();
+                _jurisUtility.ExecuteNonQuery(0, sql);
+                isError = false;
+
+            }
+            catch (Exception vvc)
+            { }
+        }
+
         private bool addRespToTable(string empsys)
         {
             isError = false;
@@ -1171,7 +1174,6 @@ namespace JurisUtilityBase
 
             string addy = richTextBoxBAAddy.Text.Replace("\r", "|").Replace("\n", "|");
             addy = addy.Replace("||", "|");
-
 
             string sql = "Insert into BillingAddress(BilAdrSysNbr, BilAdrCliNbr, BilAdrUsageFlg, BilAdrNickName, BilAdrPhone, " +
                 " BilAdrFax, BilAdrContact, BilAdrName, BilAdrAddress, BilAdrCity, BilAdrState, BilAdrZip, BilAdrCountry, BilAdrType, BilAdrEmail) " +
@@ -1245,7 +1247,7 @@ namespace JurisUtilityBase
         {
             checkForTables();
             string sql = "insert into defaults (ID, name, PopulateMatter, CreationDate, IsStandard, DefType ) " +
-                " values (999999, 'MoveToMatter', 'N', getdate(), 'N', 'C')";
+                " values (999999, 'MoveToMatter', 'N', getdate(), 'N', 'R')";
 
             _jurisUtility.ExecuteNonQuery(0, sql);
 
@@ -1282,8 +1284,8 @@ namespace JurisUtilityBase
         private bool testOrigPct()
         {
 
-            if (isNumeric(textBoxOTPct1Opt.Text) && isNumeric(textBoxOTPct2Opt.Text) && isNumeric(textBoxOTPct3Opt.Text) && isNumeric(textBoxOTPct4Opt.Text) && isNumeric(textBoxOTPct5Opt.Text) && (Convert.ToInt32(textBoxOTPct1Opt.Text) + Convert.ToInt32(textBoxOTPct2Opt.Text) + Convert.ToInt32(textBoxOTPct3Opt.Text) + Convert.ToInt32(textBoxOTPct4Opt.Text) + Convert.ToInt32(textBoxOTPct5Opt.Text) == 100))
-                    return true;
+            if (isNumeric(textBoxOTPct1Opt.Text) && isNumeric(textBoxOTPct2Opt.Text) && isNumeric(textBoxOTPct3Opt.Text) && isNumeric(textBoxOTPct4Opt.Text) && isNumeric(textBoxOTPct5Opt.Text) && (Convert.ToDecimal(textBoxOTPct1Opt.Text) + Convert.ToDecimal(textBoxOTPct2Opt.Text) + Convert.ToDecimal(textBoxOTPct3Opt.Text) + Convert.ToDecimal(textBoxOTPct4Opt.Text) + Convert.ToDecimal(textBoxOTPct5Opt.Text) == 100))
+                return true;
             else
             {
                 MessageBox.Show("All 5 percentages for Originators must be numeric and add to 100." + "\r\n" + "Resetting percentages to default. Please adjust if needed.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1310,6 +1312,62 @@ namespace JurisUtilityBase
         private void textBoxNName_Leave(object sender, EventArgs e)
         {
             textBoxRName.Text = textBoxNName.Text;
+        }
+
+        private void getNextClientNumber()
+        {
+
+                string sql = "SELECT distinct number FROM master..spt_values " +
+                            " WHERE number BETWEEN (SELECT min(cast(clicode as int)) from client) and (SELECT max(cast(clicode as int)) FROM client)  " +
+                            " AND number NOT IN(SELECT cast(clicode as int) FROM client)";
+                DataSet dds1 = _jurisUtility.RecordsetFromSQL(sql);
+                string nextcode = "";
+                if (dds1 != null && dds1.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in dds1.Tables[0].Rows)
+                    {
+                        if (codeIsNumeric || isNumeric(dr[0].ToString()))
+                        {
+                            nextcode = "000000000000" + dr[0].ToString().ToString();
+                            nextcode = nextcode.Substring(nextcode.Length - lengthOfCode, lengthOfCode);
+                            textBoxCode.Text = nextcode;
+                            break;
+                        }
+                    }
+                }
+
+        }
+
+        private void buttonCliBilling_Click(object sender, EventArgs e)
+        {
+            CliBillingForm cliB = new CliBillingForm(_jurisUtility);
+            if (cliB.loadFields())
+            {
+                cliB.ShowDialog();
+            }
+            else
+                cliB.Close();
+        }
+
+        private bool loadClientBillFields()
+        {
+            if (clisysnbr != 0)
+            {
+                string sql = "select name, data from DefaultSettings where defaultid = 999998";
+                DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+                if (dds != null && dds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in dds.Tables[0].Rows)
+                    {
+                        sql = "update client set " + dr[0].ToString() + " = replace('" + dr[1].ToString() + "', '|', char(13) + char(10)) where clisysnbr = " + clisysnbr.ToString();
+                        if (_jurisUtility.ExecuteNonQuery(0, sql))
+                            return true;
+                    }
+                } //else its not there so add it
+                return false;
+            } //we dont have a valid client so do nothing
+            else
+                return false;
         }
     }
 }

@@ -92,3 +92,5 @@ D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Intake.e
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Intake.application
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Intake.exe
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Intake.pdb
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.CliBillingForm.resources
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.MatBillingForm.resources

@@ -189,7 +189,6 @@ namespace JurisUtilityBase
             }
             catch (Exception ex111)
             {
-                MessageBox.Show(sql + "\r\n" + ex111.Message);
 
 
             }
