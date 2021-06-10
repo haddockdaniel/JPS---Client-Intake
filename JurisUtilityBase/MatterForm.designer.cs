@@ -1194,7 +1194,8 @@
             this.textBoxMatterCode.Name = "textBoxMatterCode";
             this.textBoxMatterCode.Size = new System.Drawing.Size(88, 20);
             this.textBoxMatterCode.TabIndex = 1;
-            this.textBoxMatterCode.Text = "0001";
+            this.textBoxMatterCode.Text = "0000";
+            this.textBoxMatterCode.Leave += new System.EventHandler(this.textBoxMatterCode_Leave);
             // 
             // label11
             // 
@@ -1221,7 +1222,7 @@
             this.textBoxFlatRetAmtOpt.Name = "textBoxFlatRetAmtOpt";
             this.textBoxFlatRetAmtOpt.Size = new System.Drawing.Size(64, 20);
             this.textBoxFlatRetAmtOpt.TabIndex = 196;
-            this.textBoxFlatRetAmtOpt.Text = "100";
+            this.textBoxFlatRetAmtOpt.Text = "0";
             this.textBoxFlatRetAmtOpt.Visible = false;
             // 
             // checkBoxChooseAddy
@@ -1239,6 +1240,7 @@
             // 
             // comboBoxAddyChoose
             // 
+            this.comboBoxAddyChoose.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAddyChoose.FormattingEnabled = true;
             this.comboBoxAddyChoose.Location = new System.Drawing.Point(576, 46);
             this.comboBoxAddyChoose.Name = "comboBoxAddyChoose";

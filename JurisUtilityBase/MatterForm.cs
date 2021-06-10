@@ -576,7 +576,7 @@ namespace JurisUtilityBase
                 {
                     if (textBoxCode.Text.Length > lengthOfCodeClient) // is it too many characters?
                     {
-                        MessageBox.Show("Client Code" + textBoxCode.Text + " is too long. " + "\r\n" + "Your settings only allow for up to " + lengthOfCodeClient.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Client Code " + textBoxCode.Text + " is too long. " + "\r\n" + "Your settings only allow for up to " + lengthOfCodeClient.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
                     else
@@ -588,7 +588,7 @@ namespace JurisUtilityBase
                 }
                 else
                 {
-                    MessageBox.Show("Client Code" + textBoxCode.Text + " is not numeric. Your settings require a number", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Client Code " + textBoxCode.Text + " is not numeric. Your settings require a number", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
 
@@ -597,7 +597,7 @@ namespace JurisUtilityBase
             {
                 if (textBoxCode.Text.Length > lengthOfCodeClient)
                 {
-                    MessageBox.Show("Client Code" + textBoxCode.Text + " is too long. " + "\r\n" + "Your settings only allow for up to " + lengthOfCodeClient.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Client Code " + textBoxCode.Text + " is too long. " + "\r\n" + "Your settings only allow for up to " + lengthOfCodeClient.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
                 else
@@ -619,7 +619,7 @@ namespace JurisUtilityBase
                 {
                     if (textBoxMatterCode.Text.Length > lengthOfCodeMatter) // is it too many characters?
                     {
-                        MessageBox.Show("Matter Code" + textBoxMatterCode.Text + " is too long. " + "\r\n" + "Your settings only allow for up to " + lengthOfCodeMatter.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Matter Code " + textBoxMatterCode.Text + " is too long. " + "\r\n" + "Your settings only allow for up to " + lengthOfCodeMatter.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
                     else
@@ -631,7 +631,7 @@ namespace JurisUtilityBase
                 }
                 else
                 {
-                    MessageBox.Show("Matter Code" + textBoxMatterCode.Text + " is not numeric. Your settings require a number", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Matter Code " + textBoxMatterCode.Text + " is not numeric. Your settings require a number", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
 
@@ -640,7 +640,7 @@ namespace JurisUtilityBase
             {
                 if (textBoxMatterCode.Text.Length > lengthOfCodeMatter)
                 {
-                    MessageBox.Show("Matter Code" + textBoxMatterCode.Text + " is too long. " + "\r\n" + "Your settings only allow for up to " + lengthOfCodeMatter.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Matter Code " + textBoxMatterCode.Text + " is too long. " + "\r\n" + "Your settings only allow for up to " + lengthOfCodeMatter.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
                 else
@@ -837,6 +837,30 @@ namespace JurisUtilityBase
             //ensure that box isnt checked if there are no valid addresses selected or loaded
             if (comboBoxAddyChoose.SelectedIndex == -1 || string.IsNullOrEmpty(comboBoxAddyChoose.Text))
                 checkBoxChooseAddy.Checked = false;
+
+            if (textBoxCode.Text.Length > lengthOfCodeClient)
+            {
+                MessageBox.Show("Client Code is longer than allowed. Your settings allow for " + lengthOfCodeClient.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+
+            }
+            if (codeIsNumericClient && !isNumeric(textBoxCode.Text))
+            {
+                MessageBox.Show("Client Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (textBoxMatterCode.Text.Length > lengthOfCodeMatter)
+            {
+                MessageBox.Show("Matter Code is longer than allowed. Your settings allow for " + lengthOfCodeMatter.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+
+            }
+            if (codeIsNumericMatter && !isNumeric(textBoxMatterCode.Text))
+            {
+                MessageBox.Show("Matter Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
 
             clisysnbr = getCliSysNbr();
 
@@ -1231,7 +1255,7 @@ namespace JurisUtilityBase
 
                                 //billcopy
                                 sql = "Insert into BillCopy(BilCpyBillTo,BilCpyBilAdr,BilCpyComment,BilCpyNbrOfCopies,BilCpyPrintFormat,BilCpyEmailFormat,BilCpyExportFormat,BilCpyARFormat) "
-                                + " values ( " + billto.ToString() + ", " + addySysNbr.ToString() + " ,'" + textBoxMatterCode.Text + "',1,1,0,0,0 )";
+                                + " values ( " + billto.ToString() + ", " + addySysNbr.ToString() + " ,'',1,1,0,0,0 )";
 
                                 isError = _jurisUtility.ExecuteNonQuery(0, sql);
                                 if (!isError)
@@ -1475,6 +1499,20 @@ namespace JurisUtilityBase
 
         private void textBoxCode_Leave(object sender, EventArgs e)
         {
+            if (textBoxCode.Text.Length > lengthOfCodeClient)
+                MessageBox.Show("Client Code is longer than allowed. Your settings allow for " + lengthOfCodeClient.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                if (codeIsNumericClient && !isNumeric(textBoxCode.Text))
+                    MessageBox.Show("Client Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                    verifyAndLoadClient();
+            }
+
+        }
+
+        private void verifyAndLoadClient()
+        {
             if (!string.IsNullOrEmpty(textBoxCode.Text) && clisysnbr == 0)
             {
                 clisysnbr = getCliSysNbr();
@@ -1495,6 +1533,7 @@ namespace JurisUtilityBase
                 getNextMatterNumber();
                 loadAddys();
             }
+
         }
 
         private int getCliSysNbr()
@@ -1575,18 +1614,32 @@ namespace JurisUtilityBase
 
         private string formatClientCode(string code)
         {
-            string formattedCode = "000000000000" + code;
-            formattedCode = formattedCode.Substring(formattedCode.Length - lengthOfCodeClient, lengthOfCodeClient);
-            textBoxCode.Text = formattedCode;
+            string formattedCode = "";
+            if (codeIsNumericClient)
+            {
+                formattedCode = "000000000000" + code;
+                formattedCode = formattedCode.Substring(formattedCode.Length - lengthOfCodeClient, lengthOfCodeClient);
+                textBoxCode.Text = formattedCode;
+            }
+            else
+                formattedCode = code;
             return formattedCode;
+
+
 
         }
 
         private string formatMatterCode(string code)
         {
-            string formattedCode = "000000000000" + code;
-            formattedCode = formattedCode.Substring(formattedCode.Length - lengthOfCodeMatter, lengthOfCodeMatter);
-            textBoxMatterCode.Text = formattedCode;
+            string formattedCode = "";
+            if (codeIsNumericMatter)
+            {
+                formattedCode = "000000000000" + code;
+                formattedCode = formattedCode.Substring(formattedCode.Length - lengthOfCodeMatter, lengthOfCodeMatter);
+                textBoxMatterCode.Text = formattedCode;
+            }
+            else
+                formattedCode = code;
             return formattedCode;
 
         }
@@ -1596,7 +1649,7 @@ namespace JurisUtilityBase
             if (clisysnbr != 0)
             {
                 string sql = "SELECT distinct number FROM master..spt_values " +
-                            "WHERE number BETWEEN 1 and (SELECT max(cast(matcode as int)) + 1 FROM matter where matclinbr = " + clisysnbr.ToString() + ") " +
+                            "WHERE number BETWEEN 0 and (SELECT max(cast(matcode as int)) + 1 FROM matter where matclinbr = " + clisysnbr.ToString() + ") " +
                             "AND number NOT IN(SELECT cast(matcode as int) FROM matter where matclinbr = " + clisysnbr.ToString() + ")";
                 DataSet dds1 = _jurisUtility.RecordsetFromSQL(sql);
                 string nextcode = "";
@@ -1640,7 +1693,7 @@ namespace JurisUtilityBase
         private void loadClientInfoForMatter()
         {
             //get client info to load into form
-            string sql = "SELECT   CliNickName ,CliReportingName ,CliSourceOfBusiness ,CliPhoneNbr  ,CliFaxNbr ,CliContactName  ,CliDateOpened  ,OfcOfficeCode + '    ' + right(OfcDesc, 30)  , " +
+            string sql = "SELECT   CliNickName ,CliReportingName ,CliPhoneNbr  ,CliFaxNbr ,CliContactName  ,OfcOfficeCode + '    ' + right(OfcDesc, 30)  , " +
                 " empid + '    ' + empname ,PrctClsCode  + '    ' + right(PrctClsDesc, 30)  ,CliFeeSch " +
                 " ,case when CliTaskCodeXref is null then 'null' else CliTaskCodeXref end as CliTaskCodeXref ,CliExpSch  ,case when CliExpCodeXref is null then 'null' else CliExpCodeXref end as CliExpCodeXref "
                 + ",CliBillFormat  ,CliBillAgreeCode ,CliFlatFeeIncExp  ,CliRetainerType ,CliExpFreqCode  ,CliFeeFreqCode  ,CliBillMonth ,CliBillCycle ,CliInterestPcnt " +
@@ -1655,67 +1708,68 @@ namespace JurisUtilityBase
                     //hard code every field...ugh
                     textBoxNName.Text = dr[0].ToString();
                     textBoxRName.Text = dr[1].ToString();
-                    textBoxPhoneOpt.Text = dr[3].ToString();
-                    textBoxFaxOpt.Text = dr[4].ToString();
-                    textBoxContactOpt.Text = dr[5].ToString();
-                    textBoxMonthOpt.Text = dr[20].ToString();
-                    textBoxCycleOpt.Text = dr[21].ToString();
-                    textBoxDiscPctOpt.Text = dr[25].ToString();
-                    textBoxSurPctOpt.Text = dr[27].ToString();
-                    textBoxIntPctOpt.Text = dr[22].ToString();
-                    textBoxIntDaysOpt.Text = dr[23].ToString();
-                    if (dr[31].ToString().Equals("Y"))
-                        checkBoxBudget.Checked = true;
-                    else
-                        checkBoxBudget.Checked = false;
-                    if (dr[32].ToString().Equals("Y"))
-                        checkBoxReqTaskCodes.Checked = true;
-                    else
-                        checkBoxReqTaskCodes.Checked = false;
-                    if (dr[33].ToString().Equals("Y"))
-                        checkBoxReqActCodes.Checked = true;
-                    else
-                        checkBoxReqActCodes.Checked = false;
-                    if (dr[28].ToString().Equals("Y"))
-                        checkBoxTax1.Checked = true;
-                    else
-                        checkBoxTax1.Checked = false;
-                    if (dr[29].ToString().Equals("Y"))
-                        checkBoxTax2.Checked = true;
-                    else
-                        checkBoxTax2.Checked = false;
-                    if (dr[30].ToString().Equals("Y"))
-                        checkBoxTax3.Checked = true;
-                    else
-                        checkBoxTax3.Checked = false;
-                    if (!dr[11].ToString().Equals("null"))
+                    textBoxPhoneOpt.Text = dr[2].ToString();
+                    textBoxFaxOpt.Text = dr[3].ToString();
+                    textBoxContactOpt.Text = dr[4].ToString();
+                    comboBoxOffice.SelectedIndex = comboBoxOffice.FindStringExact(dr[5].ToString());
+                    comboBoxBT.SelectedIndex = comboBoxBT.FindStringExact(dr[6].ToString());
+                    comboBoxPC.SelectedIndex = comboBoxPC.FindStringExact(dr[7].ToString());
+                    comboBoxFeeSched.SelectedIndex = comboBoxFeeSched.FindStringExact(dr[8].ToString().Split(' ')[0]);
+                    if (!dr[9].ToString().Equals("null"))
                         checkBoxTaskXRef.Checked = true;
                     else
                         checkBoxTaskXRef.Checked = false;
-                    if (!dr[13].ToString().Equals("null"))
+                    if (!dr[9].ToString().Equals("null"))
+                        comboBoxTXRef.SelectedIndex = comboBoxTXRef.FindStringExact(dr[9].ToString().Split(' ')[0]);
+                    comboBoxExpSched.SelectedIndex = comboBoxExpSched.FindStringExact(dr[10].ToString().Split(' ')[0]);
+                    if (!dr[11].ToString().Equals("null"))
                         checkBoxExpXRef.Checked = true;
                     else
                         checkBoxExpXRef.Checked = false;
-                    comboBoxOffice.SelectedIndex = comboBoxOffice.FindStringExact(dr[7].ToString());
-                    comboBoxPC.SelectedIndex = comboBoxPC.FindStringExact(dr[9].ToString());
-                    comboBoxBT.SelectedIndex = comboBoxBT.FindStringExact(dr[8].ToString());
-                    comboBoxFeeSched.SelectedIndex = comboBoxFeeSched.FindStringExact(dr[10].ToString().Split(' ')[0]);
-                    comboBoxExpSched.SelectedIndex = comboBoxExpSched.FindStringExact(dr[12].ToString().Split(' ')[0]);
-                    comboBoxBillLayout.SelectedIndex = comboBoxBillLayout.FindStringExact(dr[14].ToString().Split(' ')[0]);
-                    comboBoxPreBillLayout.SelectedIndex = comboBoxPreBillLayout.FindStringExact(dr[34].ToString().Split(' ')[0]);
-
-                    comboBoxBAgree.SelectedIndex = comboBoxBAgree.FindString(dr[15].ToString());
-                    comboBoxRetainerType.SelectedIndex = comboBoxRetainerType.FindString(dr[17].ToString());
-                    comboBoxFeeFreq.SelectedIndex = comboBoxFeeFreq.FindString(dr[19].ToString());
-                    comboBoxExpFreq.SelectedIndex = comboBoxExpFreq.FindString(dr[18].ToString());
-
-                    comboBoxDisc.SelectedIndex = comboBoxDisc.FindString(dr[24].ToString());
-                    comboBoxSurcharge.SelectedIndex = comboBoxSurcharge.FindString(dr[26].ToString());
                     if (!dr[11].ToString().Equals("null"))
-                        comboBoxTXRef.SelectedIndex = comboBoxTXRef.FindStringExact(dr[11].ToString().Split(' ')[0]);
-                    if (!dr[13].ToString().Equals("null"))
-                        comboBoxEXRef.SelectedIndex = comboBoxEXRef.FindStringExact(dr[13].ToString().Split(' ')[0]);
-
+                        comboBoxEXRef.SelectedIndex = comboBoxEXRef.FindStringExact(dr[11].ToString().Split(' ')[0]);
+                    comboBoxBillLayout.SelectedIndex = comboBoxBillLayout.FindStringExact(dr[12].ToString().Split(' ')[0]);
+                    comboBoxBAgree.SelectedIndex = comboBoxBAgree.FindString(dr[13].ToString());
+                    if (dr[14].ToString().Equals("Y"))
+                        checkBoxIncludeExp.Checked = true;
+                    else
+                        checkBoxIncludeExp.Checked = false;
+                    comboBoxRetainerType.SelectedIndex = comboBoxRetainerType.FindString(dr[15].ToString());
+                    comboBoxExpFreq.SelectedIndex = comboBoxExpFreq.FindString(dr[16].ToString());
+                    comboBoxFeeFreq.SelectedIndex = comboBoxFeeFreq.FindString(dr[17].ToString());
+                    textBoxMonthOpt.Text = dr[18].ToString();
+                    textBoxCycleOpt.Text = dr[19].ToString();
+                    textBoxIntPctOpt.Text = dr[20].ToString();
+                    textBoxIntDaysOpt.Text = dr[21].ToString();
+                    comboBoxDisc.SelectedIndex = comboBoxDisc.FindString(dr[22].ToString());
+                    textBoxDiscPctOpt.Text = dr[23].ToString();
+                    comboBoxSurcharge.SelectedIndex = comboBoxSurcharge.FindString(dr[24].ToString());
+                    textBoxSurPctOpt.Text = dr[25].ToString();
+                    if (dr[26].ToString().Equals("Y"))
+                        checkBoxTax1.Checked = true;
+                    else
+                        checkBoxTax1.Checked = false;
+                    if (dr[27].ToString().Equals("Y"))
+                        checkBoxTax2.Checked = true;
+                    else
+                        checkBoxTax2.Checked = false;
+                    if (dr[28].ToString().Equals("Y"))
+                        checkBoxTax3.Checked = true;
+                    else
+                        checkBoxTax3.Checked = false;
+                    if (dr[29].ToString().Equals("Y"))
+                        checkBoxBudget.Checked = true;
+                    else
+                        checkBoxBudget.Checked = false;
+                    if (dr[30].ToString().Equals("Y"))
+                        checkBoxReqTaskCodes.Checked = true;
+                    else
+                        checkBoxReqTaskCodes.Checked = false;
+                    if (dr[31].ToString().Equals("Y"))
+                        checkBoxReqActCodes.Checked = true;
+                    else
+                        checkBoxReqActCodes.Checked = false;
+                    comboBoxPreBillLayout.SelectedIndex = comboBoxPreBillLayout.FindStringExact(dr[32].ToString().Split(' ')[0]);
                 }
 
             }
@@ -1813,6 +1867,15 @@ namespace JurisUtilityBase
             }
             else
                 matB.Close();
+        }
+
+        private void textBoxMatterCode_Leave(object sender, EventArgs e)
+        {
+
+            if (textBoxMatterCode.Text.Length > lengthOfCodeMatter)
+                MessageBox.Show("Matter Code is longer than allowed. Your settings allow for " + lengthOfCodeMatter.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (codeIsNumericMatter && !isNumeric(textBoxMatterCode.Text))
+                MessageBox.Show("Matter Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

@@ -17,6 +17,7 @@ using JurisSVR.ExpenseAttachments;
 using System.Runtime.CompilerServices;
 using Microsoft.VisualBasic;
 using System.Diagnostics;
+using Microsoft.SqlServer.Server;
 
 namespace JurisUtilityBase
 {
@@ -825,9 +826,15 @@ namespace JurisUtilityBase
 
         private string formatClientCode(string code)
         {
-            string formattedCode = "000000000000" + code;
-            formattedCode = formattedCode.Substring(formattedCode.Length - lengthOfCode, lengthOfCode);
-            textBoxCode.Text = formattedCode;
+            string formattedCode = "";
+            if (codeIsNumeric)
+            {
+                formattedCode = "000000000000" + code;
+                formattedCode = formattedCode.Substring(formattedCode.Length - lengthOfCode, lengthOfCode);
+                textBoxCode.Text = formattedCode;
+            }
+            else
+                formattedCode = code;
             return formattedCode;
 
         }
@@ -837,6 +844,19 @@ namespace JurisUtilityBase
         {
             if (clisysnbr == 0)
             {
+                if (textBoxCode.Text.Length > lengthOfCode)
+                {
+                    MessageBox.Show("Client Code is longer than allowed. Your settings allow for " + lengthOfCode.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    buttonCreateClient.Enabled = true;
+                    return false;
+
+                }
+                if (codeIsNumeric && !isNumeric(textBoxCode.Text))
+                {
+                    MessageBox.Show("Client Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    buttonCreateClient.Enabled = true;
+                    return false;
+                }
                 string code = formatClientCode(textBoxCode.Text);
                 string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + code + "'";
                 DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
@@ -853,6 +873,7 @@ namespace JurisUtilityBase
                 }
 
             }
+
 
 
                 List<string> incorrectFields = new List<string>();
@@ -900,7 +921,8 @@ namespace JurisUtilityBase
                     if (string.IsNullOrEmpty(richTextBoxBAAddy.Text))
                     {
                         MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return false;
+                    buttonCreateClient.Enabled = true;
+                    return false;
                     }
                     else
                     {
@@ -911,7 +933,8 @@ namespace JurisUtilityBase
                                 if (!textbox.Name.EndsWith("Opt"))
                                 {
                                     MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    return false;
+                                buttonCreateClient.Enabled = true;
+                                return false;
                                 }
 
                             }
@@ -920,10 +943,13 @@ namespace JurisUtilityBase
                 }
 
 
-                    if (testOrigPct())
-                        return true;
-                    else
-                        return false;
+                if (testOrigPct())
+                    return true;
+                else
+                {
+                    buttonCreateClient.Enabled = true;
+                    return false;
+                }
                 }
 
                 else
@@ -933,8 +959,8 @@ namespace JurisUtilityBase
                         items = items + dd + " ";
                     MessageBox.Show("All numeric fields must have a number in them." + "\r\n" + "The following fields are invalid and will be reset" + "\r\n" + items + "\r\n" + "Please adjust if needed and continue.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-
-                    return false;
+                buttonCreateClient.Enabled = true;
+                return false;
                 }
 
            
@@ -1394,6 +1420,30 @@ namespace JurisUtilityBase
             } //we dont have a valid client so do nothing
             else
                 return false;
+        }
+
+        private void textBoxCode_Leave(object sender, EventArgs e)
+        {
+            if (textBoxCode.Text.Length > lengthOfCode)
+                MessageBox.Show("Client Code is longer than allowed. Your settings allow for " + lengthOfCode.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            else if (codeIsNumeric && !isNumeric(textBoxCode.Text))
+                MessageBox.Show("Client Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                string code = formatClientCode(textBoxCode.Text);
+                string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + code + "'";
+                DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+                if (dds != null && dds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in dds.Tables[0].Rows) //client already exists
+                    {
+                        MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code." + "\r\n" + "Remember codes must match the format in which they appear in Juris." + "\r\n" + "This includes leading zeroes", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                }
+            }
+
         }
     }
 }

@@ -162,6 +162,7 @@
             this.textBoxCode.Name = "textBoxCode";
             this.textBoxCode.Size = new System.Drawing.Size(77, 20);
             this.textBoxCode.TabIndex = 1;
+            this.textBoxCode.Leave += new System.EventHandler(this.textBoxCode_Leave);
             // 
             // textBoxNName
             // 
