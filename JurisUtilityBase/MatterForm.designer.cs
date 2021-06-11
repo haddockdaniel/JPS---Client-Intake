@@ -1194,7 +1194,7 @@
             this.textBoxMatterCode.Name = "textBoxMatterCode";
             this.textBoxMatterCode.Size = new System.Drawing.Size(88, 20);
             this.textBoxMatterCode.TabIndex = 1;
-            this.textBoxMatterCode.Text = "0000";
+            this.textBoxMatterCode.Text = "0001";
             this.textBoxMatterCode.Leave += new System.EventHandler(this.textBoxMatterCode_Leave);
             // 
             // label11

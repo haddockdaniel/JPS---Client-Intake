@@ -458,21 +458,6 @@ namespace JurisUtilityBase
 
         }
 
-        private void loadDefaultsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DialogResult ds = MessageBox.Show("This will clear anything already on the Matter form. Are you sure?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            DataSet ds1;
-            if (ds == DialogResult.Yes)
-            {
-                checkForTables();
-                string sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
-                ds1 = _jurisUtility.RecordsetFromSQL(sql);
-                PresetManager DM = new PresetManager(ds1, _jurisUtility, "M");
-                DM.Show();
-                this.Close();
-            }
-        }
-
         private void clearFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MatterForm cleared = new MatterForm(_jurisUtility, 0, "", 0);
@@ -989,7 +974,7 @@ namespace JurisUtilityBase
                                 }
                                 else
                                 {
-                                    MessageBox.Show("There was an issue adding the Billing Fields. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MessageBox.Show("There was an issue adding the Billing Fields." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     isError = false;
                                     undoOrig();
                                     undoResp();
@@ -997,18 +982,24 @@ namespace JurisUtilityBase
                                     undoBillCopy(billto);
                                     undoBillTo(billto);
 
+                                    if (removeAddy)
+                                    {
+                                        undoAddy(addySysNbr);
+                                        addySysNbr = 0;
+                                        removeAddy = false;
+                                    }
                                 }
                             }
                             else //error adding rig attys
                             {
-                                MessageBox.Show("There was an issue adding the Originating Attys. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("There was an issue adding the Originating Attys." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 isError = false;
                                 undoResp();
                                 undoMatter();
                                 undoBillCopy(billto);
                                 undoBillTo(billto);
-                                
-                                
+
+
                                 if (removeAddy)
                                 {
                                     undoAddy(addySysNbr);
@@ -1019,12 +1010,12 @@ namespace JurisUtilityBase
                         }
                         else //error adding resp attys
                         {
-                            MessageBox.Show("There was an issue adding the Responsible Attys. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("There was an issue adding the Responsible Attys." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             isError = false;
-                            undoMatter();
                             undoBillCopy(billto);
+                            undoMatter();
                             undoBillTo(billto);
-                            
+
                             if (removeAddy)
                             {
                                 undoAddy(addySysNbr);
@@ -1035,7 +1026,7 @@ namespace JurisUtilityBase
                     }
                     else //error adding the matter
                     {
-                        MessageBox.Show("There was an issue adding the matter. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("There was an issue adding the matter." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         isError = false;
                         undoBillCopy(billto);
                         undoBillTo(billto);
@@ -1051,12 +1042,6 @@ namespace JurisUtilityBase
 
                 }
             }
-
-
-            // TextWriter ss = new StreamWriter(@"c:\intel\sql1.txt");
-            // ss.Write(sql);
-            // ss.Flush();
-            // ss.Close();
 
 
         }
@@ -1129,7 +1114,7 @@ namespace JurisUtilityBase
 
             if (clisysnbr == 0)
             {
-                MessageBox.Show("Client " + textBoxCode.Text + " does not exist. Enter a valid client code." + "\r\n" + "Keep in mind it must match exactly as it appears in Juris including leading zeroes", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Client " + textBoxCode.Text + " does not exist. Enter a valid client code." + "\r\n" + "It must match exactly as it appears in Juris including leading zeroes", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return 0;
             }
             else
@@ -1200,7 +1185,7 @@ namespace JurisUtilityBase
                                 { return billto; }
                                 else
                                 {
-                                    MessageBox.Show("There was an issue adding Billing Reference (billcopy-Existing). No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MessageBox.Show("There was an issue adding Billing Reference (billcopy-Existing)." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     isError = false;
                                     undoBillTo(billto);
                                     return 0;
@@ -1208,7 +1193,7 @@ namespace JurisUtilityBase
                             }
                             else
                             {
-                                MessageBox.Show("There was an issue adding Billing Reference (billto-Existing). No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("There was an issue adding Billing Reference (billto-Existing)." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 isError = false;
                                 return 0;
                             }
@@ -1295,7 +1280,7 @@ namespace JurisUtilityBase
                                 }
                                 else
                                 {
-                                    MessageBox.Show("There was an issue adding Billing Reference (billcopy). No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MessageBox.Show("There was an issue adding Billing Reference (billcopy)." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     isError = false;
                                     undoBillTo(billto);
                                     undoAddy(addyid);
@@ -1304,7 +1289,7 @@ namespace JurisUtilityBase
                             }
                             else
                             {
-                                MessageBox.Show("There was an issue adding Billing Reference (billto). No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("There was an issue adding Billing Reference (billto)." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 isError = false;
                                 undoAddy(addyid);
                                 return 0;
@@ -1312,7 +1297,7 @@ namespace JurisUtilityBase
                         }
                         else
                         {
-                            MessageBox.Show("There was an issue adding the Address. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("There was an issue adding the Address." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             isError = false;
                             return 0;
                         }
@@ -1451,12 +1436,12 @@ namespace JurisUtilityBase
 
         private void verifyAndLoadClient()
         {
-            if (!string.IsNullOrEmpty(textBoxCode.Text) && clisysnbr == 0)
+            if (!string.IsNullOrEmpty(textBoxCode.Text))
             {
                 clisysnbr = getCliSysNbr();
                 if (clisysnbr == 0)
                 {
-                    MessageBox.Show("That client does not exist. Re-enter a client that exists" + "\r\n" + "and remember that the code must match exactly as it appears in Juris including leading zeros", "Client Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("That client does not exist. Re-enter a client that exists." + "\r\n" + "The code must match exactly as it appears in Juris including leading zeros", "Client Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     clisysnbr = 0;
                 }
                 else
@@ -1587,7 +1572,7 @@ namespace JurisUtilityBase
             if (clisysnbr != 0)
             {
                 string sql = "SELECT distinct number FROM master..spt_values " +
-                            "WHERE number BETWEEN 0 and (SELECT max(cast(matcode as int)) + 1 FROM matter where matclinbr = " + clisysnbr.ToString() + ") " +
+                            "WHERE number BETWEEN 1 and (SELECT max(cast(matcode as int)) + 1 FROM matter where matclinbr = " + clisysnbr.ToString() + ") " +
                             "AND number NOT IN(SELECT cast(matcode as int) FROM matter where matclinbr = " + clisysnbr.ToString() + ")";
                 DataSet dds1 = _jurisUtility.RecordsetFromSQL(sql);
                 string nextcode = "";

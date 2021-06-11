@@ -200,6 +200,12 @@
     <Compile Include="PresetManager.Designer.cs">
       <DependentUpon>PresetManager.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UtilityBaseMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -231,6 +237,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PresetManager.resx">
       <DependentUpon>PresetManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UtilityBaseMain.resx">
       <DependentUpon>UtilityBaseMain.cs</DependentUpon>

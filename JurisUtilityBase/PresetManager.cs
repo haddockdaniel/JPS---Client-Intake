@@ -19,7 +19,7 @@ namespace JurisUtilityBase
 {
     public partial class PresetManager : Form
     {
-        public PresetManager(DataSet ds, JurisUtility jutil, string CliMat)
+        public PresetManager(DataSet ds, JurisUtility jutil)
         {
             InitializeComponent();
             dataGridView1.DataSource = ds.Tables[0];
@@ -29,11 +29,9 @@ namespace JurisUtilityBase
             dataGridView1.Columns[3].Width = 100;
             dataGridView1.Columns[4].Width = 60;
             _jurisUtility = jutil;
-            ClientOrMatter = CliMat;
         }
 
         JurisUtility _jurisUtility;
-        string ClientOrMatter = "";
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
@@ -79,9 +77,9 @@ namespace JurisUtilityBase
                 {
                     sql = "update defaults set name = '" + name + "' where id = " + ID.ToString();
                     _jurisUtility.ExecuteSqlCommand(0, sql);
-                    sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = '" + ClientOrMatter + "'";
+                    sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
                     DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
-                    PresetManager DM = new PresetManager(ds, _jurisUtility, ClientOrMatter);
+                    PresetManager DM = new PresetManager(ds, _jurisUtility);
                     DM.Show();
                     this.Close();
                 }
@@ -97,8 +95,8 @@ namespace JurisUtilityBase
             int id = 0;
             string sql = "";
 
-            if (dataGridView1.SelectedRows.Count == 0)
-                MessageBox.Show("At least one Preset must be selected", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (dataGridView1.SelectedRows.Count == 0 || dataGridView1.SelectedRows.Count > 1)
+                MessageBox.Show("One and only one Preset must be selected", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
                 foreach (DataGridViewRow r in dataGridView1.SelectedRows)
@@ -109,9 +107,9 @@ namespace JurisUtilityBase
                     sql = "delete from defaults where id = " + id.ToString();
                     _jurisUtility.ExecuteSqlCommand(0, sql);
                 }
-                sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = '" + ClientOrMatter + "'";
+                sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
-                PresetManager DM = new PresetManager(ds, _jurisUtility, ClientOrMatter);
+                PresetManager DM = new PresetManager(ds, _jurisUtility);
                 DM.Show();
                 this.Close();
             }
@@ -127,13 +125,13 @@ namespace JurisUtilityBase
             else
             {
                 id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
-                sql = "update defaults set IsStandard = 'N' where DefType = '" + ClientOrMatter + "'";
+                sql = "update defaults set IsStandard = 'N' where DefType = 'C'";
                 _jurisUtility.ExecuteSqlCommand(0, sql);
                 sql = "update defaults set IsStandard = 'Y' where id = " + id.ToString();
                 _jurisUtility.ExecuteSqlCommand(0, sql);
                 sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
-                PresetManager DM = new PresetManager(ds, _jurisUtility, ClientOrMatter);
+                PresetManager DM = new PresetManager(ds, _jurisUtility);
                 DM.Show();
                 this.Close();
 
@@ -174,6 +172,25 @@ namespace JurisUtilityBase
                 cleared.Show();
                 this.Close();
             }
+        }
+
+
+        private void dataGridView1_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+        }
+
+        private void buttonNoDefault_Click(object sender, EventArgs e)
+        {
+            string sql = "";
+                sql = "update defaults set IsStandard = 'N' where DefType = 'C'";
+                _jurisUtility.ExecuteSqlCommand(0, sql);
+                sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
+                DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
+                PresetManager DM = new PresetManager(ds, _jurisUtility);
+                DM.Show();
+                this.Close();
+
+            
         }
     }
 }

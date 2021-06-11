@@ -442,7 +442,7 @@ namespace JurisUtilityBase
                 checkForTables();
                 string sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C' ";
                 ds1 = _jurisUtility.RecordsetFromSQL(sql);
-                PresetManager DM = new PresetManager(ds1, _jurisUtility, "C");
+                PresetManager DM = new PresetManager(ds1, _jurisUtility);
                 DM.Show();
                 this.Close();
             }
@@ -509,7 +509,7 @@ namespace JurisUtilityBase
                 if (!exists)
                     createDefault(name);
                 else
-                    MessageBox.Show("Names must be unique and that name already exists. Default not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Names must be unique and that name already exists." + "\r\n" + "Default not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
                 MessageBox.Show("A valid name is required. Default not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -575,7 +575,7 @@ namespace JurisUtilityBase
                         createClient();
                 }
                 else
-                    MessageBox.Show("Client Code" + textBoxCode.Text + " is not numeric. Your settings require a number", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Client Code" + textBoxCode.Text + " is not numeric." + "\r\n" + "Your settings require a number", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else // is it aplha? if so, we only care if its too long
             {
@@ -622,7 +622,7 @@ namespace JurisUtilityBase
             }
             sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
             DataSet ds1 = _jurisUtility.RecordsetFromSQL(sql);
-            PresetManager DM = new PresetManager(ds1, _jurisUtility, "C");
+            PresetManager DM = new PresetManager(ds1, _jurisUtility);
             DM.Show();
             this.Close();
 
@@ -769,14 +769,14 @@ namespace JurisUtilityBase
             {
                 if (textBoxCode.Text.Length > lengthOfCode)
                 {
-                    MessageBox.Show("Client Code is longer than allowed. Your settings allow for " + lengthOfCode.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Client Code is longer than allowed." + "\r\n" + "Your settings allow for " + lengthOfCode.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     buttonCreateClient.Enabled = true;
                     return false;
 
                 }
                 if (codeIsNumeric && !isNumeric(textBoxCode.Text))
                 {
-                    MessageBox.Show("Client Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Client Code is not numeric." + "\r\n" + "Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     buttonCreateClient.Enabled = true;
                     return false;
                 }
@@ -787,7 +787,7 @@ namespace JurisUtilityBase
                 {
                     foreach (DataRow dr in dds.Tables[0].Rows) //client already exists
                     {
-                        MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code." + "\r\n" + "Remember codes must match the format in which they appear in Juris." + "\r\n" + "This includes leading zeroes", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code." + "\r\n" + "Codes must match the format in which they appear in Juris." + "\r\n" + "This includes leading zeroes", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         buttonCreateClient.Enabled = true;
                         return false;
                         
@@ -841,7 +841,7 @@ namespace JurisUtilityBase
                 {
                     if (string.IsNullOrEmpty(richTextBoxBAAddy.Text))
                     {
-                        MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("All fields in black text are required." + "\r\n" + "Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     buttonCreateClient.Enabled = true;
                     return false;
                     }
@@ -853,9 +853,9 @@ namespace JurisUtilityBase
                             {
                                 if (!textbox.Name.EndsWith("Opt"))
                                 {
-                                    MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                buttonCreateClient.Enabled = true;
-                                return false;
+                                    MessageBox.Show("All fields in black text are required." + "\r\n" + "Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    buttonCreateClient.Enabled = true;
+                                    return false;
                                 }
 
                             }
@@ -994,18 +994,18 @@ namespace JurisUtilityBase
                                     }
                                     else
                                     {
-                                        MessageBox.Show("There was an issue adding the Billing Fields. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        MessageBox.Show("There was an issue adding the Billing Fields." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         isError = false;
-                                        undoClient();
                                         undoOrig();
                                         undoResp();
+                                        undoClient();
                                     }
 
                                 }
                             }
                             else
                             {
-                                MessageBox.Show("There was an issue adding the address. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("There was an issue adding the address." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 undoResp(); 
                                 undoClient();
                                 
@@ -1013,14 +1013,14 @@ namespace JurisUtilityBase
                         }
                         else
                         {
-                            MessageBox.Show("There was an issue adding the Responsible Timekeepers. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("There was an issue adding the Responsible Timekeepers." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             undoClient();
                         }
                     }
                 }
                 else
                 {
-                    MessageBox.Show("There was an issue adding the client. No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("There was an issue adding the client." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     clisysnbr = 0;
 
                      //TextWriter ss = new StreamWriter(@"c:\intel\sql1.txt");
@@ -1166,7 +1166,7 @@ namespace JurisUtilityBase
                 return true;
             else
             {
-                MessageBox.Show("There are duplicate Originators. Either adjust the percentages or Originators." + "\r\n" + "Originators with 0 percent are ignored and not taken into consideration", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("There are duplicate Originators. Originators with " + "\r\n" + "0 percent are not taken into consideration", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -1297,7 +1297,7 @@ namespace JurisUtilityBase
         private void textBoxCode_Leave(object sender, EventArgs e)
         {
             if (textBoxCode.Text.Length > lengthOfCode)
-                MessageBox.Show("Client Code is longer than allowed. Your settings allow for " + lengthOfCode.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Client Code is longer than allowed." + "\r\n" + "Your settings allow for " + lengthOfCode.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             else if (codeIsNumeric && !isNumeric(textBoxCode.Text))
                 MessageBox.Show("Client Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1310,11 +1310,16 @@ namespace JurisUtilityBase
                 {
                     foreach (DataRow dr in dds.Tables[0].Rows) //client already exists
                     {
-                        MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code." + "\r\n" + "Remember codes must match the format in which they appear in Juris." + "\r\n" + "This includes leading zeroes", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code." + "\r\n" + "Codes must match the format in which they appear in Juris." + "\r\n" + "This includes leading zeroes", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
                 }
             }
+
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
         }
     }

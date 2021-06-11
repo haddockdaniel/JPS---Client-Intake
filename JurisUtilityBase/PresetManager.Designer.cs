@@ -36,6 +36,7 @@
             this.buttonModify = new System.Windows.Forms.Button();
             this.buttonStandard = new System.Windows.Forms.Button();
             this.buttonLoad = new System.Windows.Forms.Button();
+            this.buttonNoDefault = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,7 +58,7 @@
             this.buttonBack.BackColor = System.Drawing.Color.LightGray;
             this.buttonBack.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonBack.ForeColor = System.Drawing.Color.Navy;
-            this.buttonBack.Location = new System.Drawing.Point(647, 331);
+            this.buttonBack.Location = new System.Drawing.Point(647, 390);
             this.buttonBack.Name = "buttonBack";
             this.buttonBack.Size = new System.Drawing.Size(148, 38);
             this.buttonBack.TabIndex = 10;
@@ -72,17 +73,21 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView1.Location = new System.Drawing.Point(15, 12);
+            this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(606, 355);
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.ShowEditingIcon = false;
+            this.dataGridView1.Size = new System.Drawing.Size(606, 427);
             this.dataGridView1.TabIndex = 9;
+            this.dataGridView1.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dataGridView1_RowStateChanged);
             // 
             // buttonDelete
             // 
             this.buttonDelete.BackColor = System.Drawing.Color.LightGray;
             this.buttonDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDelete.ForeColor = System.Drawing.Color.Navy;
-            this.buttonDelete.Location = new System.Drawing.Point(647, 264);
+            this.buttonDelete.Location = new System.Drawing.Point(647, 323);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(148, 38);
             this.buttonDelete.TabIndex = 12;
@@ -129,11 +134,25 @@
             this.buttonLoad.UseVisualStyleBackColor = false;
             this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
             // 
+            // buttonNoDefault
+            // 
+            this.buttonNoDefault.BackColor = System.Drawing.Color.LightGray;
+            this.buttonNoDefault.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonNoDefault.ForeColor = System.Drawing.Color.Navy;
+            this.buttonNoDefault.Location = new System.Drawing.Point(647, 260);
+            this.buttonNoDefault.Name = "buttonNoDefault";
+            this.buttonNoDefault.Size = new System.Drawing.Size(148, 38);
+            this.buttonNoDefault.TabIndex = 16;
+            this.buttonNoDefault.Text = "Clear Default";
+            this.buttonNoDefault.UseVisualStyleBackColor = false;
+            this.buttonNoDefault.Click += new System.EventHandler(this.buttonNoDefault_Click);
+            // 
             // PresetManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(825, 386);
+            this.ClientSize = new System.Drawing.Size(825, 451);
+            this.Controls.Add(this.buttonNoDefault);
             this.Controls.Add(this.buttonLoad);
             this.Controls.Add(this.buttonStandard);
             this.Controls.Add(this.buttonModify);
@@ -158,5 +177,6 @@
         private System.Windows.Forms.Button buttonModify;
         private System.Windows.Forms.Button buttonStandard;
         private System.Windows.Forms.Button buttonLoad;
+        private System.Windows.Forms.Button buttonNoDefault;
     }
 }
