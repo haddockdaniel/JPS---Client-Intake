@@ -780,7 +780,7 @@
             // textBoxCycleOpt
             // 
             this.textBoxCycleOpt.Location = new System.Drawing.Point(710, 495);
-            this.textBoxCycleOpt.MaxLength = 4;
+            this.textBoxCycleOpt.MaxLength = 3;
             this.textBoxCycleOpt.Name = "textBoxCycleOpt";
             this.textBoxCycleOpt.Size = new System.Drawing.Size(52, 20);
             this.textBoxCycleOpt.TabIndex = 164;
@@ -1021,28 +1021,28 @@
             // moveToolStripMenuItem
             // 
             this.moveToolStripMenuItem.Name = "moveToolStripMenuItem";
-            this.moveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.moveToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.moveToolStripMenuItem.Text = "Save As Preset";
             this.moveToolStripMenuItem.Click += new System.EventHandler(this.saveAsDefaultToolStripMenuItem_Click);
             // 
             // loadDefaultsToolStripMenuItem
             // 
             this.loadDefaultsToolStripMenuItem.Name = "loadDefaultsToolStripMenuItem";
-            this.loadDefaultsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadDefaultsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.loadDefaultsToolStripMenuItem.Text = "Manage Presets";
             this.loadDefaultsToolStripMenuItem.Click += new System.EventHandler(this.loadDefaultsToolStripMenuItem_Click);
             // 
             // clearFormToolStripMenuItem
             // 
             this.clearFormToolStripMenuItem.Name = "clearFormToolStripMenuItem";
-            this.clearFormToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearFormToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.clearFormToolStripMenuItem.Text = "Clear Form";
             this.clearFormToolStripMenuItem.Click += new System.EventHandler(this.clearFormToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Visible = false;
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);

@@ -103,7 +103,7 @@ namespace JurisUtilityBase
             _jurisUtility.ExecuteNonQuery(0, sql);
             sql = "delete from Defaults where id in (999999, 999998, 999997)";
             _jurisUtility.ExecuteNonQuery(0, sql);
-            MatterForm mf = new MatterForm(_jurisUtility, 0, "", 0);
+            
             if (radioButtonCliOnly.Checked)
             {
                 ClientForm cf = new ClientForm(_jurisUtility, 0, false);
@@ -111,8 +111,7 @@ namespace JurisUtilityBase
             }
             else
             {
-               
-
+                MatterForm mf = new MatterForm(_jurisUtility, 0, "", 0);
                 mf.Show();
             }
 

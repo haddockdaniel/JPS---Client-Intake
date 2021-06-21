@@ -59,29 +59,13 @@ namespace JurisUtilityBase
 
             DataSet myRSPC2 = new DataSet();
             //if clicode is Numeric then increment by 1
-            dds.Clear();
-            sql = "  select SpTxtValue from sysparam where SpName = 'FldClient'";
-            dds = _jurisUtility.RecordsetFromSQL(sql);
-            string cell = "";
-            if (dds != null && dds.Tables.Count > 0)
-            {
-                foreach (DataRow dr in dds.Tables[0].Rows)
-                    cell = dr[0].ToString();
-            }
-
-            string[] test = cell.Split(',');
-            lengthOfCode = Convert.ToInt32(test[2]);
-
-
-            if (test[1].Equals("C"))
-                codeIsNumeric = false;
-            else
-                codeIsNumeric = true;
+            getSettings();
 
             getNextClientNumber();
 
 
             //get number of originators
+            string cell = "";
             sql = "  select SpTxtValue from sysparam where SpName = 'CfgTkprOpts'";
             dds.Clear();
             dds = _jurisUtility.RecordsetFromSQL(sql); //the first character should be a number...if not, do nothing
@@ -351,6 +335,28 @@ namespace JurisUtilityBase
                     buttonCreateClient.Click += buttonModify;
                 }
             }
+        }
+
+        private void getSettings()
+        {
+            string sql = "  select SpTxtValue from sysparam where SpName = 'FldClient'";
+            DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+            string cell = "";
+            if (dds != null && dds.Tables.Count > 0)
+            {
+                foreach (DataRow dr in dds.Tables[0].Rows)
+                    cell = dr[0].ToString();
+            }
+
+            string[] test = cell.Split(',');
+            lengthOfCode = Convert.ToInt32(test[2]);
+
+
+            if (test[1].Equals("C"))
+                codeIsNumeric = false;
+            else
+                codeIsNumeric = true;
+
         }
 
         private void hideOrShowOriginators(int number)
@@ -753,8 +759,7 @@ namespace JurisUtilityBase
             if (codeIsNumeric)
             {
                 formattedCode = "000000000000" + code;
-                formattedCode = formattedCode.Substring(formattedCode.Length - lengthOfCode, lengthOfCode);
-                textBoxCode.Text = formattedCode;
+                formattedCode = formattedCode.Substring(formattedCode.Length - 12, 12);
             }
             else
                 formattedCode = code;
@@ -781,7 +786,7 @@ namespace JurisUtilityBase
                     return false;
                 }
                 string code = formatClientCode(textBoxCode.Text);
-                string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + code + "'";
+                string sql = "select clisysnbr from client where clicode = '" + code + "'";
                 DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
                 if (dds != null && dds.Tables.Count > 0)
                 {
@@ -862,15 +867,48 @@ namespace JurisUtilityBase
 
                         }   
                     }
-                    if (testOrigPct())
-                        return true;
-                    else
+                    if (Convert.ToInt32(textBoxMonthOpt.Text) < 1 || Convert.ToInt32(textBoxMonthOpt.Text) > 12 && ( this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("A") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("A")))
                     {
+                    MessageBox.Show("When Annual is selected, the Month must be 1 through 12.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    buttonCreateClient.Enabled = true; 
+                        return false;
+                    }
+                    if (Convert.ToInt32(textBoxMonthOpt.Text) < 1 || Convert.ToInt32(textBoxMonthOpt.Text) > 6 && (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("S") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("S")))
+                    {
+                        MessageBox.Show("When Semi Annual is selected, the Month must be 1 through 6.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
                         buttonCreateClient.Enabled = true;
                         return false;
                     }
+                    if (Convert.ToInt32(textBoxMonthOpt.Text) < 1 || Convert.ToInt32(textBoxMonthOpt.Text) > 4 && (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("Q") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("Q")))
+                    {
+                        MessageBox.Show("When Quarterly is selected, the Month must be 1 through 4.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        buttonCreateClient.Enabled = true;
+                        return false;
+                    }
+                    if (Convert.ToInt32(textBoxCycleOpt.Text) < 1 || Convert.ToInt32(textBoxCycleOpt.Text) > 999 && (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("C") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("C")))
+                    {
+                        MessageBox.Show("When Cycle is selected, the Month must be 1 through 999.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        buttonCreateClient.Enabled = true;
+                        return false;
+                    } //textBoxIntDaysOpt
+                      //textBoxCycleOpt.Text
+                    if (!isInteger(textBoxCycleOpt.Text)  || !isInteger(textBoxIntDaysOpt.Text) || !isInteger(textBoxMonthOpt.Text))
+                    {
+                        MessageBox.Show("Cycle, Interest Days and Month must be integers.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        textBoxMonthOpt.Text = "1";
+                        textBoxCycleOpt.Text = "1";
+                        textBoxIntDaysOpt.Text = "0";
+                        buttonCreateClient.Enabled = true;
+                        return false;
+                    }
+                    if (testOrigPct())
+                            return true;
+                        else
+                        {
+                            buttonCreateClient.Enabled = true;
+                            return false;
+                        }
                 }
-
                 else
                 {
                     string items = "";
@@ -881,6 +919,26 @@ namespace JurisUtilityBase
                 buttonCreateClient.Enabled = true;
                 return false;
                 }
+        }
+
+        private bool isInteger(string test)
+        {
+            try
+            {
+                if (test.Contains(".")) //integers dont have decimals
+                    return false;
+                else
+                {
+                    int f = Convert.ToInt32(test); // does it even parse?
+                    return true;                      
+                }
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
         }
 
         private void createClient()
@@ -917,7 +975,7 @@ namespace JurisUtilityBase
     + " CliReqTaskCdOnTime,CliReqActyCdOnTime,CliReqTaskCdOnExp,CliPrimaryAddr,CliType,CliEditFormat,CliThresholdOption,CliRespAtty," +
     "CliBillingField01,CliBillingField02,CliBillingField03,CliBillingField04,CliBillingField05, CliBillingField06,CliBillingField07,CliBillingField08,CliBillingField09,CliBillingField10,CliBillingField11,CliBillingField12,CliBillingField13,CliBillingField14,CliBillingField15,CliBillingField16,CliBillingField17,CliBillingField18,CliBillingField19, CliBillingField20, "
     + " CliCTerms,CliCStatus,CliCStatus2)  "
-    + " values( case when (select max(clisysnbr) from client) is null then 1 else ((select max(clisysnbr) from client) + 1) end, '" + textBoxCode.Text + "', '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "', '" + textBoxSoBOpt.Text.Trim() + "', "
+    + " values( case when (select max(clisysnbr) from client) is null then 1 else ((select max(clisysnbr) from client) + 1) end, '" + formatClientCode(textBoxCode.Text) + "', '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "', '" + textBoxSoBOpt.Text.Trim() + "', "
     + " '" + textBoxPhoneOpt.Text.Trim() + "', '" + textBoxFaxOpt.Text.Trim() + "', '" + textBoxContactOpt.Text.Trim() + "', '" + dateTimePickerOpened.Value.ToString("MM/dd/yyyy") + "', '" + this.comboBoxOffice.GetItemText(this.comboBoxOffice.SelectedItem).Split(' ')[0] + "', "
     + " (select empsysnbr from employee where empid = '" + this.comboBoxBT.GetItemText(this.comboBoxBT.SelectedItem).Split(' ')[0] + "'), "
     + "'" + this.comboBoxPC.GetItemText(this.comboBoxPC.SelectedItem).Split(' ')[0] + "', "
@@ -1100,7 +1158,7 @@ namespace JurisUtilityBase
         private int getClisysnbr()
         {
             int sysnbr = 0;
-            string sql = "select clisysnbr from client where clicode = '" + textBoxCode.Text + "'";
+            string sql = "select clisysnbr from client where clicode = '" + formatClientCode(textBoxCode.Text) + "'";
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
             if (dds != null && dds.Tables.Count > 0)
             {
