@@ -51,12 +51,14 @@ namespace JurisUtilityBase
             checkForTables();
             string sql = "select id from defaults where IsStandard = 'Y'";
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
-            if (dds != null && dds.Tables.Count > 0)
+            if (presetID == 0) // if there is no preset passe by presetmamager then use default
             {
-                foreach (DataRow dr in dds.Tables[0].Rows)
-                    presetID = Convert.ToInt32(dr[0].ToString());
-            } //else its not there so add it
-
+                if (dds != null && dds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in dds.Tables[0].Rows)
+                        presetID = Convert.ToInt32(dr[0].ToString());
+                } //else its not there so add it
+            }
             DataSet myRSPC2 = new DataSet();
             //if clicode is Numeric then increment by 1
             getSettings();
@@ -387,6 +389,21 @@ namespace JurisUtilityBase
         private void loadDfaultPreset()
         {
             checkForTables();
+            //make sure default numbers are set 
+            textBoxOTPct1Opt.Text = "100";
+            textBoxOTPct2Opt.Text = "0";
+            textBoxOTPct3Opt.Text = "0";
+            textBoxOTPct4Opt.Text = "0";
+            textBoxOTPct5Opt.Text = "0";
+            textBoxMonthOpt.Text = "1";
+            textBoxCycleOpt.Text = "1";
+            textBoxIntDaysOpt.Text = "0";
+            textBoxIntPctOpt.Text = "0.00";
+            textBoxDiscPctOpt.Text = "0.00";
+            textBoxSurPctOpt.Text = "0.00";
+            textBoxBANName.Text = "MAIN";
+            richTextBoxBAAddy.Text = "";
+
             string sql = "select name, data, entrytype from DefaultSettings where defaultid = " + presetID.ToString();
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
             if (dds != null && dds.Tables.Count > 0)
@@ -496,7 +513,7 @@ namespace JurisUtilityBase
 
         private void checkDefaultName()
         {
-            string name = Microsoft.VisualBasic.Interaction.InputBox("Name of new default", "Default Name", "New Default");
+            string name = Microsoft.VisualBasic.Interaction.InputBox("Name of new Preset", "Preset Name", "New Preset");
             if (!string.IsNullOrEmpty(name))
             {
                 //see if default name already exists
@@ -515,10 +532,10 @@ namespace JurisUtilityBase
                 if (!exists)
                     createDefault(name);
                 else
-                    MessageBox.Show("Names must be unique and that name already exists." + "\r\n" + "Default not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Names must be unique and that name already exists." + "\r\n" + "Preset not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
-                MessageBox.Show("A valid name is required. Default not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("A valid name is required. Preset not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void createDefault(string name)
@@ -1290,7 +1307,7 @@ namespace JurisUtilityBase
 
         private void ExitDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
+            System.Environment.Exit(0);
         }
 
         private void textBoxNName_Leave(object sender, EventArgs e)
@@ -1379,6 +1396,11 @@ namespace JurisUtilityBase
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void ClientForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //MessageBox.Show(e.CloseReason.ToString() + " : "  + (sender as Button).Name);
         }
     }
 }

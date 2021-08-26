@@ -1881,6 +1881,11 @@ namespace JurisUtilityBase
                     textBoxMatterCode.Text = code;
             }
         }
+
+        private void MatterForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+        }
     }
 
 

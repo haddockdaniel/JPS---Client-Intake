@@ -80,15 +80,16 @@ D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\JurisSVR21.dll
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.csproj.CopyComplete
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.PresetManager.resources
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.MatterForm.resources
-D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Intake.exe.config
-D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Intake.exe.manifest
-D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Intake.application
-D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Intake.exe
-D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Intake.pdb
-D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Intake.exe.manifest
-D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Intake.application
-D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Intake.exe
-D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Intake.pdb
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.CliBillingForm.resources
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.MatBillingForm.resources
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.SettingsForm.resources
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.CMIActivation.resources
+D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Matter Intake.exe.config
+D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Matter Intake.exe.manifest
+D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Matter Intake.application
+D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Matter Intake.exe
+D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\Client Matter Intake.pdb
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter Intake.exe.manifest
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter Intake.application
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter Intake.exe
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter Intake.pdb

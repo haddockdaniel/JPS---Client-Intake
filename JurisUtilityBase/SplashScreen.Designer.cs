@@ -34,7 +34,6 @@
             this.horizontalLine1 = new System.Windows.Forms.Label();
             this.labelStatus = new System.Windows.Forms.Label();
             this.labelHorizontalLine2 = new System.Windows.Forms.Label();
-            this.labelVersion = new System.Windows.Forms.Label();
             this.labelCopyright = new System.Windows.Forms.Label();
             this.labelCompany = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -89,16 +88,6 @@
             this.labelHorizontalLine2.Size = new System.Drawing.Size(313, 2);
             this.labelHorizontalLine2.TabIndex = 4;
             // 
-            // labelVersion
-            // 
-            this.labelVersion.AutoSize = true;
-            this.labelVersion.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelVersion.Location = new System.Drawing.Point(11, 221);
-            this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(80, 16);
-            this.labelVersion.TabIndex = 5;
-            this.labelVersion.Text = "Version 2.71";
-            // 
             // labelCopyright
             // 
             this.labelCopyright.AutoSize = true;
@@ -126,11 +115,10 @@
             this.BackColor = System.Drawing.SystemColors.Window;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(331, 331);
+            this.ClientSize = new System.Drawing.Size(327, 327);
             this.ControlBox = false;
             this.Controls.Add(this.labelCompany);
             this.Controls.Add(this.labelCopyright);
-            this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.labelHorizontalLine2);
             this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.horizontalLine1);
@@ -157,7 +145,6 @@
         private System.Windows.Forms.Label horizontalLine1;
         private System.Windows.Forms.Label labelStatus;
         private System.Windows.Forms.Label labelHorizontalLine2;
-        private System.Windows.Forms.Label labelVersion;
         private System.Windows.Forms.Label labelCopyright;
         private System.Windows.Forms.Label labelCompany;
     }

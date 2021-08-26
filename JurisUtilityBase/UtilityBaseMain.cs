@@ -20,6 +20,7 @@ namespace JurisUtilityBase
         #region Private  members
 
         private JurisUtility _jurisUtility;
+        private bool isActivated;
 
         #endregion
 
@@ -43,6 +44,19 @@ namespace JurisUtilityBase
         {
             InitializeComponent();
             _jurisUtility = new JurisUtility();
+            isActivated = false;
+        }
+
+
+        private bool verifyDBHash(string hash, string dbName)
+        {
+            Encrypt eec = new Encrypt();
+            if (dbName.Equals(eec.DecryptString("b14ca5898a4e41ca7bce2ea2315a1916", hash), StringComparison.OrdinalIgnoreCase))
+                return true;
+            else
+                return false;
+
+
         }
 
         #endregion
@@ -87,9 +101,80 @@ namespace JurisUtilityBase
             {
                 ///GetFieldLengths();
             }
+            //create base table if not exist
+            string sql = "IF  NOT EXISTS (SELECT * FROM sys.objects " +
+            " WHERE object_id = OBJECT_ID(N'[dbo].[CMIActivation]') AND type in (N'U')) " +
+            " BEGIN " +
+            " Create Table[dbo].[CMIActivation](productID int, productName varchar(300), hash varchar(50)) " +
+            " END";
+
+            _jurisUtility.ExecuteSqlCommand(0, sql);
+
+            //does key already exist?
+            string hash = "";
+            hash = gethashFromDB();
+            if (!string.IsNullOrEmpty(hash)) //does the hash exits? if so....
+            {
+                //if it does, verify it
+                isActivated = verifyDBHash(hash, JurisDbName); //if it matches, we are good
+                if (!isActivated) //if not remove that info and make them reactivate
+                {
+                    sql = "delete from CMIActivation where productid = 1";
+                    _jurisUtility.ExecuteNonQuery(0, sql);
+                    MessageBox.Show("That Activation Code does not correspond with your Juris database" + "\r\n" + "The product has to be Reactivated", "Activation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    System.Environment.Exit(0);
+                }
+            }
+            else //it does not exist so make them activate
+            {
+                CMIActivation cmi = new CMIActivation(_jurisUtility);
+                cmi.ShowDialog();
+                //this adds it to DB. Now verify its good
+                hash = gethashFromDB();
+                if (!string.IsNullOrEmpty(hash))
+                { 
+                    isActivated = verifyDBHash(hash, JurisDbName); //if it matches, we are good
+                    if (!isActivated) //if not remove that info and make them reactivate
+                    {
+                        sql = "delete from CMIActivation where productid = 1";
+                        _jurisUtility.ExecuteNonQuery(0, sql);
+                        MessageBox.Show("That Activation Code does not correspond with your Juris database" + "\r\n" + "The product has to be Reactivated", "Activation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        System.Environment.Exit(0);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("There was a problem activating. Please ensure you code is correct and try again", "Activation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    System.Environment.Exit(0);
+                }
+            }
 
         }
 
+
+        private string gethashFromDB()
+        {
+            string hash = "";
+            string sql = "select hash from CMIActivation where productID = 1";
+            DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+            if (dds != null && dds.Tables.Count > 0 && dds.Tables[0].Rows.Count > 0)
+            {
+                if (dds.Tables[0].Rows.Count > 1) //why do they have more than one per db?
+                {
+                    sql = "delete from CMIActivation where productid = 1";
+                    _jurisUtility.ExecuteNonQuery(0, sql);
+                }
+                else
+                {
+                    foreach (DataRow dr in dds.Tables[0].Rows)
+                    {
+                        hash = dr[0].ToString();
+
+                    }
+                }
+            }
+            return hash;
+        }
 
 
         #endregion
@@ -98,21 +183,32 @@ namespace JurisUtilityBase
 
         private void DoDaFix()
         {
-            //now delete it as it isnt a preset and is only temp because we arent moving client info over to a matter screen
-            string sql = "delete from DefaultSettings where defaultid in (999999, 999998, 999997)";
-            _jurisUtility.ExecuteNonQuery(0, sql);
-            sql = "delete from Defaults where id in (999999, 999998, 999997)";
-            _jurisUtility.ExecuteNonQuery(0, sql);
-            
-            if (radioButtonCliOnly.Checked)
+
+            if (isActivated) // fail safe in case I missed something
             {
-                ClientForm cf = new ClientForm(_jurisUtility, 0, false);
-                cf.Show();
+                //now delete it as it isnt a preset and is only temp because we arent moving client info over to a matter screen
+                string sql = "delete from DefaultSettings where defaultid in (999999, 999998, 999997)";
+                _jurisUtility.ExecuteNonQuery(0, sql);
+                sql = "delete from Defaults where id in (999999, 999998, 999997)";
+                _jurisUtility.ExecuteNonQuery(0, sql);
+
+                if (radioButtonCliOnly.Checked)
+                {
+                    ClientForm cf = new ClientForm(_jurisUtility, 0, false);
+                    this.Hide();
+                    cf.Show();
+                }
+                else
+                {
+                    MatterForm mf = new MatterForm(_jurisUtility, 0, "", 0);
+                    this.Hide();
+                    mf.Show();
+                }
             }
             else
             {
-                MatterForm mf = new MatterForm(_jurisUtility, 0, "", 0);
-                mf.Show();
+                System.Environment.Exit(0);
+
             }
 
         }
@@ -182,37 +278,7 @@ namespace JurisUtilityBase
             return computerName + "/" + userName;
         }
 
-        /// <summary>
-        /// Update status bar (text to display and step number of total completed)
-        /// </summary>
-        /// <param name="status">status text to display</param>
-        /// <param name="step">steps completed</param>
-        /// <param name="steps">total steps to be done</param>
-        private void UpdateStatus(string status, long step, long steps)
-        {
-            labelCurrentStatus.Text = status;
 
-            if (steps == 0)
-            {
-                progressBar.Value = 0;
-                labelPercentComplete.Text = string.Empty;
-            }
-            else
-            {
-                double pctLong = Math.Round(((double)step/steps)*100.0);
-                int percentage = (int)Math.Round(pctLong, 0);
-                if ((percentage < 0) || (percentage > 100))
-                {
-                    progressBar.Value = 0;
-                    labelPercentComplete.Text = string.Empty;
-                }
-                else
-                {
-                    progressBar.Value = percentage;
-                    labelPercentComplete.Text = string.Format("{0} percent complete", percentage);
-                }
-            }
-        }
 
         private void DeleteLog()
         {
@@ -265,6 +331,7 @@ namespace JurisUtilityBase
 
         private void button1_Click(object sender, EventArgs e)
         {
+
             DoDaFix();
         }
 

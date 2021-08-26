@@ -29,9 +29,8 @@ namespace JurisUtilityBase
 
         private void SplashScreen_Load(object sender, EventArgs e)
         {
-            this.labelVersion.Text = @"Version " + Application.ProductVersion;
             this.labelCopyright.Text = @"Copyright © 1996-" + DateTime.Now.Year;
-            this.labelAppName.Text = "JPS - Client Intake";
+            this.labelAppName.Text = "Client Matter Intake";
             this.labelCompany.Text = Application.CompanyName;
             this.Refresh();
         }

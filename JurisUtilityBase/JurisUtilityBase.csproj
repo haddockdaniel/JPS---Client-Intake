@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>JurisUtilityBase</RootNamespace>
-    <AssemblyName>Client Intake</AssemblyName>
+    <AssemblyName>Client Matter Intake</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
@@ -23,7 +23,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>C:\Juris\Client Intake\</PublishUrl>
+    <PublishUrl>C:\Juris\Client Matter Intake\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -33,7 +33,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>18</ApplicationRevision>
+    <ApplicationRevision>23</ApplicationRevision>
     <ApplicationVersion>3.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -84,11 +84,10 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>71570D67F96A13F316042005D65550023417AEEF</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>34B834AE12590004822F9711F3AF46CDC3D498A4</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>
-    </ManifestKeyFile>
+    <ManifestKeyFile>JurisUtilityBase_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -175,6 +174,13 @@
     <Compile Include="ClientForm.Designer.cs">
       <DependentUpon>ClientForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CMIActivation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CMIActivation.Designer.cs">
+      <DependentUpon>CMIActivation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Encrypt.cs" />
     <Compile Include="JurisUtility.cs" />
     <Compile Include="MatBillingForm.cs">
       <SubType>Form</SubType>
@@ -225,6 +231,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ClientForm.resx">
       <DependentUpon>ClientForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CMIActivation.resx">
+      <DependentUpon>CMIActivation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MatBillingForm.resx">
       <DependentUpon>MatBillingForm.cs</DependentUpon>

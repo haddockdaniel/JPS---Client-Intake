@@ -37,7 +37,7 @@ namespace JurisUtilityBase
         {
             ClientForm cleared = new ClientForm(_jurisUtility, 0, false);
             cleared.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void buttonRename_Click(object sender, EventArgs e)
@@ -81,7 +81,7 @@ namespace JurisUtilityBase
                     DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                     PresetManager DM = new PresetManager(ds, _jurisUtility);
                     DM.Show();
-                    this.Close();
+                    this.Hide();
                 }
                 else
                     MessageBox.Show("Names must be unique and that name already exists. Default not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -111,7 +111,7 @@ namespace JurisUtilityBase
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                 PresetManager DM = new PresetManager(ds, _jurisUtility);
                 DM.Show();
-                this.Close();
+                this.Hide();
             }
             
         }
@@ -133,7 +133,7 @@ namespace JurisUtilityBase
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                 PresetManager DM = new PresetManager(ds, _jurisUtility);
                 DM.Show();
-                this.Close();
+                this.Hide();
 
             }
 
@@ -151,7 +151,7 @@ namespace JurisUtilityBase
                 id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
                 ClientForm cleared = new ClientForm(_jurisUtility, id, true);
                 cleared.Show();
-                this.Close();
+                this.Hide();
             }
 
 
@@ -170,7 +170,7 @@ namespace JurisUtilityBase
                 id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
                 ClientForm cleared = new ClientForm(_jurisUtility, id, false);
                 cleared.Show();
-                this.Close();
+                this.Hide();
             }
         }
 
@@ -188,9 +188,36 @@ namespace JurisUtilityBase
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                 PresetManager DM = new PresetManager(ds, _jurisUtility);
                 DM.Show();
-                this.Close();
+                this.Hide();
 
             
+        }
+
+        private void PresetManager_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            ClientForm cleared = new ClientForm(_jurisUtility, 0, false);
+            cleared.Show();
+        }
+
+        private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int id = 0;
+            if (dataGridView1.SelectedRows.Count == 0 || dataGridView1.SelectedRows.Count > 1)
+                MessageBox.Show("One and only one Preset can be loaded at a time", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                int index = e.RowIndex;
+                dataGridView1.Rows[index].Selected = true;
+                id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
+                ClientForm cleared = new ClientForm(_jurisUtility, id, false);
+                cleared.Show();
+                this.Hide();
+            }
         }
     }
 }

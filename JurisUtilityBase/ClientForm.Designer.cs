@@ -544,6 +544,7 @@
             this.textBoxBANName.Name = "textBoxBANName";
             this.textBoxBANName.Size = new System.Drawing.Size(246, 20);
             this.textBoxBANName.TabIndex = 31;
+            this.textBoxBANName.Text = "MAIN";
             // 
             // label25
             // 
@@ -1345,6 +1346,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ClientForm";
             this.Text = "Client Intake Form";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ClientForm_FormClosed);
             this.Load += new System.EventHandler(this.ClientForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

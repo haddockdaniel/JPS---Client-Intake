@@ -1380,6 +1380,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MatterForm";
             this.Text = "Matter Intake Form";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MatterForm_FormClosing);
             this.Load += new System.EventHandler(this.ClientForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

@@ -32,13 +32,8 @@
             this.JurisLogoImageBox = new System.Windows.Forms.PictureBox();
             this.LexisNexisLogoPictureBox = new System.Windows.Forms.PictureBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.listBoxCompanies = new System.Windows.Forms.ListBox();
             this.labelDescription = new System.Windows.Forms.Label();
-            this.statusGroupBox = new System.Windows.Forms.GroupBox();
-            this.labelCurrentStatus = new System.Windows.Forms.Label();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.labelPercentComplete = new System.Windows.Forms.Label();
             this.OpenFileDialogOpen = new System.Windows.Forms.OpenFileDialog();
             this.buttonReport = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -48,8 +43,6 @@
             this.radioButtonCliOnly = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.JurisLogoImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LexisNexisLogoPictureBox)).BeginInit();
-            this.statusStrip.SuspendLayout();
-            this.statusGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -77,20 +70,10 @@
             // 
             // statusStrip
             // 
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 391);
+            this.statusStrip.Location = new System.Drawing.Point(0, 374);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(492, 22);
             this.statusStrip.TabIndex = 2;
-            // 
-            // toolStripStatusLabel
-            // 
-            this.toolStripStatusLabel.BackColor = System.Drawing.SystemColors.Control;
-            this.toolStripStatusLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(135, 17);
-            this.toolStripStatusLabel.Text = "Status: Ready to Execute";
             // 
             // listBoxCompanies
             // 
@@ -108,44 +91,7 @@
             this.labelDescription.Name = "labelDescription";
             this.labelDescription.Size = new System.Drawing.Size(174, 69);
             this.labelDescription.TabIndex = 1;
-            this.labelDescription.Text = "Imports new clients and matters based on an Excel template";
-            // 
-            // statusGroupBox
-            // 
-            this.statusGroupBox.Controls.Add(this.labelCurrentStatus);
-            this.statusGroupBox.Controls.Add(this.progressBar);
-            this.statusGroupBox.Controls.Add(this.labelPercentComplete);
-            this.statusGroupBox.Location = new System.Drawing.Point(111, 77);
-            this.statusGroupBox.Name = "statusGroupBox";
-            this.statusGroupBox.Size = new System.Drawing.Size(365, 73);
-            this.statusGroupBox.TabIndex = 5;
-            this.statusGroupBox.TabStop = false;
-            this.statusGroupBox.Text = "Utility Status:";
-            // 
-            // labelCurrentStatus
-            // 
-            this.labelCurrentStatus.AutoSize = true;
-            this.labelCurrentStatus.Location = new System.Drawing.Point(7, 50);
-            this.labelCurrentStatus.Name = "labelCurrentStatus";
-            this.labelCurrentStatus.Size = new System.Drawing.Size(77, 13);
-            this.labelCurrentStatus.TabIndex = 2;
-            this.labelCurrentStatus.Text = "Current Status:";
-            // 
-            // progressBar
-            // 
-            this.progressBar.Location = new System.Drawing.Point(7, 27);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(348, 20);
-            this.progressBar.TabIndex = 0;
-            // 
-            // labelPercentComplete
-            // 
-            this.labelPercentComplete.AutoSize = true;
-            this.labelPercentComplete.Location = new System.Drawing.Point(274, 11);
-            this.labelPercentComplete.Name = "labelPercentComplete";
-            this.labelPercentComplete.Size = new System.Drawing.Size(62, 13);
-            this.labelPercentComplete.TabIndex = 0;
-            this.labelPercentComplete.Text = "% Complete";
+            this.labelDescription.Text = "Imports new clients and matters based on User\'s entries";
             // 
             // OpenFileDialogOpen
             // 
@@ -156,7 +102,7 @@
             this.buttonReport.BackColor = System.Drawing.Color.LightGray;
             this.buttonReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonReport.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.buttonReport.Location = new System.Drawing.Point(121, 343);
+            this.buttonReport.Location = new System.Drawing.Point(124, 299);
             this.buttonReport.Name = "buttonReport";
             this.buttonReport.Size = new System.Drawing.Size(105, 38);
             this.buttonReport.TabIndex = 16;
@@ -169,7 +115,7 @@
             this.button1.BackColor = System.Drawing.Color.LightGray;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.button1.Location = new System.Drawing.Point(333, 343);
+            this.button1.Location = new System.Drawing.Point(330, 299);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(101, 38);
             this.button1.TabIndex = 17;
@@ -182,7 +128,7 @@
             this.buttonBrowse.BackColor = System.Drawing.Color.LightGray;
             this.buttonBrowse.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonBrowse.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.buttonBrowse.Location = new System.Drawing.Point(178, 269);
+            this.buttonBrowse.Location = new System.Drawing.Point(175, 188);
             this.buttonBrowse.Name = "buttonBrowse";
             this.buttonBrowse.Size = new System.Drawing.Size(197, 38);
             this.buttonBrowse.TabIndex = 19;
@@ -196,7 +142,7 @@
             this.groupBox1.Controls.Add(this.radioButtonCliOnly);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.groupBox1.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.groupBox1.Location = new System.Drawing.Point(178, 163);
+            this.groupBox1.Location = new System.Drawing.Point(175, 88);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(200, 75);
             this.groupBox1.TabIndex = 21;
@@ -231,12 +177,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(492, 413);
+            this.ClientSize = new System.Drawing.Size(492, 396);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonBrowse);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonReport);
-            this.Controls.Add(this.statusGroupBox);
             this.Controls.Add(this.labelDescription);
             this.Controls.Add(this.listBoxCompanies);
             this.Controls.Add(this.statusStrip);
@@ -249,14 +194,10 @@
             this.MinimizeBox = false;
             this.Name = "UtilityBaseMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "JPS - Client Intake";
+            this.Text = "Client Matter Intake";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.JurisLogoImageBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.LexisNexisLogoPictureBox)).EndInit();
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
-            this.statusGroupBox.ResumeLayout(false);
-            this.statusGroupBox.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -269,13 +210,8 @@
         private System.Windows.Forms.PictureBox JurisLogoImageBox;
         private System.Windows.Forms.PictureBox LexisNexisLogoPictureBox;
         private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
         private System.Windows.Forms.ListBox listBoxCompanies;
         private System.Windows.Forms.Label labelDescription;
-        private System.Windows.Forms.GroupBox statusGroupBox;
-        private System.Windows.Forms.Label labelCurrentStatus;
-        private System.Windows.Forms.ProgressBar progressBar;
-        private System.Windows.Forms.Label labelPercentComplete;
         private System.Windows.Forms.OpenFileDialog OpenFileDialogOpen;
         private System.Windows.Forms.Button buttonReport;
         private System.Windows.Forms.Button button1;
