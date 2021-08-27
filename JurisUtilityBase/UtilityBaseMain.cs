@@ -110,45 +110,6 @@ namespace JurisUtilityBase
 
             _jurisUtility.ExecuteSqlCommand(0, sql);
 
-            //does key already exist?
-            string hash = "";
-            hash = gethashFromDB();
-            if (!string.IsNullOrEmpty(hash)) //does the hash exits? if so....
-            {
-                //if it does, verify it
-                isActivated = verifyDBHash(hash, JurisDbName); //if it matches, we are good
-                if (!isActivated) //if not remove that info and make them reactivate
-                {
-                    sql = "delete from CMIActivation where productid = 1";
-                    _jurisUtility.ExecuteNonQuery(0, sql);
-                    MessageBox.Show("That Activation Code does not correspond with your Juris database" + "\r\n" + "The product has to be Reactivated", "Activation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    System.Environment.Exit(0);
-                }
-            }
-            else //it does not exist so make them activate
-            {
-                CMIActivation cmi = new CMIActivation(_jurisUtility);
-                cmi.ShowDialog();
-                //this adds it to DB. Now verify its good
-                hash = gethashFromDB();
-                if (!string.IsNullOrEmpty(hash))
-                { 
-                    isActivated = verifyDBHash(hash, JurisDbName); //if it matches, we are good
-                    if (!isActivated) //if not remove that info and make them reactivate
-                    {
-                        sql = "delete from CMIActivation where productid = 1";
-                        _jurisUtility.ExecuteNonQuery(0, sql);
-                        MessageBox.Show("That Activation Code does not correspond with your Juris database" + "\r\n" + "The product has to be Reactivated", "Activation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        System.Environment.Exit(0);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("There was a problem activating. Please ensure you code is correct and try again", "Activation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    System.Environment.Exit(0);
-                }
-            }
-
         }
 
 
@@ -183,11 +144,50 @@ namespace JurisUtilityBase
 
         private void DoDaFix()
         {
+            //does key already exist?
+            string hash = "";
+            string sql = "";
+            hash = gethashFromDB();
+            if (!string.IsNullOrEmpty(hash)) //does the hash exits? if so....
+            {
+                //if it does, verify it
+                isActivated = verifyDBHash(hash, JurisDbName); //if it matches, we are good
+                if (!isActivated) //if not remove that info and make them reactivate
+                {
+                    sql = "delete from CMIActivation where productid = 1";
+                    _jurisUtility.ExecuteNonQuery(0, sql);
+                    MessageBox.Show("That Activation Code does not correspond with your Juris database" + "\r\n" + "The product has to be Reactivated", "Activation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    System.Environment.Exit(0);
+                }
+            }
+            else //it does not exist so make them activate
+            {
+                CMIActivation cmi = new CMIActivation(_jurisUtility);
+                cmi.ShowDialog();
+                //this adds it to DB. Now verify its good
+                hash = gethashFromDB();
+                if (!string.IsNullOrEmpty(hash))
+                {
+                    isActivated = verifyDBHash(hash, JurisDbName); //if it matches, we are good
+                    if (!isActivated) //if not remove that info and make them reactivate
+                    {
+                        sql = "delete from CMIActivation where productid = 1";
+                        _jurisUtility.ExecuteNonQuery(0, sql);
+                        MessageBox.Show("That Activation Code does not correspond with your Juris database" + "\r\n" + "The product has to be Reactivated", "Activation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        System.Environment.Exit(0);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("There was a problem activating. Please ensure you code is correct and try again", "Activation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    System.Environment.Exit(0);
+                }
+            }
 
             if (isActivated) // fail safe in case I missed something
             {
                 //now delete it as it isnt a preset and is only temp because we arent moving client info over to a matter screen
-                string sql = "delete from DefaultSettings where defaultid in (999999, 999998, 999997)";
+                sql = "delete from DefaultSettings where defaultid in (999999, 999998, 999997)";
                 _jurisUtility.ExecuteNonQuery(0, sql);
                 sql = "delete from Defaults where id in (999999, 999998, 999997)";
                 _jurisUtility.ExecuteNonQuery(0, sql);
