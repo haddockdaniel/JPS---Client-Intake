@@ -47,9 +47,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(18, 35);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(104, 13);
+            this.label1.Size = new System.Drawing.Size(113, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Enter Serial Number:";
+            this.label1.Text = "Enter Activation Code:";
             // 
             // buttonActivate
             // 
@@ -89,6 +89,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CMIActivation";
             this.Text = "Client Matter Intake Activation";
+            this.Load += new System.EventHandler(this.CMIActivation_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

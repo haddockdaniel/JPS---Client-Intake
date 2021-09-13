@@ -164,8 +164,9 @@
             this.Controls.Add(this.dataGridView1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PresetManager";
-            this.Text = "`";
+            this.Text = "Template Manager";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PresetManager_FormClosed);
+            this.Load += new System.EventHandler(this.PresetManager_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 

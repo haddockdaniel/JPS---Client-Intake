@@ -23,13 +23,14 @@ namespace JurisUtilityBase
 {
     public partial class MatterForm : Form
     {
-        public MatterForm(JurisUtility jutil, int clisys, string cc, int adrSys)
+        public MatterForm(JurisUtility jutil, int clisys, string cc, int adrSys, System.Drawing.Point ppt)
         {
             InitializeComponent();
             _jurisUtility = jutil;
             addySysNbr = adrSys;
             clisysnbr = clisys;
             clicode = cc;
+            pt = ppt;
         }
 
 
@@ -47,12 +48,13 @@ namespace JurisUtilityBase
         int lengthOfCodeMatter = 4;
         int numOfOrig = 5;
         int matsysnbr = 0;
+        private System.Drawing.Point pt;
 
         //load all default items
         private void ClientForm_Load(object sender, EventArgs e)
         {
             dateTimePickerOpened.Value = DateTime.Now; //OpenedDate
-
+            this.Location = pt;
             textBoxCode.Text = clicode;
 
             if (addySysNbr == 0 || clisysnbr == 0)
@@ -460,7 +462,8 @@ namespace JurisUtilityBase
 
         private void clearFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MatterForm cleared = new MatterForm(_jurisUtility, 0, "", 0);
+            pt = this.Location;
+            MatterForm cleared = new MatterForm(_jurisUtility, 0, "", 0, pt);
             cleared.Show();
             this.Close();
         }
@@ -1012,7 +1015,8 @@ namespace JurisUtilityBase
                                     DialogResult fc = MessageBox.Show("Matter " + textBoxCode.Text + "/" + textBoxMatterCode.Text + " was added successfully." + "\r\n" + "Would you like to add another Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                                     if (fc == DialogResult.Yes)
                                     {
-                                        MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addySysNbr);
+                                        pt = this.Location;
+                                        MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addySysNbr, pt);
                                         cleared.Show();
                                         //move data over
                                         this.Close();

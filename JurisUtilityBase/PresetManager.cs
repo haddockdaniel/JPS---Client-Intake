@@ -19,7 +19,7 @@ namespace JurisUtilityBase
 {
     public partial class PresetManager : Form
     {
-        public PresetManager(DataSet ds, JurisUtility jutil)
+        public PresetManager(DataSet ds, JurisUtility jutil, System.Drawing.Point ppt)
         {
             InitializeComponent();
             dataGridView1.DataSource = ds.Tables[0];
@@ -29,13 +29,17 @@ namespace JurisUtilityBase
             dataGridView1.Columns[3].Width = 100;
             dataGridView1.Columns[4].Width = 60;
             _jurisUtility = jutil;
+            pt = ppt;
+            
         }
 
         JurisUtility _jurisUtility;
+        private System.Drawing.Point pt;
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            ClientForm cleared = new ClientForm(_jurisUtility, 0, false);
+            pt = this.Location;
+            ClientForm cleared = new ClientForm(_jurisUtility, 0, false, pt);
             cleared.Show();
             this.Hide();
         }
@@ -44,7 +48,7 @@ namespace JurisUtilityBase
         {
             int id = 0;
             if (dataGridView1.SelectedRows.Count == 0 || dataGridView1.SelectedRows.Count > 1)
-                MessageBox.Show("One and only one Preset can be renamed at a time", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("One and only one Template can be renamed at a time", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
                 id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
@@ -58,7 +62,7 @@ namespace JurisUtilityBase
 
         private void checkDefaultName(int ID)
         {
-            string name = Microsoft.VisualBasic.Interaction.InputBox("Enter the New Name", "Default Name", "New Default");
+            string name = Microsoft.VisualBasic.Interaction.InputBox("Enter the New Name", "Template Name", "Template Default");
             if (!string.IsNullOrEmpty(name))
             {
                 //see if default name already exists
@@ -79,15 +83,16 @@ namespace JurisUtilityBase
                     _jurisUtility.ExecuteSqlCommand(0, sql);
                     sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
                     DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
-                    PresetManager DM = new PresetManager(ds, _jurisUtility);
+                    pt = this.Location;
+                    PresetManager DM = new PresetManager(ds, _jurisUtility, pt);
                     DM.Show();
                     this.Hide();
                 }
                 else
-                    MessageBox.Show("Names must be unique and that name already exists. Default not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Names must be unique and that name already exists. Template not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
-                MessageBox.Show("A valid name is required. Default not updated", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("A valid name is required. Template not updated", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
@@ -96,7 +101,7 @@ namespace JurisUtilityBase
             string sql = "";
 
             if (dataGridView1.SelectedRows.Count == 0 || dataGridView1.SelectedRows.Count > 1)
-                MessageBox.Show("One and only one Preset must be selected", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("One and only one Template must be selected", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
                 foreach (DataGridViewRow r in dataGridView1.SelectedRows)
@@ -109,7 +114,8 @@ namespace JurisUtilityBase
                 }
                 sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
-                PresetManager DM = new PresetManager(ds, _jurisUtility);
+                pt = this.Location;
+                PresetManager DM = new PresetManager(ds, _jurisUtility, pt);
                 DM.Show();
                 this.Hide();
             }
@@ -121,7 +127,7 @@ namespace JurisUtilityBase
             string sql = "";
             int id = 0;
             if (dataGridView1.SelectedRows.Count == 0 || dataGridView1.SelectedRows.Count > 1)
-                MessageBox.Show("One and only one Preset can be default at a time", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("One and only one Template can be default at a time", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
                 id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
@@ -131,7 +137,8 @@ namespace JurisUtilityBase
                 _jurisUtility.ExecuteSqlCommand(0, sql);
                 sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
-                PresetManager DM = new PresetManager(ds, _jurisUtility);
+                pt = this.Location;
+                PresetManager DM = new PresetManager(ds, _jurisUtility, pt);
                 DM.Show();
                 this.Hide();
 
@@ -145,11 +152,12 @@ namespace JurisUtilityBase
         {
             int id = 0;
             if (dataGridView1.SelectedRows.Count == 0 || dataGridView1.SelectedRows.Count > 1)
-                MessageBox.Show("One and only one Preset can be Modified at a time", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("One and only one Template can be Modified at a time", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
                 id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
-                ClientForm cleared = new ClientForm(_jurisUtility, id, true);
+                pt = this.Location;
+                ClientForm cleared = new ClientForm(_jurisUtility, id, true, pt);
                 cleared.Show();
                 this.Hide();
             }
@@ -164,11 +172,12 @@ namespace JurisUtilityBase
         {
             int id = 0;
             if (dataGridView1.SelectedRows.Count == 0 || dataGridView1.SelectedRows.Count > 1)
-                MessageBox.Show("One and only one Preset can be loaded at a time", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("One and only one Template can be loaded at a time", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
                 id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
-                ClientForm cleared = new ClientForm(_jurisUtility, id, false);
+                pt = this.Location;
+                ClientForm cleared = new ClientForm(_jurisUtility, id, false, pt);
                 cleared.Show();
                 this.Hide();
             }
@@ -186,7 +195,8 @@ namespace JurisUtilityBase
                 _jurisUtility.ExecuteSqlCommand(0, sql);
                 sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
-                PresetManager DM = new PresetManager(ds, _jurisUtility);
+            pt = this.Location;
+            PresetManager DM = new PresetManager(ds, _jurisUtility, pt);
                 DM.Show();
                 this.Hide();
 
@@ -195,7 +205,8 @@ namespace JurisUtilityBase
 
         private void PresetManager_FormClosed(object sender, FormClosedEventArgs e)
         {
-            ClientForm cleared = new ClientForm(_jurisUtility, 0, false);
+            pt = this.Location;
+            ClientForm cleared = new ClientForm(_jurisUtility, 0, false, pt);
             cleared.Show();
         }
 
@@ -208,16 +219,22 @@ namespace JurisUtilityBase
         {
             int id = 0;
             if (dataGridView1.SelectedRows.Count == 0 || dataGridView1.SelectedRows.Count > 1)
-                MessageBox.Show("One and only one Preset can be loaded at a time", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("One and only one Template can be loaded at a time", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
                 int index = e.RowIndex;
                 dataGridView1.Rows[index].Selected = true;
                 id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
-                ClientForm cleared = new ClientForm(_jurisUtility, id, false);
+                pt = this.Location;
+                ClientForm cleared = new ClientForm(_jurisUtility, id, false, pt);
                 cleared.Show();
                 this.Hide();
             }
+        }
+
+        private void PresetManager_Load(object sender, EventArgs e)
+        {
+            this.Location = pt;
         }
     }
 }

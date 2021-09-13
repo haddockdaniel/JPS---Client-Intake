@@ -23,12 +23,13 @@ namespace JurisUtilityBase
 {
     public partial class ClientForm : Form
     {
-        public ClientForm(JurisUtility jutil, int preID, bool modify)
+        public ClientForm(JurisUtility jutil, int preID, bool modify, System.Drawing.Point ppt)
         {
             InitializeComponent();
             _jurisUtility = jutil;
             presetID = preID;
             isModification = modify;
+            pt = ppt;
         }
 
         JurisUtility _jurisUtility;
@@ -39,12 +40,13 @@ namespace JurisUtilityBase
         int clisysnbr = 0;
         bool isError = false;
         int lengthOfCode = 4;
-
+        private System.Drawing.Point pt;
+        
 
         //load all default items
         private void ClientForm_Load(object sender, EventArgs e)
         {
-
+            this.Location = pt;
             dateTimePickerOpened.Value = DateTime.Now; //OpenedDate
 
             //see if a default exists and keep the ID for later use
@@ -332,7 +334,7 @@ namespace JurisUtilityBase
                     loadDfaultPreset();
                 if (isModification)
                 {
-                    buttonCreateClient.Text = "Save Preset";
+                    buttonCreateClient.Text = "Save Template";
                     buttonCreateClient.Click -=  button1_Click;
                     buttonCreateClient.Click += buttonModify;
                 }
@@ -465,15 +467,20 @@ namespace JurisUtilityBase
                 checkForTables();
                 string sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C' ";
                 ds1 = _jurisUtility.RecordsetFromSQL(sql);
-                PresetManager DM = new PresetManager(ds1, _jurisUtility);
+                pt = this.Location;
+                PresetManager DM = new PresetManager(ds1, _jurisUtility, pt);
                 DM.Show();
                 this.Close();
+
+
+                
             }
         }
 
         private void clearFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ClientForm cleared = new ClientForm(_jurisUtility, 0, false);
+            pt = this.Location;
+            ClientForm cleared = new ClientForm(_jurisUtility, 0, false, pt);
             cleared.Show();
             this.Close();
         }
@@ -500,7 +507,8 @@ namespace JurisUtilityBase
 
         private void clearFieldsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MatterForm cleared = new MatterForm(_jurisUtility,  0, "", 0);
+            pt = this.Location;
+            MatterForm cleared = new MatterForm(_jurisUtility,  0, "", 0, pt);
             cleared.Show();
             this.Close();
         }
@@ -513,7 +521,7 @@ namespace JurisUtilityBase
 
         private void checkDefaultName()
         {
-            string name = Microsoft.VisualBasic.Interaction.InputBox("Name of new Preset", "Preset Name", "New Preset");
+            string name = Microsoft.VisualBasic.Interaction.InputBox("Name of new Template", "Template Name", "New Template");
             if (!string.IsNullOrEmpty(name))
             {
                 //see if default name already exists
@@ -532,10 +540,10 @@ namespace JurisUtilityBase
                 if (!exists)
                     createDefault(name);
                 else
-                    MessageBox.Show("Names must be unique and that name already exists." + "\r\n" + "Preset not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Names must be unique and that name already exists." + "\r\n" + "Template not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
-                MessageBox.Show("A valid name is required. Preset not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("A valid name is required. Template not added", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void createDefault(string name)
@@ -645,7 +653,8 @@ namespace JurisUtilityBase
             }
             sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
             DataSet ds1 = _jurisUtility.RecordsetFromSQL(sql);
-            PresetManager DM = new PresetManager(ds1, _jurisUtility);
+            pt = this.Location;
+            PresetManager DM = new PresetManager(ds1, _jurisUtility, pt);
             DM.Show();
             this.Close();
 
@@ -1055,14 +1064,16 @@ namespace JurisUtilityBase
                                         {
                                             //save info to move over to matter
                                             saveInfoToMoveToMatter();
-                                            MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid);
+                                            pt = this.Location;
+                                            MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid, pt);
                                             cleared.Show();
                                             //move data over
                                             this.Close();
                                         }
                                         else
                                         {
-                                            ClientForm newClient = new ClientForm(_jurisUtility, presetID, false);
+                                            pt = this.Location;
+                                            ClientForm newClient = new ClientForm(_jurisUtility, presetID, false, pt);
                                             newClient.Show();
                                             this.Close();
                                         }

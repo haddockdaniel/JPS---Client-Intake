@@ -93,3 +93,4 @@ D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter I
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter Intake.application
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter Intake.exe
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter Intake.pdb
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter Intake.TrustInfo.xml

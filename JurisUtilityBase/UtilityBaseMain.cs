@@ -12,6 +12,8 @@ using JDataEngine;
 using JurisAuthenticator;
 using JurisUtilityBase.Properties;
 using System.Data.OleDb;
+using System.Runtime.CompilerServices;
+using Microsoft.Office.Interop.Excel;
 
 namespace JurisUtilityBase
 {
@@ -21,6 +23,7 @@ namespace JurisUtilityBase
 
         private JurisUtility _jurisUtility;
         private bool isActivated;
+        private System.Drawing.Point pt;
 
         #endregion
 
@@ -45,6 +48,7 @@ namespace JurisUtilityBase
             InitializeComponent();
             _jurisUtility = new JurisUtility();
             isActivated = false;
+            
         }
 
 
@@ -162,7 +166,8 @@ namespace JurisUtilityBase
             }
             else //it does not exist so make them activate
             {
-                CMIActivation cmi = new CMIActivation(_jurisUtility);
+                this.Location = pt;
+                CMIActivation cmi = new CMIActivation(_jurisUtility, pt);
                 cmi.ShowDialog();
                 //this adds it to DB. Now verify its good
                 hash = gethashFromDB();
@@ -175,8 +180,7 @@ namespace JurisUtilityBase
                         _jurisUtility.ExecuteNonQuery(0, sql);
                         MessageBox.Show("That Activation Code does not correspond with your Juris database" + "\r\n" + "The product has to be Reactivated", "Activation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         System.Environment.Exit(0);
-                    }
-                }
+                    }             }
                 else
                 {
                     MessageBox.Show("There was a problem activating. Please ensure you code is correct and try again", "Activation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -191,16 +195,16 @@ namespace JurisUtilityBase
                 _jurisUtility.ExecuteNonQuery(0, sql);
                 sql = "delete from Defaults where id in (999999, 999998, 999997)";
                 _jurisUtility.ExecuteNonQuery(0, sql);
-
+                this.Location = pt;
                 if (radioButtonCliOnly.Checked)
                 {
-                    ClientForm cf = new ClientForm(_jurisUtility, 0, false);
+                    ClientForm cf = new ClientForm(_jurisUtility, 0, false, pt);
                     this.Hide();
                     cf.Show();
                 }
                 else
                 {
-                    MatterForm mf = new MatterForm(_jurisUtility, 0, "", 0);
+                    MatterForm mf = new MatterForm(_jurisUtility, 0, "", 0, pt);
                     this.Hide();
                     mf.Show();
                 }
@@ -282,7 +286,7 @@ namespace JurisUtilityBase
 
         private void DeleteLog()
         {
-            string AppDir = Path.GetDirectoryName(Application.ExecutablePath);
+            string AppDir = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
             string filePathName = Path.Combine(AppDir, "VoucherImportLog.txt");
             if (File.Exists(filePathName + ".ark5"))
             {
@@ -320,7 +324,7 @@ namespace JurisUtilityBase
 
         private void LogFile(string LogLine)
         {
-            string AppDir = Path.GetDirectoryName(Application.ExecutablePath);
+            string AppDir = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
             string filePathName = Path.Combine(AppDir, "VoucherImportLog.txt");
             using (StreamWriter sw = File.AppendText(filePathName))
             {
