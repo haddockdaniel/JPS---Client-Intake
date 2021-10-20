@@ -48,7 +48,7 @@ namespace JurisUtilityBase
             InitializeComponent();
             _jurisUtility = new JurisUtility();
             isActivated = false;
-            
+
         }
 
 

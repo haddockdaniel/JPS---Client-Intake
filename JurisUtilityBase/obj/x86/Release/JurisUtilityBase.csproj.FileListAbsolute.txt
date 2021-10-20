@@ -57,7 +57,6 @@ D:\Projects\MCCabe Trust Ledger Fix\JurisUtilityBase\obj\x86\Release\JurisUtilit
 D:\Projects\MCCabe Trust Ledger Fix\JurisUtilityBase\obj\x86\Release\JPS - McCabe Trust Fix.exe.manifest
 D:\Projects\MCCabe Trust Ledger Fix\JurisUtilityBase\obj\x86\Release\JPS - McCabe Trust Fix.application
 D:\Projects\MCCabe Trust Ledger Fix\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.csproj.CopyComplete
-D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.csprojAssemblyReference.cache
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.csproj.ResolveComReference.cache
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.ClientForm.resources
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.PrinterDialog.resources
@@ -77,7 +76,6 @@ D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\JurisIDef21.dll
 D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\JurisStr21.dll
 D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\JurisStr221.dll
 D:\Projects\JPS - Client Intake\JurisUtilityBase\bin\x86\Release\JurisSVR21.dll
-D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.csproj.CopyComplete
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.PresetManager.resources
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.MatterForm.resources
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.CliBillingForm.resources
@@ -94,3 +92,4 @@ D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter I
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter Intake.exe
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter Intake.pdb
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter Intake.TrustInfo.xml
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.csproj.AssemblyReference.cache

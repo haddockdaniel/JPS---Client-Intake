@@ -969,6 +969,7 @@ namespace JurisUtilityBase
 
         private void createClient()
         {
+            int addyid = 0;
             if (checkFields())
             {
                 string txref = "null";
@@ -1018,88 +1019,133 @@ namespace JurisUtilityBase
                     clisysnbr = getClisysnbr();
                     if (clisysnbr != 0)
                     {
-                        if (!resp.Equals("null"))
-                            addRespToTable(resp); //you have to add it twice for some reason...in client and ClientResponsibleTimekeeper
-                        if (!isError) // was there an issue adding resp tkpr? if so, undo client and addy
+                        //add log
+                        DateTime nn = DateTime.Now;
+                        string pcName = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
+                        sql = "Insert into Client_log([DateTimeStamp] ,[HostMachine],[Application] ,[JurisUser] ,[RecordType] ,[SourceTable],[Notes],CliSysNbr,CliCode,CliNickName,CliReportingName,CliSourceOfBusiness, " +
+                      " CliPhoneNbr,CliFaxNbr,CliContactName,CliDateOpened,CliOfficeCode,CliBillingAtty,CliPracticeClass, "
+                        + " CliFeeSch,CliTaskCodeXref,CliExpSch,CliExpCodeXref,CliBillFormat,CliBillAgreeCode,CliFlatFeeIncExp,CliRetainerType,CliExpFreqCode,CliFeeFreqCode,CliBillMonth,CliBillCycle, "
+                        + " CliExpThreshold,CliFeeThreshold,CliInterestPcnt,CliInterestDays,CliDiscountOption,CliDiscountPcnt,CliSurchargeOption,CliSurchargePcnt, " +
+                        " CliTax1Exempt,CliTax2Exempt,CliTax3Exempt,CliBudgetOption,CliReqPhaseOnTrans, "
+                        + " CliReqTaskCdOnTime,CliReqActyCdOnTime,CliReqTaskCdOnExp,CliPrimaryAddr,CliType,CliEditFormat,CliThresholdOption,CliRespAtty," +
+                        "CliBillingField01,CliBillingField02,CliBillingField03,CliBillingField04,CliBillingField05, CliBillingField06,CliBillingField07,CliBillingField08,CliBillingField09,CliBillingField10,CliBillingField11,CliBillingField12,CliBillingField13,CliBillingField14,CliBillingField15,CliBillingField16,CliBillingField17,CliBillingField18,CliBillingField19, CliBillingField20, "
+                        + " CliCTerms,CliCStatus,CliCStatus2)  "
+                        + " values( '" + nn.ToString("yyyy-MM-dd HH:mm") + "', left('" + pcName + "', 30), 'CMI Tool',1, 1,40,null,"
+                        + clisysnbr + ", '" + formatClientCode(textBoxCode.Text) + "', '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "', '" + textBoxSoBOpt.Text.Trim() + "', "
+                        + " '" + textBoxPhoneOpt.Text.Trim() + "', '" + textBoxFaxOpt.Text.Trim() + "', '" + textBoxContactOpt.Text.Trim() + "', '" + dateTimePickerOpened.Value.ToString("MM/dd/yyyy") + "', '" + this.comboBoxOffice.GetItemText(this.comboBoxOffice.SelectedItem).Split(' ')[0] + "', "
+                        + " (select empsysnbr from employee where empid = '" + this.comboBoxBT.GetItemText(this.comboBoxBT.SelectedItem).Split(' ')[0] + "'), "
+                        + "'" + this.comboBoxPC.GetItemText(this.comboBoxPC.SelectedItem).Split(' ')[0] + "', "
+                        + " '" + this.comboBoxFeeSched.GetItemText(this.comboBoxFeeSched.SelectedItem).Split(' ')[0] + "'," + txref + ",'" + this.comboBoxExpSched.GetItemText(this.comboBoxExpSched.SelectedItem).Split(' ')[0] + "'," + exref + ", "
+                        + " '" + this.comboBoxBillLayout.GetItemText(this.comboBoxBillLayout.SelectedItem).Split(' ')[0] + "','" + this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0] + "','" + inclExp + "','" + retType + "', '" + this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0] + "' ," + textBoxMonthOpt.Text + "," + textBoxCycleOpt.Text + ", "
+                        + " 0.00,0.00," + textBoxIntPctOpt.Text + "," + textBoxIntDaysOpt.Text + "," + this.comboBoxDisc.GetItemText(this.comboBoxDisc.SelectedItem).Split(' ')[0] + "," + textBoxDiscPctOpt.Text + ", " + this.comboBoxSurcharge.GetItemText(this.comboBoxSurcharge.SelectedItem).Split(' ')[0] + ", " + textBoxSurPctOpt.Text + ", "
+                        + " '" + tax1 + "','" + tax2 + "','" + tax3 + "'," + budg + ",'N','" + reqTask + "','" + reqAct + "','N',null,0,'" + this.comboBoxPreBillLayout.GetItemText(this.comboBoxPreBillLayout.SelectedItem).Split(' ')[0] + "', "
+                        + " 0," + resp + ",'','','','','','','','','','','','', "
+                        + " '','','','','','','','',0,0,'')";
+                        isError = _jurisUtility.ExecuteNonQuery(0, sql);
+                        if (!isError)
                         {
-                            isError = createAddy();
-                            if (!isError) //was there an isue adding the address? If so, we need to remove the client
-                            {
-                                sql = "select max(biladrsysnbr) from billingaddress";
-                                DataSet dds = new DataSet();
-                                int addyid = 0;
-                                dds = _jurisUtility.RecordsetFromSQL(sql);
-                                if (dds != null && dds.Tables.Count > 0)
-                                {
-                                    foreach (DataRow dr in dds.Tables[0].Rows)
-                                        addyid = Convert.ToInt32(dr[0].ToString());
 
-                                }
-                                isError = addOrig(addyid);
-                                if (!isError)
+                            if (!resp.Equals("null"))
+                                addRespToTable(resp); //you have to add it twice for some reason...in client and ClientResponsibleTimekeeper
+                            if (!isError) // was there an issue adding resp tkpr? if so, undo client
+                            {
+                                isError = createAddy();
+                                if (!isError) //was there an issue adding the address? If so, we need to remove the client and resp
                                 {
-                                    isError = loadClientBillFields();
+                                    sql = "select max(biladrsysnbr) from billingaddress";
+                                    DataSet dds = new DataSet();
+                                    
+                                    dds = _jurisUtility.RecordsetFromSQL(sql);
+                                    if (dds != null && dds.Tables.Count > 0)
+                                    {
+                                        foreach (DataRow dr in dds.Tables[0].Rows)
+                                            addyid = Convert.ToInt32(dr[0].ToString());
+
+                                    }
+                                    isError = addOrig();
                                     if (!isError)
                                     {
-                                        string SQL = "Insert into DocumentTree(dtdocid, dtsystemcreated, dtdocclass,dtdoctype,  dtparentid, dttitle, dtkeyl) "
-                                        + " select (select max(dtdocid)  from documenttree) + 1 , 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
-                                        + " from Client where clisysnbr = " + clisysnbr.ToString();
-                                        _jurisUtility.ExecuteNonQuery(0, SQL);
-
-                                        SQL = " Update sysparam set spnbrvalue=(select max(dtdocid) from documenttree) where spname='LastSysNbrDocTree'";
-                                        _jurisUtility.ExecuteNonQuery(0, SQL);
-
-                                        SQL = " update sysparam set spnbrvalue = (select max(CliSysNbr) from client) where spname = 'LastSysNbrClient'";
-                                        _jurisUtility.ExecuteNonQuery(0, SQL);
-
-                                        sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
-                                        _jurisUtility.ExecuteNonQuery(0, sql);
-
-                                        //after adding the client, load the preset back in
-                                        if (presetID != 0)
-                                            checkForTables();
-
-                                        DialogResult fc = MessageBox.Show("Client " + textBoxCode.Text + " was added successfully." + "\r\n" + "Would you like to Add a Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                                        if (fc == DialogResult.Yes)
+                                        isError = loadClientBillFields();
+                                        if (!isError)
                                         {
-                                            //save info to move over to matter
-                                            saveInfoToMoveToMatter();
-                                            pt = this.Location;
-                                            MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid, pt);
-                                            cleared.Show();
-                                            //move data over
-                                            this.Close();
+                                            string SQL = "Insert into DocumentTree(dtdocid, dtsystemcreated, dtdocclass,dtdoctype,  dtparentid, dttitle, dtkeyl) "
+                                            + " select (select max(dtdocid)  from documenttree) + 1 , 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
+                                            + " from Client where clisysnbr = " + clisysnbr.ToString();
+                                            _jurisUtility.ExecuteNonQuery(0, SQL);
+
+                                            SQL = " Update sysparam set spnbrvalue=(select max(dtdocid) from documenttree) where spname='LastSysNbrDocTree'";
+                                            _jurisUtility.ExecuteNonQuery(0, SQL);
+
+                                            SQL = " update sysparam set spnbrvalue = (select max(CliSysNbr) from client) where spname = 'LastSysNbrClient'";
+                                            _jurisUtility.ExecuteNonQuery(0, SQL);
+
+                                            sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
+                                            _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                            //after adding the client, load the preset back in
+                                            if (presetID != 0)
+                                                checkForTables();
+
+                                            DialogResult fc = MessageBox.Show("Client " + textBoxCode.Text + " was added successfully." + "\r\n" + "Would you like to Add a Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                            if (fc == DialogResult.Yes)
+                                            {
+                                                //save info to move over to matter
+                                                saveInfoToMoveToMatter();
+                                                pt = this.Location;
+                                                MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid, pt);
+                                                cleared.Show();
+                                                //move data over
+                                                this.Close();
+                                            }
+                                            else
+                                            {
+                                                pt = this.Location;
+                                                ClientForm newClient = new ClientForm(_jurisUtility, presetID, false, pt);
+                                                newClient.Show();
+                                                this.Close();
+                                            }
                                         }
                                         else
                                         {
-                                            pt = this.Location;
-                                            ClientForm newClient = new ClientForm(_jurisUtility, presetID, false, pt);
-                                            newClient.Show();
-                                            this.Close();
+                                            MessageBox.Show("There was an issue adding the Billing Fields." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            isError = false;
+                                            undoOrig();
+                                            undoResp();
+                                            undoAddy(addyid);
+                                            undoClientLog();
+                                            undoClient();
                                         }
+
                                     }
                                     else
                                     {
-                                        MessageBox.Show("There was an issue adding the Billing Fields." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        isError = false;
-                                        undoOrig();
+                                        MessageBox.Show("There was an issue adding the Originator." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         undoResp();
+                                        undoAddy(addyid);
+                                        undoClientLog();
                                         undoClient();
+                                        
                                     }
-
+                                }
+                                else
+                                {
+                                    MessageBox.Show("There was an issue adding the address." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    undoResp();
+                                    undoClientLog();
+                                    undoClient();
                                 }
                             }
                             else
                             {
-                                MessageBox.Show("There was an issue adding the address." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                undoResp(); 
+                                MessageBox.Show("There was an issue adding the Responsible Timekeepers." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                undoClientLog(); 
                                 undoClient();
-                                
                             }
                         }
                         else
                         {
-                            MessageBox.Show("There was an issue adding the Responsible Timekeepers." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("There was an issue adding the Client." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            undoClientLog(); 
                             undoClient();
                         }
                     }
@@ -1131,11 +1177,42 @@ namespace JurisUtilityBase
 
         }
 
+        private void undoClientLog()
+        {
+            try
+            {
+                string sql = "delete from client_log where clisysnbr = " + clisysnbr.ToString();
+                _jurisUtility.ExecuteNonQuery(0, sql);
+                clisysnbr = 0;
+                isError = false;
+            }
+            catch (Exception) { }
+
+        }
+
+        private void undoAddy(int addyID)
+        {
+            try
+            {
+                string sql = "delete from billingaddress_log where biladrsysnbr = " + addyID.ToString();
+                _jurisUtility.ExecuteNonQuery(0, sql);
+                sql = "delete from billingaddress where biladrsysnbr = " + addyID.ToString();
+                _jurisUtility.ExecuteNonQuery(0, sql);
+
+                clisysnbr = 0;
+                isError = false;
+            }
+            catch (Exception) { }
+
+        }
+
         private void undoResp()
         {
             try
             {
-                string sql = "delete from CliOrigAtty where COrigCli = " + clisysnbr.ToString();
+                string sql = "delete from ClientResponsibleTimekeeper_log where CRTClientID = " + clisysnbr.ToString();
+                _jurisUtility.ExecuteNonQuery(0, sql); 
+                sql = "delete from ClientResponsibleTimekeeper where CRTClientID = " + clisysnbr.ToString();
                 _jurisUtility.ExecuteNonQuery(0, sql);
                 clisysnbr = 0;
                 isError = false;
@@ -1148,8 +1225,11 @@ namespace JurisUtilityBase
         {
             try
             {
-                string sql = "delete from CliOrigAtty where COrigCli = " + clisysnbr.ToString();
+                string sql = "delete from CliOrigAtty_log where COrigCli = " + clisysnbr.ToString();
+                _jurisUtility.ExecuteNonQuery(0, sql); 
+                sql = "delete from CliOrigAtty where COrigCli = " + clisysnbr.ToString();
                 _jurisUtility.ExecuteNonQuery(0, sql);
+
                 isError = false;
             }
             catch (Exception)   { }
@@ -1158,15 +1238,26 @@ namespace JurisUtilityBase
         private bool addRespToTable(string empsys)
         {
             isError = false;
+            DateTime nn = DateTime.Now;
+            string pcName = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
             string sql = "insert into ClientResponsibleTimekeeper (CRTClientID, CRTEmployeeID, CRTPercent) values ( " + 
                    clisysnbr.ToString() + ", " + empsys + ", 100.0000 )" ;
            isError =  _jurisUtility.ExecuteNonQuery(0, sql);
-
+            if (!isError)
+            {
+                sql = "insert into ClientResponsibleTimekeeper_log ([DateTimeStamp] ,[HostMachine],[Application] ,[JurisUser] ,[RecordType] ,[SourceTable],[Notes],CRTClientID, CRTEmployeeID, CRTPercent) values ( " +
+                   "'" + nn.ToString("yyyy-MM-dd HH:mm") + "', left('" + pcName + "', 30), 'CMI Tool',1, 1,185,null," + clisysnbr.ToString() + ", " + empsys + ", 100.0000 )";
+                isError = _jurisUtility.ExecuteNonQuery(0, sql);
+            }
             return isError;
+
         }
 
         private bool createAddy()
         {
+            bool isError = false;
+            DateTime nn = DateTime.Now;
+            string pcName = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
             string addy = richTextBoxBAAddy.Text.Replace("\r", "|").Replace("\n", "|");
             addy = addy.Replace("||", "|");
 
@@ -1179,7 +1270,33 @@ namespace JurisUtilityBase
     "replace('" + addy + "', '|', char(13) + char(10)), "
     + " '" + textBoxBACityOpt.Text + "', '" + textBoxBAStateOpt.Text + "', '" + textBoxBAZipOpt.Text + "','" + textBoxBACountryOpt.Text + "', 0, '" + textBoxBAEmailOpt.Text + "')";
 
-            return _jurisUtility.ExecuteNonQuery(0, sql);
+            isError = _jurisUtility.ExecuteNonQuery(0, sql);
+            if (!isError)
+            {
+                int addyid = 0;
+                sql = "select max(biladrsysnbr) from billingaddress";
+                DataSet dds = new DataSet();
+
+                dds = _jurisUtility.RecordsetFromSQL(sql);
+                if (dds != null && dds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in dds.Tables[0].Rows)
+                        addyid = Convert.ToInt32(dr[0].ToString());
+
+                }
+                sql = "insert into BillingAddress_log ([DateTimeStamp] ,[HostMachine],[Application] ,[JurisUser] ,[RecordType] ,[SourceTable],[Notes],BilAdrSysNbr, BilAdrCliNbr, BilAdrUsageFlg, BilAdrNickName, BilAdrPhone, " +
+                " BilAdrFax, BilAdrContact, BilAdrName, BilAdrAddress, BilAdrCity, BilAdrState, BilAdrZip, BilAdrCountry, BilAdrType, BilAdrEmail) " +
+                    "values ( " +
+                   "'" + nn.ToString("yyyy-MM-dd HH:mm") + "', left('" + pcName + "', 30), 'CMI Tool',1, 1,20,null, " + addyid.ToString() + ", " + clisysnbr + ", " +
+    " 'C', '" + textBoxBANName.Text + "', '" + textBoxBAPhoneOpt.Text + "', "
+     + "  '" + textBoxBAFaxOpt.Text + "', '" + textBoxBAContactOpt.Text + "', " +
+    " '" + textBoxBANameOpt.Text + "', " +
+    "replace('" + addy + "', '|', char(13) + char(10)), "
+    + " '" + textBoxBACityOpt.Text + "', '" + textBoxBAStateOpt.Text + "', '" + textBoxBAZipOpt.Text + "','" + textBoxBACountryOpt.Text + "', 0, '" + textBoxBAEmailOpt.Text + "')";
+                isError = _jurisUtility.ExecuteNonQuery(0, sql);
+            }
+
+            return isError;
         }
 
 
@@ -1196,41 +1313,62 @@ namespace JurisUtilityBase
             return sysnbr;
         }
 
-        private bool addOrig(int addyid)
+        private bool addOrig()
         {
             string sql = "";
                 
                 if (!textBoxOTPct1Opt.Text.Equals("0"))
                 {
                     sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT1.GetItemText(this.comboBoxOT1.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct1Opt.Text + " as decimal(7,4)))";
-                if (_jurisUtility.ExecuteNonQuery(0, sql))
-                    return true;
+                    if (_jurisUtility.ExecuteNonQuery(0, sql))
+                        return true;
+                    else
+                        return addOrigLog(clisysnbr.ToString(), this.comboBoxOT1.GetItemText(this.comboBoxOT1.SelectedItem).Split(' ')[0], textBoxOTPct1Opt.Text);
                 }
                 if (!textBoxOTPct2Opt.Text.Equals("0"))
                 {
                     sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT2.GetItemText(this.comboBoxOT2.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct2Opt.Text + " as decimal(7,4)))";
-                if (_jurisUtility.ExecuteNonQuery(0, sql))
-                    return true;
+                    if (_jurisUtility.ExecuteNonQuery(0, sql))
+                        return true;
+                    else
+                        return addOrigLog(clisysnbr.ToString(), this.comboBoxOT2.GetItemText(this.comboBoxOT2.SelectedItem).Split(' ')[0], textBoxOTPct2Opt.Text);
             }
                 if (!textBoxOTPct3Opt.Text.Equals("0"))
                 {
                     sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT3.GetItemText(this.comboBoxOT3.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct3Opt.Text + " as decimal(7,4)))";
-                if (_jurisUtility.ExecuteNonQuery(0, sql))
-                    return true;
+                    if (_jurisUtility.ExecuteNonQuery(0, sql))
+                        return true;
+                    else
+                        return addOrigLog(clisysnbr.ToString(), this.comboBoxOT3.GetItemText(this.comboBoxOT3.SelectedItem).Split(' ')[0], textBoxOTPct3Opt.Text);
             }
                 if (!textBoxOTPct4Opt.Text.Equals("0"))
                 {
                     sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT4.GetItemText(this.comboBoxOT4.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct4Opt.Text + " as decimal(7,4)))";
-                if (_jurisUtility.ExecuteNonQuery(0, sql))
-                    return true;
+                    if (_jurisUtility.ExecuteNonQuery(0, sql))
+                        return true;
+                    else
+                        return addOrigLog(clisysnbr.ToString(), this.comboBoxOT4.GetItemText(this.comboBoxOT4.SelectedItem).Split(' ')[0], textBoxOTPct4Opt.Text);
             }
                 if (!textBoxOTPct5Opt.Text.Equals("0"))
                 {
                     sql = "insert into CliOrigAtty (COrigCli, COrigAtty, COrigPcnt) values (" + clisysnbr.ToString() + ", (select empsysnbr from employee where empid = '" + this.comboBoxOT5.GetItemText(this.comboBoxOT5.SelectedItem).Split(' ')[0] + "'), cast(" + textBoxOTPct5Opt.Text + " as decimal(7,4)))";
-                if (_jurisUtility.ExecuteNonQuery(0, sql))
-                    return true;
+                    if (_jurisUtility.ExecuteNonQuery(0, sql))
+                        return true;
+                    else
+                        return addOrigLog(clisysnbr.ToString(), this.comboBoxOT5.GetItemText(this.comboBoxOT5.SelectedItem).Split(' ')[0], textBoxOTPct5Opt.Text);
             }
             return false;
+
+        }
+
+        private bool addOrigLog(string clisys, string empid, string pct)
+        {
+            DateTime nn = DateTime.Now;
+            string pcName = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
+            string sql = "insert into CliOrigAtty_log ([DateTimeStamp] ,[HostMachine],[Application] ,[JurisUser] ,[RecordType] ,[SourceTable],[Notes],COrigCli, COrigAtty, COrigPcnt) " +
+                " values ('" + nn.ToString("yyyy-MM-dd HH:mm") + "', left('" + pcName + "', 30), 'CMI Tool',1, 1,43,null," + clisys + ", (select empsysnbr from employee where empid = '" + empid + "'), cast(" + pct + " as decimal(7,4)))";
+            return _jurisUtility.ExecuteNonQuery(0, sql);
+
 
         }
 
