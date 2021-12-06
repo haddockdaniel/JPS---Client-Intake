@@ -143,6 +143,7 @@
             this.checkBoxExpXRef = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
             this.buttonCliBilling = new System.Windows.Forms.Button();
+            this.buttonAddNoteCard = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -1053,7 +1054,7 @@
             this.buttonCreateClient.BackColor = System.Drawing.Color.LightGray;
             this.buttonCreateClient.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCreateClient.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonCreateClient.Location = new System.Drawing.Point(415, 694);
+            this.buttonCreateClient.Location = new System.Drawing.Point(415, 719);
             this.buttonCreateClient.Name = "buttonCreateClient";
             this.buttonCreateClient.Size = new System.Drawing.Size(128, 36);
             this.buttonCreateClient.TabIndex = 56;
@@ -1066,7 +1067,7 @@
             this.buttonExit.BackColor = System.Drawing.Color.LightGray;
             this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonExit.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonExit.Location = new System.Drawing.Point(626, 694);
+            this.buttonExit.Location = new System.Drawing.Point(626, 719);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(128, 36);
             this.buttonExit.TabIndex = 57;
@@ -1228,15 +1229,29 @@
             this.buttonCliBilling.Name = "buttonCliBilling";
             this.buttonCliBilling.Size = new System.Drawing.Size(339, 26);
             this.buttonCliBilling.TabIndex = 194;
-            this.buttonCliBilling.Text = "Client Billing Fields";
+            this.buttonCliBilling.Text = "Billing Fields/UDFs";
             this.buttonCliBilling.UseVisualStyleBackColor = false;
             this.buttonCliBilling.Click += new System.EventHandler(this.buttonCliBilling_Click);
+            // 
+            // buttonAddNoteCard
+            // 
+            this.buttonAddNoteCard.BackColor = System.Drawing.Color.LightGray;
+            this.buttonAddNoteCard.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonAddNoteCard.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.buttonAddNoteCard.Location = new System.Drawing.Point(415, 681);
+            this.buttonAddNoteCard.Name = "buttonAddNoteCard";
+            this.buttonAddNoteCard.Size = new System.Drawing.Size(339, 26);
+            this.buttonAddNoteCard.TabIndex = 195;
+            this.buttonAddNoteCard.Text = "Add Note Card";
+            this.buttonAddNoteCard.UseVisualStyleBackColor = false;
+            this.buttonAddNoteCard.Click += new System.EventHandler(this.buttonAddNoteCard_Click);
             // 
             // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(786, 769);
+            this.Controls.Add(this.buttonAddNoteCard);
             this.Controls.Add(this.buttonCliBilling);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.textBoxBANName);
@@ -1471,5 +1486,6 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button buttonCliBilling;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.Button buttonAddNoteCard;
     }
 }

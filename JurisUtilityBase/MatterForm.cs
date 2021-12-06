@@ -1,23 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
-using System.IO;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Globalization;
 using Gizmox.Controls;
-using JDataEngine;
-using JurisAuthenticator;
-using JurisUtilityBase.Properties;
-using System.Data.OleDb;
-using Microsoft.Win32;
-using JurisSVR.ExpenseAttachments;
-using System.Runtime.CompilerServices;
-using Microsoft.VisualBasic;
-using JurisSVR;
-using System.Windows.Forms.VisualStyles;
+
 
 namespace JurisUtilityBase
 {
@@ -33,7 +20,7 @@ namespace JurisUtilityBase
             pt = ppt;
         }
 
-
+        private System.Drawing.Point pt;
         JurisUtility _jurisUtility;
 
         string clicode = "";
@@ -48,7 +35,9 @@ namespace JurisUtilityBase
         int lengthOfCodeMatter = 4;
         int numOfOrig = 5;
         int matsysnbr = 0;
-        private System.Drawing.Point pt;
+        string noteName = "";
+        string noteText = "";
+
 
         //load all default items
         private void ClientForm_Load(object sender, EventArgs e)
@@ -976,7 +965,7 @@ namespace JurisUtilityBase
                       + "   MatBillingField03,MatBillingField04,MatBillingField05,MatBillingField06,MatBillingField07,MatBillingField08,MatBillingField09,MatBillingField10,MatBillingField11,MatBillingField12,MatBillingField13,MatBillingField14,MatBillingField15,MatBillingField16,"
                        + "  MatBillingField17,MatBillingField18,MatBillingField19,MatBillingField20,MatCTerms,MatCStatus,MatCStatus2) "
                        + "     values( case when (select max(matsysnbr) from matter) is null then 1 else ((select max(matsysnbr) from matter) + 1) end, " + clisysnbr + ", " + billto.ToString() + ",  "
-                       + "       '" + formattedMatCode + "', '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "',  '" + textBoxDescOpt.Text.Trim() + "', " +
+                       + "       '" + formattedMatCode + "', '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "',  '" + richTextBoxDescOpt.Text.Trim() + "', " +
                        " '', '" + textBoxPhoneOpt.Text.Trim() + "', '" + textBoxFaxOpt.Text.Trim() + "', '" + textBoxContactOpt.Text.Trim() + "', '" + dateTimePickerOpened.Value.ToString("MM/dd/yyyy") + "','O' ,'0', "
                      + " '01/01/1900','" + this.comboBoxOffice.GetItemText(this.comboBoxOffice.SelectedItem).Split(' ')[0] + "','" + this.comboBoxPC.GetItemText(this.comboBoxPC.SelectedItem).Split(' ')[0] + "','" + this.comboBoxFeeSched.GetItemText(this.comboBoxFeeSched.SelectedItem).Split(' ')[0] + "'," + txref + ",'" + this.comboBoxExpSched.GetItemText(this.comboBoxExpSched.SelectedItem).Split(' ')[0] + "'," + exref + ",0, "
                       + "'" + this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0] + "','" + inclExp + "','" + retType + "', " + textBoxFlatRetAmtOpt.Text + ", '" + this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0] + "' ," + textBoxMonthOpt.Text + "," + textBoxCycleOpt.Text + ", "
@@ -1010,7 +999,9 @@ namespace JurisUtilityBase
                                     sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
                                     _jurisUtility.ExecuteNonQuery(0, sql);
 
-
+                                    //if they added a notecard
+                                    sql = "insert into [matterNote] ([mNClient] ,[mNNoteIndex],[mNObject],[mNNoteText],[mNNoteObject]) values(" + matsysnbr.ToString() + ", replace('" + noteName + "', '|', char(13) + char(10)), '', replace('" + noteText + "', '|', char(13) + char(10)), null)";
+                                    _jurisUtility.ExecuteNonQuery(0, sql);
 
                                     DialogResult fc = MessageBox.Show("Matter " + textBoxCode.Text + "/" + textBoxMatterCode.Text + " was added successfully." + "\r\n" + "Would you like to add another Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                                     if (fc == DialogResult.Yes)
@@ -1023,11 +1014,17 @@ namespace JurisUtilityBase
 
                                     }
                                     else
+                                    {
+                                        sql = "delete from DefaultSettings where defaultid = 999997"; //stored BF info
+                                        _jurisUtility.ExecuteNonQuery(0, sql);
+                                        sql = "delete from Defaults where id = 999997";
+                                        _jurisUtility.ExecuteNonQuery(0, sql);
                                         this.Close();
+                                    }
                                 }
                                 else
                                 {
-                                    MessageBox.Show("There was an issue adding the Billing Fields." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MessageBox.Show("There was an issue adding the Billing/UDF Fields." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     isError = false;
                                     undoOrig();
                                     undoResp();
@@ -1139,7 +1136,7 @@ namespace JurisUtilityBase
                 isError = false;
 
             }
-            catch (Exception)   { }
+            catch (Exception ex)   { MessageBox.Show(ex.Message); }
         }
 
         private void undoResp()
@@ -1889,6 +1886,41 @@ namespace JurisUtilityBase
         private void MatterForm_FormClosing(object sender, FormClosingEventArgs e)
         {
 
+        }
+
+        private void closeAndCreateClientToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pt = this.Location;
+            ClientForm cleared = new ClientForm(_jurisUtility, 0, false, pt);
+            cleared.Show();
+            this.Close();
+        }
+
+        private void buttonNoteCard_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            AddNoteCard adn = new AddNoteCard(pt, "Add Matter Note Card");
+            adn.ShowDialog();
+            noteName = adn.name;
+            noteText = adn.text;
+            this.Show();
+        }
+
+        private void buttonCliLookUp_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            ClientLookUp cl = new ClientLookUp(_jurisUtility, pt);
+            cl.ShowDialog();
+            if (cl.clientSelected)
+            {
+                clisysnbr = cl.clisysnbr;
+                textBoxCode.Text = cl.clicode;
+            }
+            cl.Close();
+            loadClientInfoForMatter();
+            getNextMatterNumber();
+            loadAddys();
+            this.Show();
         }
     }
 

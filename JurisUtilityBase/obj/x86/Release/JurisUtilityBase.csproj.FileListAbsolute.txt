@@ -93,3 +93,5 @@ D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter I
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter Intake.pdb
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\Client Matter Intake.TrustInfo.xml
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.csproj.AssemblyReference.cache
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.ClientLookUp.resources
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.AddNoteCard.resources

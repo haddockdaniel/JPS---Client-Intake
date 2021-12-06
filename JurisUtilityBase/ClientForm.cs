@@ -1,23 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
-using System.IO;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Globalization;
 using Gizmox.Controls;
-using JDataEngine;
-using JurisAuthenticator;
-using JurisUtilityBase.Properties;
-using System.Data.OleDb;
-using Microsoft.Win32;
-using JurisSVR.ExpenseAttachments;
-using System.Runtime.CompilerServices;
-using Microsoft.VisualBasic;
-using System.Diagnostics;
-using Microsoft.SqlServer.Server;
+
 
 namespace JurisUtilityBase
 {
@@ -41,6 +28,8 @@ namespace JurisUtilityBase
         bool isError = false;
         int lengthOfCode = 4;
         private System.Drawing.Point pt;
+        string noteName = "";
+        string noteText = "";
         
 
         //load all default items
@@ -1082,6 +1071,10 @@ namespace JurisUtilityBase
                                             sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
                                             _jurisUtility.ExecuteNonQuery(0, sql);
 
+                                            //add notecard if thye selected it
+                                            sql = "insert into [ClientNote] ([CNClient] ,[CNNoteIndex],[CNObject],[CNNoteText],[CNNoteObject]) values(" + clisysnbr.ToString() + ", replace('" + noteName + "', '|', char(13) + char(10)), '', replace('" + noteText + "', '|', char(13) + char(10)), null)";
+                                            _jurisUtility.ExecuteNonQuery(0, sql);
+
                                             //after adding the client, load the preset back in
                                             if (presetID != 0)
                                                 checkForTables();
@@ -1099,6 +1092,10 @@ namespace JurisUtilityBase
                                             }
                                             else
                                             {
+                                                sql = "delete from DefaultSettings where defaultid = 999998"; //stored BF info
+                                                _jurisUtility.ExecuteNonQuery(0, sql);
+                                                sql = "delete from Defaults where id = 999998";
+                                                _jurisUtility.ExecuteNonQuery(0, sql);
                                                 pt = this.Location;
                                                 ClientForm newClient = new ClientForm(_jurisUtility, presetID, false, pt);
                                                 newClient.Show();
@@ -1107,7 +1104,7 @@ namespace JurisUtilityBase
                                         }
                                         else
                                         {
-                                            MessageBox.Show("There was an issue adding the Billing Fields." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            MessageBox.Show("There was an issue adding the Billing/UDF Fields." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                             isError = false;
                                             undoOrig();
                                             undoResp();
@@ -1551,5 +1548,17 @@ namespace JurisUtilityBase
         {
             //MessageBox.Show(e.CloseReason.ToString() + " : "  + (sender as Button).Name);
         }
+
+        private void buttonAddNoteCard_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            AddNoteCard adn = new AddNoteCard(pt, "Add Client Note Card");
+            adn.ShowDialog();
+            noteName = adn.name;
+            noteText = adn.text;
+            this.Show();
+        }
+
+
     }
 }
