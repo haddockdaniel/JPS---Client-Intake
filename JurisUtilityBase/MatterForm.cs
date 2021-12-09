@@ -953,6 +953,12 @@ namespace JurisUtilityBase
                 if (billto != 0)
                 {
                     string formattedMatCode = formatMatterCode(textBoxMatterCode.Text);
+                    string desc = richTextBoxDescOpt.Text.Replace("\r", "|").Replace("\n", "|");
+                    desc = desc.Replace("||", "|");
+                    desc = desc.Replace("'", "").Replace("\"", "").Replace(@"\", " ").Replace("%", "").Replace("[", "").Replace("]", "").Replace("_", " ").Replace("^", "");
+                    string rem = richTextBoxRemarksOpt.Text.Replace("\r", "|").Replace("\n", "|");
+                    rem = rem.Replace("||", "|");
+                    rem= rem.Replace("'", "").Replace("\"", "").Replace(@"\", " ").Replace("%", "").Replace("[", "").Replace("]", "").Replace("_", " ").Replace("^", "");
 
                     string sql = "Insert into Matter(MatSysNbr,MatCliNbr,MatBillTo,MatCode,MatNickName,MatReportingName,MatDescription, " +
                         " MatRemarks,MatPhoneNbr,MatFaxNbr,MatContactName,MatDateOpened,MatStatusFlag,MatLockFlag, "
@@ -965,8 +971,8 @@ namespace JurisUtilityBase
                       + "   MatBillingField03,MatBillingField04,MatBillingField05,MatBillingField06,MatBillingField07,MatBillingField08,MatBillingField09,MatBillingField10,MatBillingField11,MatBillingField12,MatBillingField13,MatBillingField14,MatBillingField15,MatBillingField16,"
                        + "  MatBillingField17,MatBillingField18,MatBillingField19,MatBillingField20,MatCTerms,MatCStatus,MatCStatus2) "
                        + "     values( case when (select max(matsysnbr) from matter) is null then 1 else ((select max(matsysnbr) from matter) + 1) end, " + clisysnbr + ", " + billto.ToString() + ",  "
-                       + "       '" + formattedMatCode + "', '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "',  '" + richTextBoxDescOpt.Text.Trim() + "', " +
-                       " '', '" + textBoxPhoneOpt.Text.Trim() + "', '" + textBoxFaxOpt.Text.Trim() + "', '" + textBoxContactOpt.Text.Trim() + "', '" + dateTimePickerOpened.Value.ToString("MM/dd/yyyy") + "','O' ,'0', "
+                       + "       '" + formattedMatCode + "', '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "', replace('" + desc + "', '|', char(13) + char(10)), " +
+                       " replace('" + rem + "', '|', char(13) + char(10)),'" + textBoxPhoneOpt.Text.Trim() + "', '" + textBoxFaxOpt.Text.Trim() + "', '" + textBoxContactOpt.Text.Trim() + "', '" + dateTimePickerOpened.Value.ToString("MM/dd/yyyy") + "','O' ,'0', "
                      + " '01/01/1900','" + this.comboBoxOffice.GetItemText(this.comboBoxOffice.SelectedItem).Split(' ')[0] + "','" + this.comboBoxPC.GetItemText(this.comboBoxPC.SelectedItem).Split(' ')[0] + "','" + this.comboBoxFeeSched.GetItemText(this.comboBoxFeeSched.SelectedItem).Split(' ')[0] + "'," + txref + ",'" + this.comboBoxExpSched.GetItemText(this.comboBoxExpSched.SelectedItem).Split(' ')[0] + "'," + exref + ",0, "
                       + "'" + this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0] + "','" + inclExp + "','" + retType + "', " + textBoxFlatRetAmtOpt.Text + ", '" + this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0] + "' ," + textBoxMonthOpt.Text + "," + textBoxCycleOpt.Text + ", "
                      + " 0.00,0.00," + textBoxIntPctOpt.Text + "," + textBoxIntDaysOpt.Text + "," + this.comboBoxDisc.GetItemText(this.comboBoxDisc.SelectedItem).Split(' ')[0] + "," + textBoxDiscPctOpt.Text + ", " + this.comboBoxSurcharge.GetItemText(this.comboBoxSurcharge.SelectedItem).Split(' ')[0] + ", " + textBoxSurPctOpt.Text + ", 0, 0.00,"
@@ -1000,7 +1006,8 @@ namespace JurisUtilityBase
                                     _jurisUtility.ExecuteNonQuery(0, sql);
 
                                     //if they added a notecard
-                                    sql = "insert into [matterNote] ([mNClient] ,[mNNoteIndex],[mNObject],[mNNoteText],[mNNoteObject]) values(" + matsysnbr.ToString() + ", replace('" + noteName + "', '|', char(13) + char(10)), '', replace('" + noteText + "', '|', char(13) + char(10)), null)";
+
+                                    sql = "insert into [matterNote] ([MNMatter] ,[mNNoteIndex],[mNObject],[mNNoteText],[mNNoteObject]) values(" + matsysnbr.ToString() + ", replace('" + noteName + "', '|', char(13) + char(10)), '', replace('" + noteText + "', '|', char(13) + char(10)), null)";
                                     _jurisUtility.ExecuteNonQuery(0, sql);
 
                                     DialogResult fc = MessageBox.Show("Matter " + textBoxCode.Text + "/" + textBoxMatterCode.Text + " was added successfully." + "\r\n" + "Would you like to add another Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -1269,7 +1276,7 @@ namespace JurisUtilityBase
                             removeAddy = true;
                             string addy = richTextBoxBAAddy.Text.Replace("\r", "|").Replace("\n", "|");
                             addy = addy.Replace("||", "|");
-
+                            addy = addy.Replace("'", "").Replace("\"", "").Replace(@"\", " ").Replace("%", "").Replace("[", "").Replace("]", "").Replace("_", " ").Replace("^", "");
 
                             sql = "Insert into BillingAddress(BilAdrSysNbr, BilAdrCliNbr, BilAdrUsageFlg, BilAdrNickName, BilAdrPhone, " +
                                 " BilAdrFax, BilAdrContact, BilAdrName, BilAdrAddress, BilAdrCity, BilAdrState, BilAdrZip, BilAdrCountry, BilAdrType, BilAdrEmail) " +

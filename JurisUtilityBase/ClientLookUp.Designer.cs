@@ -36,7 +36,6 @@ namespace JurisUtilityBase
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.buttonCreateClient = new System.Windows.Forms.Button();
             this.buttonExit = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,7 +54,7 @@ namespace JurisUtilityBase
             // radioButtonByCliNum
             // 
             this.radioButtonByCliNum.AutoSize = true;
-            this.radioButtonByCliNum.Location = new System.Drawing.Point(160, 32);
+            this.radioButtonByCliNum.Location = new System.Drawing.Point(225, 32);
             this.radioButtonByCliNum.Name = "radioButtonByCliNum";
             this.radioButtonByCliNum.Size = new System.Drawing.Size(113, 17);
             this.radioButtonByCliNum.TabIndex = 1;
@@ -66,17 +65,24 @@ namespace JurisUtilityBase
             // 
             this.textBoxClient.Location = new System.Drawing.Point(28, 72);
             this.textBoxClient.Name = "textBoxClient";
-            this.textBoxClient.Size = new System.Drawing.Size(245, 20);
+            this.textBoxClient.Size = new System.Drawing.Size(310, 20);
             this.textBoxClient.TabIndex = 2;
             this.textBoxClient.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView1.Location = new System.Drawing.Point(28, 108);
+            this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(245, 150);
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(310, 170);
             this.dataGridView1.TabIndex = 3;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             // 
             // buttonCreateClient
@@ -84,7 +90,7 @@ namespace JurisUtilityBase
             this.buttonCreateClient.BackColor = System.Drawing.Color.LightGray;
             this.buttonCreateClient.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCreateClient.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonCreateClient.Location = new System.Drawing.Point(28, 295);
+            this.buttonCreateClient.Location = new System.Drawing.Point(28, 297);
             this.buttonCreateClient.Name = "buttonCreateClient";
             this.buttonCreateClient.Size = new System.Drawing.Size(90, 36);
             this.buttonCreateClient.TabIndex = 58;
@@ -97,7 +103,7 @@ namespace JurisUtilityBase
             this.buttonExit.BackColor = System.Drawing.Color.LightGray;
             this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonExit.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonExit.Location = new System.Drawing.Point(180, 295);
+            this.buttonExit.Location = new System.Drawing.Point(245, 297);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(93, 36);
             this.buttonExit.TabIndex = 59;
@@ -105,21 +111,11 @@ namespace JurisUtilityBase
             this.buttonExit.UseVisualStyleBackColor = false;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(26, 265);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(247, 13);
-            this.label1.TabIndex = 60;
-            this.label1.Text = "* Double click one client and click Next to proceed";
-            // 
             // ClientLookUp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(308, 348);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(381, 348);
             this.Controls.Add(this.buttonCreateClient);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.dataGridView1);
@@ -143,6 +139,5 @@ namespace JurisUtilityBase
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button buttonCreateClient;
         private System.Windows.Forms.Button buttonExit;
-        private System.Windows.Forms.Label label1;
     }
 }

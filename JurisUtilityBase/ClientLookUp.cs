@@ -37,6 +37,7 @@ namespace JurisUtilityBase
             dataGridView1.Columns[0].Width = 1;
             dataGridView1.Columns[1].Width = 50;
             dataGridView1.Columns[2].Width = 250;
+            this.dataGridView1.Columns[0].Visible = false;
         }
 
         private void buttonExit_Click(object sender, EventArgs e)
@@ -67,6 +68,36 @@ namespace JurisUtilityBase
             {
                 
                 this.Hide();
+            }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int id = 0;
+            if (dataGridView1.SelectedRows.Count == 0 || dataGridView1.SelectedRows.Count > 1)
+                MessageBox.Show("Please select one client to proceed", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                int index = e.RowIndex;
+                dataGridView1.Rows[index].Selected = true;
+                clisysnbr = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
+                clicode = dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[1].Value.ToString();
+                clientSelected = true;
+            }
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int id = 0;
+            if (dataGridView1.SelectedRows.Count == 0 || dataGridView1.SelectedRows.Count > 1)
+                MessageBox.Show("Please select one client to proceed", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                int index = e.RowIndex;
+                dataGridView1.Rows[index].Selected = true;
+                clisysnbr = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
+                clicode = dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[1].Value.ToString();
+                clientSelected = true;
             }
         }
     }

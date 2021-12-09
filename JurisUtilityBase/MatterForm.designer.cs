@@ -148,6 +148,8 @@
             this.buttonNoteCard = new System.Windows.Forms.Button();
             this.buttonCliLookUp = new System.Windows.Forms.Button();
             this.richTextBoxDescOpt = new System.Windows.Forms.RichTextBox();
+            this.richTextBoxRemarksOpt = new System.Windows.Forms.RichTextBox();
+            this.label35 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -217,7 +219,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(14, 276);
+            this.label5.Location = new System.Drawing.Point(14, 325);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(71, 13);
             this.label5.TabIndex = 107;
@@ -225,7 +227,7 @@
             // 
             // textBoxContactOpt
             // 
-            this.textBoxContactOpt.Location = new System.Drawing.Point(119, 242);
+            this.textBoxContactOpt.Location = new System.Drawing.Point(119, 291);
             this.textBoxContactOpt.MaxLength = 30;
             this.textBoxContactOpt.Name = "textBoxContactOpt";
             this.textBoxContactOpt.Size = new System.Drawing.Size(246, 20);
@@ -235,7 +237,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.label6.Location = new System.Drawing.Point(14, 245);
+            this.label6.Location = new System.Drawing.Point(14, 294);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(75, 13);
             this.label6.TabIndex = 106;
@@ -243,7 +245,7 @@
             // 
             // textBoxFaxOpt
             // 
-            this.textBoxFaxOpt.Location = new System.Drawing.Point(119, 213);
+            this.textBoxFaxOpt.Location = new System.Drawing.Point(119, 262);
             this.textBoxFaxOpt.MaxLength = 20;
             this.textBoxFaxOpt.Name = "textBoxFaxOpt";
             this.textBoxFaxOpt.Size = new System.Drawing.Size(155, 20);
@@ -253,7 +255,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.label7.Location = new System.Drawing.Point(14, 216);
+            this.label7.Location = new System.Drawing.Point(14, 265);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(64, 13);
             this.label7.TabIndex = 105;
@@ -261,7 +263,7 @@
             // 
             // textBoxPhoneOpt
             // 
-            this.textBoxPhoneOpt.Location = new System.Drawing.Point(119, 181);
+            this.textBoxPhoneOpt.Location = new System.Drawing.Point(119, 230);
             this.textBoxPhoneOpt.MaxLength = 20;
             this.textBoxPhoneOpt.Name = "textBoxPhoneOpt";
             this.textBoxPhoneOpt.Size = new System.Drawing.Size(155, 20);
@@ -271,7 +273,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.label8.Location = new System.Drawing.Point(14, 184);
+            this.label8.Location = new System.Drawing.Point(14, 233);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(78, 13);
             this.label8.TabIndex = 104;
@@ -280,7 +282,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(14, 622);
+            this.label10.Location = new System.Drawing.Point(14, 671);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(96, 13);
             this.label10.TabIndex = 116;
@@ -289,7 +291,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(14, 568);
+            this.label12.Location = new System.Drawing.Point(14, 617);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(73, 13);
             this.label12.TabIndex = 113;
@@ -298,7 +300,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(14, 404);
+            this.label13.Location = new System.Drawing.Point(14, 453);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(63, 13);
             this.label13.TabIndex = 112;
@@ -307,7 +309,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(14, 369);
+            this.label14.Location = new System.Drawing.Point(14, 418);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(93, 13);
             this.label14.TabIndex = 111;
@@ -316,7 +318,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(14, 336);
+            this.label15.Location = new System.Drawing.Point(14, 385);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(74, 13);
             this.label15.TabIndex = 109;
@@ -325,7 +327,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(14, 304);
+            this.label16.Location = new System.Drawing.Point(14, 353);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(63, 13);
             this.label16.TabIndex = 108;
@@ -335,7 +337,7 @@
             // 
             this.comboBoxOffice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOffice.FormattingEnabled = true;
-            this.comboBoxOffice.Location = new System.Drawing.Point(119, 301);
+            this.comboBoxOffice.Location = new System.Drawing.Point(119, 350);
             this.comboBoxOffice.Name = "comboBoxOffice";
             this.comboBoxOffice.Size = new System.Drawing.Size(246, 21);
             this.comboBoxOffice.TabIndex = 9;
@@ -344,7 +346,7 @@
             // 
             this.comboBoxPC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxPC.FormattingEnabled = true;
-            this.comboBoxPC.Location = new System.Drawing.Point(119, 333);
+            this.comboBoxPC.Location = new System.Drawing.Point(119, 382);
             this.comboBoxPC.Name = "comboBoxPC";
             this.comboBoxPC.Size = new System.Drawing.Size(246, 21);
             this.comboBoxPC.TabIndex = 10;
@@ -353,7 +355,7 @@
             // 
             this.comboBoxBT.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxBT.FormattingEnabled = true;
-            this.comboBoxBT.Location = new System.Drawing.Point(119, 366);
+            this.comboBoxBT.Location = new System.Drawing.Point(119, 415);
             this.comboBoxBT.Name = "comboBoxBT";
             this.comboBoxBT.Size = new System.Drawing.Size(185, 21);
             this.comboBoxBT.TabIndex = 11;
@@ -362,7 +364,7 @@
             // 
             this.comboBoxOT1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOT1.FormattingEnabled = true;
-            this.comboBoxOT1.Location = new System.Drawing.Point(119, 401);
+            this.comboBoxOT1.Location = new System.Drawing.Point(119, 450);
             this.comboBoxOT1.Name = "comboBoxOT1";
             this.comboBoxOT1.Size = new System.Drawing.Size(185, 21);
             this.comboBoxOT1.TabIndex = 12;
@@ -371,7 +373,7 @@
             // 
             this.comboBoxEXRef.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxEXRef.FormattingEnabled = true;
-            this.comboBoxEXRef.Location = new System.Drawing.Point(119, 648);
+            this.comboBoxEXRef.Location = new System.Drawing.Point(119, 697);
             this.comboBoxEXRef.Name = "comboBoxEXRef";
             this.comboBoxEXRef.Size = new System.Drawing.Size(121, 21);
             this.comboBoxEXRef.TabIndex = 26;
@@ -380,7 +382,7 @@
             // 
             this.comboBoxExpSched.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxExpSched.FormattingEnabled = true;
-            this.comboBoxExpSched.Location = new System.Drawing.Point(119, 619);
+            this.comboBoxExpSched.Location = new System.Drawing.Point(119, 668);
             this.comboBoxExpSched.Name = "comboBoxExpSched";
             this.comboBoxExpSched.Size = new System.Drawing.Size(121, 21);
             this.comboBoxExpSched.TabIndex = 25;
@@ -389,7 +391,7 @@
             // 
             this.comboBoxTXRef.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTXRef.FormattingEnabled = true;
-            this.comboBoxTXRef.Location = new System.Drawing.Point(119, 592);
+            this.comboBoxTXRef.Location = new System.Drawing.Point(119, 641);
             this.comboBoxTXRef.Name = "comboBoxTXRef";
             this.comboBoxTXRef.Size = new System.Drawing.Size(121, 21);
             this.comboBoxTXRef.TabIndex = 24;
@@ -398,7 +400,7 @@
             // 
             this.comboBoxFeeSched.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFeeSched.FormattingEnabled = true;
-            this.comboBoxFeeSched.Location = new System.Drawing.Point(119, 565);
+            this.comboBoxFeeSched.Location = new System.Drawing.Point(119, 614);
             this.comboBoxFeeSched.Name = "comboBoxFeeSched";
             this.comboBoxFeeSched.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFeeSched.TabIndex = 23;
@@ -626,7 +628,7 @@
             // 
             this.comboBoxBAgree.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxBAgree.FormattingEnabled = true;
-            this.comboBoxBAgree.Location = new System.Drawing.Point(119, 733);
+            this.comboBoxBAgree.Location = new System.Drawing.Point(119, 782);
             this.comboBoxBAgree.Name = "comboBoxBAgree";
             this.comboBoxBAgree.Size = new System.Drawing.Size(121, 21);
             this.comboBoxBAgree.TabIndex = 29;
@@ -636,7 +638,7 @@
             // 
             this.comboBoxPreBillLayout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxPreBillLayout.FormattingEnabled = true;
-            this.comboBoxPreBillLayout.Location = new System.Drawing.Point(119, 704);
+            this.comboBoxPreBillLayout.Location = new System.Drawing.Point(119, 753);
             this.comboBoxPreBillLayout.Name = "comboBoxPreBillLayout";
             this.comboBoxPreBillLayout.Size = new System.Drawing.Size(121, 21);
             this.comboBoxPreBillLayout.TabIndex = 28;
@@ -645,7 +647,7 @@
             // 
             this.comboBoxBillLayout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxBillLayout.FormattingEnabled = true;
-            this.comboBoxBillLayout.Location = new System.Drawing.Point(119, 676);
+            this.comboBoxBillLayout.Location = new System.Drawing.Point(119, 725);
             this.comboBoxBillLayout.Name = "comboBoxBillLayout";
             this.comboBoxBillLayout.Size = new System.Drawing.Size(121, 21);
             this.comboBoxBillLayout.TabIndex = 27;
@@ -653,7 +655,7 @@
             // label29
             // 
             this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(14, 733);
+            this.label29.Location = new System.Drawing.Point(14, 782);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(88, 13);
             this.label29.TabIndex = 147;
@@ -662,7 +664,7 @@
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(14, 707);
+            this.label30.Location = new System.Drawing.Point(14, 756);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(71, 13);
             this.label30.TabIndex = 146;
@@ -671,7 +673,7 @@
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(14, 679);
+            this.label31.Location = new System.Drawing.Point(14, 728);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(55, 13);
             this.label31.TabIndex = 145;
@@ -681,7 +683,7 @@
             // 
             this.comboBoxRetainerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRetainerType.FormattingEnabled = true;
-            this.comboBoxRetainerType.Location = new System.Drawing.Point(119, 760);
+            this.comboBoxRetainerType.Location = new System.Drawing.Point(119, 809);
             this.comboBoxRetainerType.Name = "comboBoxRetainerType";
             this.comboBoxRetainerType.Size = new System.Drawing.Size(121, 21);
             this.comboBoxRetainerType.TabIndex = 30;
@@ -690,7 +692,7 @@
             // labelRet
             // 
             this.labelRet.AutoSize = true;
-            this.labelRet.Location = new System.Drawing.Point(14, 763);
+            this.labelRet.Location = new System.Drawing.Point(14, 812);
             this.labelRet.Name = "labelRet";
             this.labelRet.Size = new System.Drawing.Size(74, 13);
             this.labelRet.TabIndex = 151;
@@ -700,7 +702,7 @@
             // checkBoxIncludeExp
             // 
             this.checkBoxIncludeExp.AutoSize = true;
-            this.checkBoxIncludeExp.Location = new System.Drawing.Point(255, 735);
+            this.checkBoxIncludeExp.Location = new System.Drawing.Point(255, 784);
             this.checkBoxIncludeExp.Name = "checkBoxIncludeExp";
             this.checkBoxIncludeExp.Size = new System.Drawing.Size(110, 17);
             this.checkBoxIncludeExp.TabIndex = 154;
@@ -712,7 +714,7 @@
             // 
             this.comboBoxExpFreq.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxExpFreq.FormattingEnabled = true;
-            this.comboBoxExpFreq.Location = new System.Drawing.Point(517, 514);
+            this.comboBoxExpFreq.Location = new System.Drawing.Point(517, 499);
             this.comboBoxExpFreq.Name = "comboBoxExpFreq";
             this.comboBoxExpFreq.Size = new System.Drawing.Size(121, 21);
             this.comboBoxExpFreq.TabIndex = 50;
@@ -722,7 +724,7 @@
             // 
             this.comboBoxFeeFreq.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFeeFreq.FormattingEnabled = true;
-            this.comboBoxFeeFreq.Location = new System.Drawing.Point(517, 479);
+            this.comboBoxFeeFreq.Location = new System.Drawing.Point(517, 464);
             this.comboBoxFeeFreq.Name = "comboBoxFeeFreq";
             this.comboBoxFeeFreq.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFeeFreq.TabIndex = 49;
@@ -731,7 +733,7 @@
             // label36
             // 
             this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(412, 517);
+            this.label36.Location = new System.Drawing.Point(412, 502);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(101, 13);
             this.label36.TabIndex = 160;
@@ -740,7 +742,7 @@
             // label37
             // 
             this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(412, 482);
+            this.label37.Location = new System.Drawing.Point(412, 467);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(78, 13);
             this.label37.TabIndex = 159;
@@ -749,7 +751,7 @@
             // labelCycle
             // 
             this.labelCycle.AutoSize = true;
-            this.labelCycle.Location = new System.Drawing.Point(708, 482);
+            this.labelCycle.Location = new System.Drawing.Point(708, 467);
             this.labelCycle.Name = "labelCycle";
             this.labelCycle.Size = new System.Drawing.Size(33, 13);
             this.labelCycle.TabIndex = 162;
@@ -759,7 +761,7 @@
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(644, 482);
+            this.label39.Location = new System.Drawing.Point(644, 467);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(37, 13);
             this.label39.TabIndex = 161;
@@ -767,7 +769,7 @@
             // 
             // textBoxMonthOpt
             // 
-            this.textBoxMonthOpt.Location = new System.Drawing.Point(645, 514);
+            this.textBoxMonthOpt.Location = new System.Drawing.Point(645, 499);
             this.textBoxMonthOpt.MaxLength = 2;
             this.textBoxMonthOpt.Name = "textBoxMonthOpt";
             this.textBoxMonthOpt.Size = new System.Drawing.Size(52, 20);
@@ -776,7 +778,7 @@
             // 
             // textBoxCycleOpt
             // 
-            this.textBoxCycleOpt.Location = new System.Drawing.Point(710, 514);
+            this.textBoxCycleOpt.Location = new System.Drawing.Point(710, 499);
             this.textBoxCycleOpt.MaxLength = 4;
             this.textBoxCycleOpt.Name = "textBoxCycleOpt";
             this.textBoxCycleOpt.Size = new System.Drawing.Size(52, 20);
@@ -786,7 +788,7 @@
             // 
             // dateTimePickerOpened
             // 
-            this.dateTimePickerOpened.Location = new System.Drawing.Point(119, 273);
+            this.dateTimePickerOpened.Location = new System.Drawing.Point(119, 322);
             this.dateTimePickerOpened.Name = "dateTimePickerOpened";
             this.dateTimePickerOpened.Size = new System.Drawing.Size(193, 20);
             this.dateTimePickerOpened.TabIndex = 8;
@@ -817,7 +819,7 @@
             // 
             this.checkBoxReqActCodes.AutoSize = true;
             this.checkBoxReqActCodes.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.checkBoxReqActCodes.Location = new System.Drawing.Point(516, 423);
+            this.checkBoxReqActCodes.Location = new System.Drawing.Point(414, 416);
             this.checkBoxReqActCodes.Name = "checkBoxReqActCodes";
             this.checkBoxReqActCodes.Size = new System.Drawing.Size(133, 17);
             this.checkBoxReqActCodes.TabIndex = 44;
@@ -828,7 +830,7 @@
             // 
             this.comboBoxSurcharge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSurcharge.FormattingEnabled = true;
-            this.comboBoxSurcharge.Location = new System.Drawing.Point(517, 586);
+            this.comboBoxSurcharge.Location = new System.Drawing.Point(517, 571);
             this.comboBoxSurcharge.Name = "comboBoxSurcharge";
             this.comboBoxSurcharge.Size = new System.Drawing.Size(132, 21);
             this.comboBoxSurcharge.TabIndex = 53;
@@ -838,7 +840,7 @@
             // 
             this.comboBoxDisc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDisc.FormattingEnabled = true;
-            this.comboBoxDisc.Location = new System.Drawing.Point(517, 551);
+            this.comboBoxDisc.Location = new System.Drawing.Point(517, 536);
             this.comboBoxDisc.Name = "comboBoxDisc";
             this.comboBoxDisc.Size = new System.Drawing.Size(132, 21);
             this.comboBoxDisc.TabIndex = 52;
@@ -848,7 +850,7 @@
             // 
             this.label32.AutoSize = true;
             this.label32.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.label32.Location = new System.Drawing.Point(412, 589);
+            this.label32.Location = new System.Drawing.Point(412, 574);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(90, 13);
             this.label32.TabIndex = 175;
@@ -858,7 +860,7 @@
             // 
             this.label33.AutoSize = true;
             this.label33.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.label33.Location = new System.Drawing.Point(412, 554);
+            this.label33.Location = new System.Drawing.Point(412, 539);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(83, 13);
             this.label33.TabIndex = 174;
@@ -866,7 +868,7 @@
             // 
             // textBoxDiscPctOpt
             // 
-            this.textBoxDiscPctOpt.Location = new System.Drawing.Point(665, 551);
+            this.textBoxDiscPctOpt.Location = new System.Drawing.Point(665, 536);
             this.textBoxDiscPctOpt.MaxLength = 6;
             this.textBoxDiscPctOpt.Name = "textBoxDiscPctOpt";
             this.textBoxDiscPctOpt.Size = new System.Drawing.Size(61, 20);
@@ -876,7 +878,7 @@
             // labelDPct
             // 
             this.labelDPct.AutoSize = true;
-            this.labelDPct.Location = new System.Drawing.Point(664, 605);
+            this.labelDPct.Location = new System.Drawing.Point(664, 590);
             this.labelDPct.Name = "labelDPct";
             this.labelDPct.Size = new System.Drawing.Size(62, 13);
             this.labelDPct.TabIndex = 176;
@@ -884,7 +886,7 @@
             // 
             // textBoxSurPctOpt
             // 
-            this.textBoxSurPctOpt.Location = new System.Drawing.Point(665, 587);
+            this.textBoxSurPctOpt.Location = new System.Drawing.Point(665, 572);
             this.textBoxSurPctOpt.MaxLength = 6;
             this.textBoxSurPctOpt.Name = "textBoxSurPctOpt";
             this.textBoxSurPctOpt.Size = new System.Drawing.Size(61, 20);
@@ -894,7 +896,7 @@
             // labelSPct
             // 
             this.labelSPct.AutoSize = true;
-            this.labelSPct.Location = new System.Drawing.Point(664, 571);
+            this.labelSPct.Location = new System.Drawing.Point(664, 556);
             this.labelSPct.Name = "labelSPct";
             this.labelSPct.Size = new System.Drawing.Size(62, 13);
             this.labelSPct.TabIndex = 178;
@@ -902,7 +904,7 @@
             // 
             // textBoxIntDaysOpt
             // 
-            this.textBoxIntDaysOpt.Location = new System.Drawing.Point(517, 626);
+            this.textBoxIntDaysOpt.Location = new System.Drawing.Point(517, 611);
             this.textBoxIntDaysOpt.MaxLength = 6;
             this.textBoxIntDaysOpt.Name = "textBoxIntDaysOpt";
             this.textBoxIntDaysOpt.Size = new System.Drawing.Size(132, 20);
@@ -913,7 +915,7 @@
             // 
             this.label44.AutoSize = true;
             this.label44.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.label44.Location = new System.Drawing.Point(412, 629);
+            this.label44.Location = new System.Drawing.Point(412, 614);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(69, 13);
             this.label44.TabIndex = 181;
@@ -921,7 +923,7 @@
             // 
             // textBoxIntPctOpt
             // 
-            this.textBoxIntPctOpt.Location = new System.Drawing.Point(663, 626);
+            this.textBoxIntPctOpt.Location = new System.Drawing.Point(663, 611);
             this.textBoxIntPctOpt.MaxLength = 6;
             this.textBoxIntPctOpt.Name = "textBoxIntPctOpt";
             this.textBoxIntPctOpt.Size = new System.Drawing.Size(63, 20);
@@ -931,7 +933,7 @@
             // label45
             // 
             this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(662, 610);
+            this.label45.Location = new System.Drawing.Point(662, 595);
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(62, 13);
             this.label45.TabIndex = 182;
@@ -941,7 +943,7 @@
             // 
             this.checkBoxTax3.AutoSize = true;
             this.checkBoxTax3.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.checkBoxTax3.Location = new System.Drawing.Point(663, 456);
+            this.checkBoxTax3.Location = new System.Drawing.Point(663, 439);
             this.checkBoxTax3.Name = "checkBoxTax3";
             this.checkBoxTax3.Size = new System.Drawing.Size(91, 17);
             this.checkBoxTax3.TabIndex = 48;
@@ -952,7 +954,7 @@
             // 
             this.checkBoxTax2.AutoSize = true;
             this.checkBoxTax2.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.checkBoxTax2.Location = new System.Drawing.Point(547, 456);
+            this.checkBoxTax2.Location = new System.Drawing.Point(547, 439);
             this.checkBoxTax2.Name = "checkBoxTax2";
             this.checkBoxTax2.Size = new System.Drawing.Size(91, 17);
             this.checkBoxTax2.TabIndex = 47;
@@ -963,7 +965,7 @@
             // 
             this.checkBoxTax1.AutoSize = true;
             this.checkBoxTax1.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.checkBoxTax1.Location = new System.Drawing.Point(415, 456);
+            this.checkBoxTax1.Location = new System.Drawing.Point(415, 439);
             this.checkBoxTax1.Name = "checkBoxTax1";
             this.checkBoxTax1.Size = new System.Drawing.Size(91, 17);
             this.checkBoxTax1.TabIndex = 46;
@@ -1024,7 +1026,7 @@
             this.buttonCreateClient.BackColor = System.Drawing.Color.LightGray;
             this.buttonCreateClient.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCreateClient.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonCreateClient.Location = new System.Drawing.Point(414, 745);
+            this.buttonCreateClient.Location = new System.Drawing.Point(414, 738);
             this.buttonCreateClient.Name = "buttonCreateClient";
             this.buttonCreateClient.Size = new System.Drawing.Size(128, 36);
             this.buttonCreateClient.TabIndex = 56;
@@ -1037,7 +1039,7 @@
             this.buttonExit.BackColor = System.Drawing.Color.LightGray;
             this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonExit.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonExit.Location = new System.Drawing.Point(626, 745);
+            this.buttonExit.Location = new System.Drawing.Point(626, 738);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(128, 36);
             this.buttonExit.TabIndex = 57;
@@ -1047,7 +1049,7 @@
             // 
             // textBoxOTPct1Opt
             // 
-            this.textBoxOTPct1Opt.Location = new System.Drawing.Point(313, 402);
+            this.textBoxOTPct1Opt.Location = new System.Drawing.Point(313, 451);
             this.textBoxOTPct1Opt.Name = "textBoxOTPct1Opt";
             this.textBoxOTPct1Opt.Size = new System.Drawing.Size(52, 20);
             this.textBoxOTPct1Opt.TabIndex = 13;
@@ -1056,7 +1058,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(310, 386);
+            this.label17.Location = new System.Drawing.Point(310, 435);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(62, 13);
             this.label17.TabIndex = 192;
@@ -1064,7 +1066,7 @@
             // 
             // textBoxOTPct2Opt
             // 
-            this.textBoxOTPct2Opt.Location = new System.Drawing.Point(313, 430);
+            this.textBoxOTPct2Opt.Location = new System.Drawing.Point(313, 479);
             this.textBoxOTPct2Opt.Name = "textBoxOTPct2Opt";
             this.textBoxOTPct2Opt.Size = new System.Drawing.Size(52, 20);
             this.textBoxOTPct2Opt.TabIndex = 15;
@@ -1075,7 +1077,7 @@
             // 
             this.comboBoxOT2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOT2.FormattingEnabled = true;
-            this.comboBoxOT2.Location = new System.Drawing.Point(119, 429);
+            this.comboBoxOT2.Location = new System.Drawing.Point(119, 478);
             this.comboBoxOT2.Name = "comboBoxOT2";
             this.comboBoxOT2.Size = new System.Drawing.Size(185, 21);
             this.comboBoxOT2.TabIndex = 14;
@@ -1083,7 +1085,7 @@
             // 
             // textBoxOTPct3Opt
             // 
-            this.textBoxOTPct3Opt.Location = new System.Drawing.Point(313, 457);
+            this.textBoxOTPct3Opt.Location = new System.Drawing.Point(313, 506);
             this.textBoxOTPct3Opt.Name = "textBoxOTPct3Opt";
             this.textBoxOTPct3Opt.Size = new System.Drawing.Size(52, 20);
             this.textBoxOTPct3Opt.TabIndex = 17;
@@ -1094,7 +1096,7 @@
             // 
             this.comboBoxOT3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOT3.FormattingEnabled = true;
-            this.comboBoxOT3.Location = new System.Drawing.Point(119, 456);
+            this.comboBoxOT3.Location = new System.Drawing.Point(119, 505);
             this.comboBoxOT3.Name = "comboBoxOT3";
             this.comboBoxOT3.Size = new System.Drawing.Size(185, 21);
             this.comboBoxOT3.TabIndex = 16;
@@ -1102,7 +1104,7 @@
             // 
             // textBoxOTPct4Opt
             // 
-            this.textBoxOTPct4Opt.Location = new System.Drawing.Point(313, 484);
+            this.textBoxOTPct4Opt.Location = new System.Drawing.Point(313, 533);
             this.textBoxOTPct4Opt.Name = "textBoxOTPct4Opt";
             this.textBoxOTPct4Opt.Size = new System.Drawing.Size(52, 20);
             this.textBoxOTPct4Opt.TabIndex = 19;
@@ -1113,7 +1115,7 @@
             // 
             this.comboBoxOT4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOT4.FormattingEnabled = true;
-            this.comboBoxOT4.Location = new System.Drawing.Point(119, 483);
+            this.comboBoxOT4.Location = new System.Drawing.Point(119, 532);
             this.comboBoxOT4.Name = "comboBoxOT4";
             this.comboBoxOT4.Size = new System.Drawing.Size(185, 21);
             this.comboBoxOT4.TabIndex = 18;
@@ -1121,7 +1123,7 @@
             // 
             // textBoxOTPct5Opt
             // 
-            this.textBoxOTPct5Opt.Location = new System.Drawing.Point(313, 511);
+            this.textBoxOTPct5Opt.Location = new System.Drawing.Point(313, 560);
             this.textBoxOTPct5Opt.Name = "textBoxOTPct5Opt";
             this.textBoxOTPct5Opt.Size = new System.Drawing.Size(52, 20);
             this.textBoxOTPct5Opt.TabIndex = 21;
@@ -1132,7 +1134,7 @@
             // 
             this.comboBoxOT5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOT5.FormattingEnabled = true;
-            this.comboBoxOT5.Location = new System.Drawing.Point(119, 510);
+            this.comboBoxOT5.Location = new System.Drawing.Point(119, 559);
             this.comboBoxOT5.Name = "comboBoxOT5";
             this.comboBoxOT5.Size = new System.Drawing.Size(185, 21);
             this.comboBoxOT5.TabIndex = 20;
@@ -1142,7 +1144,7 @@
             // 
             this.comboBoxRT.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRT.FormattingEnabled = true;
-            this.comboBoxRT.Location = new System.Drawing.Point(119, 538);
+            this.comboBoxRT.Location = new System.Drawing.Point(119, 587);
             this.comboBoxRT.Name = "comboBoxRT";
             this.comboBoxRT.Size = new System.Drawing.Size(185, 21);
             this.comboBoxRT.TabIndex = 22;
@@ -1151,7 +1153,7 @@
             // 
             this.checkBoxRT.AutoSize = true;
             this.checkBoxRT.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.checkBoxRT.Location = new System.Drawing.Point(17, 537);
+            this.checkBoxRT.Location = new System.Drawing.Point(17, 586);
             this.checkBoxRT.Name = "checkBoxRT";
             this.checkBoxRT.Size = new System.Drawing.Size(76, 17);
             this.checkBoxRT.TabIndex = 22;
@@ -1162,7 +1164,7 @@
             // 
             this.checkBoxTaskXRef.AutoSize = true;
             this.checkBoxTaskXRef.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.checkBoxTaskXRef.Location = new System.Drawing.Point(14, 594);
+            this.checkBoxTaskXRef.Location = new System.Drawing.Point(14, 643);
             this.checkBoxTaskXRef.Name = "checkBoxTaskXRef";
             this.checkBoxTaskXRef.Size = new System.Drawing.Size(93, 17);
             this.checkBoxTaskXRef.TabIndex = 24;
@@ -1173,7 +1175,7 @@
             // 
             this.checkBoxExpXRef.AutoSize = true;
             this.checkBoxExpXRef.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.checkBoxExpXRef.Location = new System.Drawing.Point(15, 650);
+            this.checkBoxExpXRef.Location = new System.Drawing.Point(15, 699);
             this.checkBoxExpXRef.Name = "checkBoxExpXRef";
             this.checkBoxExpXRef.Size = new System.Drawing.Size(87, 17);
             this.checkBoxExpXRef.TabIndex = 26;
@@ -1212,7 +1214,7 @@
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(252, 764);
+            this.label34.Location = new System.Drawing.Point(252, 813);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(43, 13);
             this.label34.TabIndex = 197;
@@ -1221,7 +1223,7 @@
             // 
             // textBoxFlatRetAmtOpt
             // 
-            this.textBoxFlatRetAmtOpt.Location = new System.Drawing.Point(301, 760);
+            this.textBoxFlatRetAmtOpt.Location = new System.Drawing.Point(301, 809);
             this.textBoxFlatRetAmtOpt.Name = "textBoxFlatRetAmtOpt";
             this.textBoxFlatRetAmtOpt.Size = new System.Drawing.Size(64, 20);
             this.textBoxFlatRetAmtOpt.TabIndex = 196;
@@ -1255,7 +1257,7 @@
             this.buttonCliBilling.BackColor = System.Drawing.Color.LightGray;
             this.buttonCliBilling.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCliBilling.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.buttonCliBilling.Location = new System.Drawing.Point(415, 662);
+            this.buttonCliBilling.Location = new System.Drawing.Point(415, 647);
             this.buttonCliBilling.Name = "buttonCliBilling";
             this.buttonCliBilling.Size = new System.Drawing.Size(339, 26);
             this.buttonCliBilling.TabIndex = 200;
@@ -1268,7 +1270,7 @@
             this.buttonNoteCard.BackColor = System.Drawing.Color.LightGray;
             this.buttonNoteCard.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonNoteCard.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.buttonNoteCard.Location = new System.Drawing.Point(414, 702);
+            this.buttonNoteCard.Location = new System.Drawing.Point(414, 687);
             this.buttonNoteCard.Name = "buttonNoteCard";
             this.buttonNoteCard.Size = new System.Drawing.Size(339, 26);
             this.buttonNoteCard.TabIndex = 201;
@@ -1295,11 +1297,32 @@
             this.richTextBoxDescOpt.TabIndex = 203;
             this.richTextBoxDescOpt.Text = "";
             // 
+            // richTextBoxRemarksOpt
+            // 
+            this.richTextBoxRemarksOpt.Location = new System.Drawing.Point(119, 175);
+            this.richTextBoxRemarksOpt.MaxLength = 4000;
+            this.richTextBoxRemarksOpt.Name = "richTextBoxRemarksOpt";
+            this.richTextBoxRemarksOpt.Size = new System.Drawing.Size(245, 48);
+            this.richTextBoxRemarksOpt.TabIndex = 205;
+            this.richTextBoxRemarksOpt.Text = "";
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.label35.Location = new System.Drawing.Point(14, 182);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(49, 13);
+            this.label35.TabIndex = 204;
+            this.label35.Text = "Remarks";
+            // 
             // MatterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(783, 787);
+            this.ClientSize = new System.Drawing.Size(783, 838);
+            this.Controls.Add(this.richTextBoxRemarksOpt);
+            this.Controls.Add(this.label35);
             this.Controls.Add(this.richTextBoxDescOpt);
             this.Controls.Add(this.buttonCliLookUp);
             this.Controls.Add(this.buttonNoteCard);
@@ -1547,5 +1570,7 @@
         private System.Windows.Forms.Button buttonNoteCard;
         private System.Windows.Forms.Button buttonCliLookUp;
         private System.Windows.Forms.RichTextBox richTextBoxDescOpt;
+        private System.Windows.Forms.RichTextBox richTextBoxRemarksOpt;
+        private System.Windows.Forms.Label label35;
     }
 }
