@@ -11,15 +11,17 @@ namespace JurisUtilityBase
 {
     public partial class CliBillingForm : Form
     {
-        public CliBillingForm(JurisUtility _JU)
+        public CliBillingForm(JurisUtility _JU, int empsys)
         {
             InitializeComponent();
             JU = _JU;
+            empsysnbr = empsys;
         }
 
         JurisUtility JU;
         List<BillingField> bfList = new List<BillingField>();
         BillingField bf = null;
+        int empsysnbr = 0;
 
         public bool loadFields()
         {
@@ -147,8 +149,8 @@ namespace JurisUtilityBase
         private void saveData()
         {
 
-            string sql = "insert into defaults (ID, name, PopulateMatter, CreationDate, IsStandard, DefType ) " +
-        " values (999998, 'BFClient', 'N', getdate(), 'N', 'R')";
+            string sql = "insert into defaults (ID, name, userid, CreationDate, IsStandard, AllData ) " +
+        " values (999998, 'BFClient', 'N', getdate(), " + empsysnbr.ToString() + ", '')";
 
             JU.ExecuteNonQuery(0, sql);
 

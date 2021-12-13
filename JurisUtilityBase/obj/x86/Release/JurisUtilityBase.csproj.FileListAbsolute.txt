@@ -96,3 +96,4 @@ D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBas
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.ClientLookUp.resources
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.AddNoteCard.resources
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.UserLogin.resources
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.MatLookUp.resources

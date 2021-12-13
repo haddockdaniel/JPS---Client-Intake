@@ -90,7 +90,7 @@ namespace JurisUtilityBase
             this.buttonCreateClient.BackColor = System.Drawing.Color.LightGray;
             this.buttonCreateClient.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCreateClient.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonCreateClient.Location = new System.Drawing.Point(28, 297);
+            this.buttonCreateClient.Location = new System.Drawing.Point(248, 297);
             this.buttonCreateClient.Name = "buttonCreateClient";
             this.buttonCreateClient.Size = new System.Drawing.Size(90, 36);
             this.buttonCreateClient.TabIndex = 58;
@@ -103,7 +103,7 @@ namespace JurisUtilityBase
             this.buttonExit.BackColor = System.Drawing.Color.LightGray;
             this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonExit.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonExit.Location = new System.Drawing.Point(245, 297);
+            this.buttonExit.Location = new System.Drawing.Point(28, 297);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(93, 36);
             this.buttonExit.TabIndex = 59;

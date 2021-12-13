@@ -36,6 +36,7 @@ namespace JurisUtilityBase
             this.textBoxPWord = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.buttonReport = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // textBoxName
@@ -78,7 +79,7 @@ namespace JurisUtilityBase
             this.button1.BackColor = System.Drawing.Color.LightGray;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.button1.Location = new System.Drawing.Point(133, 124);
+            this.button1.Location = new System.Drawing.Point(133, 140);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(76, 30);
             this.button1.TabIndex = 3;
@@ -91,7 +92,7 @@ namespace JurisUtilityBase
             this.buttonReport.BackColor = System.Drawing.Color.LightGray;
             this.buttonReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonReport.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.buttonReport.Location = new System.Drawing.Point(15, 124);
+            this.buttonReport.Location = new System.Drawing.Point(15, 140);
             this.buttonReport.Name = "buttonReport";
             this.buttonReport.Size = new System.Drawing.Size(86, 30);
             this.buttonReport.TabIndex = 4;
@@ -99,11 +100,21 @@ namespace JurisUtilityBase
             this.buttonReport.UseVisualStyleBackColor = false;
             this.buttonReport.Click += new System.EventHandler(this.buttonReport_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(32, 109);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(159, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "*This form uses your Juris Log In";
+            // 
             // UserLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(238, 166);
+            this.ClientSize = new System.Drawing.Size(238, 185);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonReport);
             this.Controls.Add(this.label2);
@@ -127,5 +138,6 @@ namespace JurisUtilityBase
         private System.Windows.Forms.TextBox textBoxPWord;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button buttonReport;
+        private System.Windows.Forms.Label label3;
     }
 }

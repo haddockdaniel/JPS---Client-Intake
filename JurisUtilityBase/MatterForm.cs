@@ -464,7 +464,7 @@ namespace JurisUtilityBase
             string sql = "IF  NOT EXISTS (SELECT * FROM sys.objects " +
             " WHERE object_id = OBJECT_ID(N'[dbo].[Defaults]') AND type in (N'U')) " +
             " BEGIN " +
-            " Create Table[dbo].[Defaults](ID int, name varchar(300), PopulateMatter char,  CreationDate datetime, IsStandard char, DefType char) " +
+            " Create Table [dbo].[Defaults](ID int, name varchar(300), UserID int,  CreationDate datetime, IsStandard char, AllData varchar(250)) " +
             " END";
 
             _jurisUtility.ExecuteSqlCommand(0, sql);
@@ -987,17 +987,34 @@ namespace JurisUtilityBase
                     isError = _jurisUtility.ExecuteNonQuery(0, sql);
                     if (!isError) //error adding matter
                     {
+                        sql = "update BillingAddress_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                        _jurisUtility.ExecuteNonQuery(0, sql);
+
+                        sql = "update Billto_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                        _jurisUtility.ExecuteNonQuery(0, sql);
+
+                        sql = "update BillCopy_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                        _jurisUtility.ExecuteNonQuery(0, sql);
+
                         matsysnbr = getMatSysNbr();
                         if (!resp.Equals("Empty"))
                             isError = addRespToTable(resp);
                         if (!isError) //error adding resp atty
                         {
+                            sql = "update MatterResponsibleTimekeeper_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                            _jurisUtility.ExecuteNonQuery(0, sql);
                             isError = addOrig();
                             if (!isError)//error adding originators
                             {
+                                sql = "update MatOrigAtty_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                                _jurisUtility.ExecuteNonQuery(0, sql);
                                 isError = loadMatterBillFields();
                                 if (!isError)
                                 {
+                                    //handles making of matter and editing it for billing fields/udfs
+                                    sql = "update matter_log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                                    _jurisUtility.ExecuteNonQuery(0, sql);
+
                                     sql = "update sysparam set spnbrvalue = " + matsysnbr.ToString() + " where spname = 'LastSysNbrMatter'";
                                     _jurisUtility.ExecuteNonQuery(0, sql);
 
@@ -1010,6 +1027,9 @@ namespace JurisUtilityBase
                                     //if they added a notecard
 
                                     sql = "insert into [matterNote] ([MNMatter] ,[mNNoteIndex],[mNObject],[mNNoteText],[mNNoteObject]) values(" + matsysnbr.ToString() + ", replace('" + noteName + "', '|', char(13) + char(10)), '', replace('" + noteText + "', '|', char(13) + char(10)), null)";
+                                    _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                    sql = "update MatterNote_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
                                     _jurisUtility.ExecuteNonQuery(0, sql);
 
                                     DialogResult fc = MessageBox.Show("Matter " + textBoxCode.Text + "/" + textBoxMatterCode.Text + " was added successfully." + "\r\n" + "Would you like to add another Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -1482,7 +1502,7 @@ namespace JurisUtilityBase
 
         private void ExitDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
+            System.Environment.Exit(0);
         }
 
         private int getAddyID()
@@ -1866,7 +1886,7 @@ namespace JurisUtilityBase
 
         private void buttonCliBilling_Click(object sender, EventArgs e)
         {
-            MatBillingForm matB = new MatBillingForm(_jurisUtility);
+            MatBillingForm matB = new MatBillingForm(_jurisUtility, empsysnbr);
             if (matB.loadFields())
             {
                 matB.ShowDialog();
@@ -1929,7 +1949,29 @@ namespace JurisUtilityBase
             loadClientInfoForMatter();
             getNextMatterNumber();
             loadAddys();
+            cl.Close();
             this.Show();
+        }
+
+        private void textBoxMatterCode_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            if (clisysnbr != 0)
+            {
+                this.Hide();
+                MatLookUp cl = new MatLookUp(_jurisUtility, pt, clisysnbr);
+                cl.ShowDialog();
+                cl.Close();
+                this.Show();
+            }
+            else
+            {
+                MessageBox.Show("A client must be selected first", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 

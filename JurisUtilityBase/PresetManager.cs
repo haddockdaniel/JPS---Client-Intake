@@ -27,7 +27,6 @@ namespace JurisUtilityBase
             dataGridView1.Columns[1].Width = 250;
             dataGridView1.Columns[2].Width = 75;
             dataGridView1.Columns[3].Width = 100;
-            dataGridView1.Columns[4].Width = 60;
             _jurisUtility = jutil;
             pt = ppt;
             empsysnbr = empsys;
@@ -82,7 +81,7 @@ namespace JurisUtilityBase
                 {
                     sql = "update defaults set name = '" + name + "' where id = " + ID.ToString();
                     _jurisUtility.ExecuteSqlCommand(0, sql);
-                    sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
+                    sql = "select ID, name as [Default Name],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where  userid = " + empsysnbr.ToString();
                     DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                     pt = this.Location;
                     PresetManager DM = new PresetManager(ds, _jurisUtility, pt, empsysnbr);
@@ -113,7 +112,7 @@ namespace JurisUtilityBase
                     sql = "delete from defaults where id = " + id.ToString();
                     _jurisUtility.ExecuteSqlCommand(0, sql);
                 }
-                sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
+                sql = "select ID, name as [Default Name],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where  userid = " + empsysnbr.ToString();
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                 pt = this.Location;
                 PresetManager DM = new PresetManager(ds, _jurisUtility, pt, empsysnbr);
@@ -132,11 +131,11 @@ namespace JurisUtilityBase
             else
             {
                 id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
-                sql = "update defaults set IsStandard = 'N' where DefType = 'C'";
+                sql = "update defaults set IsStandard = 'N' where userid = " + empsysnbr.ToString();
                 _jurisUtility.ExecuteSqlCommand(0, sql);
                 sql = "update defaults set IsStandard = 'Y' where id = " + id.ToString();
                 _jurisUtility.ExecuteSqlCommand(0, sql);
-                sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
+                sql = "select ID, name as [Default Name], convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where userID = " + empsysnbr.ToString();
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                 pt = this.Location;
                 PresetManager DM = new PresetManager(ds, _jurisUtility, pt, empsysnbr);
@@ -192,9 +191,9 @@ namespace JurisUtilityBase
         private void buttonNoDefault_Click(object sender, EventArgs e)
         {
             string sql = "";
-                sql = "update defaults set IsStandard = 'N' where DefType = 'C'";
-                _jurisUtility.ExecuteSqlCommand(0, sql);
-                sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
+                sql = "update defaults set IsStandard = 'N' where userid = " + empsysnbr.ToString();
+            _jurisUtility.ExecuteSqlCommand(0, sql);
+                sql = "select ID, name as [Default Name],   convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where  userid = " + empsysnbr.ToString();
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
             pt = this.Location;
             PresetManager DM = new PresetManager(ds, _jurisUtility, pt, empsysnbr);

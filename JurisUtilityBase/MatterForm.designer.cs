@@ -150,6 +150,7 @@
             this.richTextBoxDescOpt = new System.Windows.Forms.RichTextBox();
             this.richTextBoxRemarksOpt = new System.Windows.Forms.RichTextBox();
             this.label35 = new System.Windows.Forms.Label();
+            this.buttonMatLookUp = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -1026,7 +1027,7 @@
             this.buttonCreateClient.BackColor = System.Drawing.Color.LightGray;
             this.buttonCreateClient.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCreateClient.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonCreateClient.Location = new System.Drawing.Point(414, 738);
+            this.buttonCreateClient.Location = new System.Drawing.Point(625, 744);
             this.buttonCreateClient.Name = "buttonCreateClient";
             this.buttonCreateClient.Size = new System.Drawing.Size(128, 36);
             this.buttonCreateClient.TabIndex = 56;
@@ -1039,7 +1040,7 @@
             this.buttonExit.BackColor = System.Drawing.Color.LightGray;
             this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonExit.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonExit.Location = new System.Drawing.Point(626, 738);
+            this.buttonExit.Location = new System.Drawing.Point(414, 744);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(128, 36);
             this.buttonExit.TabIndex = 57;
@@ -1197,9 +1198,10 @@
             this.textBoxMatterCode.Location = new System.Drawing.Point(295, 38);
             this.textBoxMatterCode.MaxLength = 12;
             this.textBoxMatterCode.Name = "textBoxMatterCode";
-            this.textBoxMatterCode.Size = new System.Drawing.Size(69, 20);
+            this.textBoxMatterCode.Size = new System.Drawing.Size(54, 20);
             this.textBoxMatterCode.TabIndex = 1;
             this.textBoxMatterCode.Text = "0001";
+            this.textBoxMatterCode.TextChanged += new System.EventHandler(this.textBoxMatterCode_TextChanged);
             this.textBoxMatterCode.Leave += new System.EventHandler(this.textBoxMatterCode_Leave);
             // 
             // label11
@@ -1316,11 +1318,22 @@
             this.label35.TabIndex = 204;
             this.label35.Text = "Remarks";
             // 
+            // buttonMatLookUp
+            // 
+            this.buttonMatLookUp.Image = ((System.Drawing.Image)(resources.GetObject("buttonMatLookUp.Image")));
+            this.buttonMatLookUp.Location = new System.Drawing.Point(355, 37);
+            this.buttonMatLookUp.Name = "buttonMatLookUp";
+            this.buttonMatLookUp.Size = new System.Drawing.Size(25, 21);
+            this.buttonMatLookUp.TabIndex = 206;
+            this.buttonMatLookUp.UseVisualStyleBackColor = true;
+            this.buttonMatLookUp.Click += new System.EventHandler(this.button1_Click_1);
+            // 
             // MatterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(783, 838);
+            this.Controls.Add(this.buttonMatLookUp);
             this.Controls.Add(this.richTextBoxRemarksOpt);
             this.Controls.Add(this.label35);
             this.Controls.Add(this.richTextBoxDescOpt);
@@ -1572,5 +1585,6 @@
         private System.Windows.Forms.RichTextBox richTextBoxDescOpt;
         private System.Windows.Forms.RichTextBox richTextBoxRemarksOpt;
         private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.Button buttonMatLookUp;
     }
 }
