@@ -10,6 +10,7 @@ using System.Globalization;
 using Gizmox.Controls;
 using JDataEngine;
 using JurisAuthenticator;
+using Gizmox.CSharp;
 using JurisUtilityBase.Properties;
 using System.Data.OleDb;
 using System.Runtime.CompilerServices;
@@ -48,7 +49,6 @@ namespace JurisUtilityBase
             InitializeComponent();
             _jurisUtility = new JurisUtility();
             isActivated = false;
-
         }
 
 
@@ -151,6 +151,10 @@ namespace JurisUtilityBase
             //does key already exist?
             string hash = "";
             string sql = "";
+
+
+
+
             hash = gethashFromDB();
             if (!string.IsNullOrEmpty(hash)) //does the hash exits? if so....
             {
@@ -191,23 +195,41 @@ namespace JurisUtilityBase
             if (isActivated) // fail safe in case I missed something
             {
                 //now delete it as it isnt a preset and is only temp because we arent moving client info over to a matter screen
-                sql = "delete from DefaultSettings where defaultid in (999999, 999998, 999997)";
-                _jurisUtility.ExecuteNonQuery(0, sql);
-                sql = "delete from Defaults where id in (999999, 999998, 999997)";
-                _jurisUtility.ExecuteNonQuery(0, sql);
+                int empsys =  0;
                 this.Location = pt;
-                if (radioButtonCliOnly.Checked)
+                //force user to login
+                UserLogin ul = new UserLogin(_jurisUtility, pt);
+                this.Hide();
+                Employee emp = new Employee();
+                emp = ul.emp;
+                ul.ShowDialog();
+
+                if (emp.empsysnbr != 0) // did we get a valid logon and empsysnbr?
                 {
-                    ClientForm cf = new ClientForm(_jurisUtility, 0, false, pt);
-                    this.Hide();
-                    cf.Show();
-                }
+                    //if the setting was stored (login success), open program...else...exit
+                    empsys = emp.empsysnbr;
+                        sql = "delete from DefaultSettings where defaultid in (999999, 999998, 999997)"; // only remove that user id
+                        _jurisUtility.ExecuteNonQuery(0, sql);
+                        sql = "delete from Defaults where id in (999999, 999998, 999997)";
+                        _jurisUtility.ExecuteNonQuery(0, sql);
+                        if (radioButtonCliOnly.Checked)
+                        {
+                            ClientForm cf = new ClientForm(_jurisUtility, 0, false, pt, empsys);
+                            this.Hide();
+                            cf.Show();
+                        }
+                        else
+                        {
+                            MatterForm mf = new MatterForm(_jurisUtility, 0, "", 0, pt, empsys);
+                            this.Hide();
+                            mf.Show();
+                        }
+                 }
                 else
                 {
-                    MatterForm mf = new MatterForm(_jurisUtility, 0, "", 0, pt);
-                    this.Hide();
-                    mf.Show();
+                    MessageBox.Show("No user name supplied");
                 }
+
             }
             else
             {
@@ -216,6 +238,9 @@ namespace JurisUtilityBase
             }
 
         }
+
+
+
         private bool VerifyFirmName()
         {
             //    Dim SQL     As String

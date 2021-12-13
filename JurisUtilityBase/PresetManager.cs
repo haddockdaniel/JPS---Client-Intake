@@ -19,7 +19,7 @@ namespace JurisUtilityBase
 {
     public partial class PresetManager : Form
     {
-        public PresetManager(DataSet ds, JurisUtility jutil, System.Drawing.Point ppt)
+        public PresetManager(DataSet ds, JurisUtility jutil, System.Drawing.Point ppt, int empsys)
         {
             InitializeComponent();
             dataGridView1.DataSource = ds.Tables[0];
@@ -30,16 +30,17 @@ namespace JurisUtilityBase
             dataGridView1.Columns[4].Width = 60;
             _jurisUtility = jutil;
             pt = ppt;
-            
+            empsysnbr = empsys;
         }
 
         JurisUtility _jurisUtility;
         private System.Drawing.Point pt;
+        private int empsysnbr = 0;
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
             pt = this.Location;
-            ClientForm cleared = new ClientForm(_jurisUtility, 0, false, pt);
+            ClientForm cleared = new ClientForm(_jurisUtility, 0, false, pt, empsysnbr);
             cleared.Show();
             this.Hide();
         }
@@ -84,7 +85,7 @@ namespace JurisUtilityBase
                     sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
                     DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                     pt = this.Location;
-                    PresetManager DM = new PresetManager(ds, _jurisUtility, pt);
+                    PresetManager DM = new PresetManager(ds, _jurisUtility, pt, empsysnbr);
                     DM.Show();
                     this.Hide();
                 }
@@ -115,7 +116,7 @@ namespace JurisUtilityBase
                 sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                 pt = this.Location;
-                PresetManager DM = new PresetManager(ds, _jurisUtility, pt);
+                PresetManager DM = new PresetManager(ds, _jurisUtility, pt, empsysnbr);
                 DM.Show();
                 this.Hide();
             }
@@ -138,7 +139,7 @@ namespace JurisUtilityBase
                 sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                 pt = this.Location;
-                PresetManager DM = new PresetManager(ds, _jurisUtility, pt);
+                PresetManager DM = new PresetManager(ds, _jurisUtility, pt, empsysnbr);
                 DM.Show();
                 this.Hide();
 
@@ -157,7 +158,7 @@ namespace JurisUtilityBase
             {
                 id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
                 pt = this.Location;
-                ClientForm cleared = new ClientForm(_jurisUtility, id, true, pt);
+                ClientForm cleared = new ClientForm(_jurisUtility, id, true, pt, empsysnbr);
                 cleared.Show();
                 this.Hide();
             }
@@ -177,7 +178,7 @@ namespace JurisUtilityBase
             {
                 id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
                 pt = this.Location;
-                ClientForm cleared = new ClientForm(_jurisUtility, id, false, pt);
+                ClientForm cleared = new ClientForm(_jurisUtility, id, false, pt, empsysnbr);
                 cleared.Show();
                 this.Hide();
             }
@@ -196,7 +197,7 @@ namespace JurisUtilityBase
                 sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
             pt = this.Location;
-            PresetManager DM = new PresetManager(ds, _jurisUtility, pt);
+            PresetManager DM = new PresetManager(ds, _jurisUtility, pt, empsysnbr);
                 DM.Show();
                 this.Hide();
 
@@ -206,7 +207,7 @@ namespace JurisUtilityBase
         private void PresetManager_FormClosed(object sender, FormClosedEventArgs e)
         {
             pt = this.Location;
-            ClientForm cleared = new ClientForm(_jurisUtility, 0, false, pt);
+            ClientForm cleared = new ClientForm(_jurisUtility, 0, false, pt, empsysnbr);
             cleared.Show();
         }
 
@@ -226,7 +227,7 @@ namespace JurisUtilityBase
                 dataGridView1.Rows[index].Selected = true;
                 id = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[0].Value);
                 pt = this.Location;
-                ClientForm cleared = new ClientForm(_jurisUtility, id, false, pt);
+                ClientForm cleared = new ClientForm(_jurisUtility, id, false, pt, empsysnbr);
                 cleared.Show();
                 this.Hide();
             }

@@ -10,13 +10,14 @@ namespace JurisUtilityBase
 {
     public partial class ClientForm : Form
     {
-        public ClientForm(JurisUtility jutil, int preID, bool modify, System.Drawing.Point ppt)
+        public ClientForm(JurisUtility jutil, int preID, bool modify, System.Drawing.Point ppt, int empsys)
         {
             InitializeComponent();
             _jurisUtility = jutil;
             presetID = preID;
             isModification = modify;
             pt = ppt;
+            empsysnbr = empsys;
         }
 
         JurisUtility _jurisUtility;
@@ -30,7 +31,7 @@ namespace JurisUtilityBase
         private System.Drawing.Point pt;
         string noteName = "";
         string noteText = "";
-        
+        int empsysnbr = 0;
 
         //load all default items
         private void ClientForm_Load(object sender, EventArgs e)
@@ -457,7 +458,7 @@ namespace JurisUtilityBase
                 string sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C' ";
                 ds1 = _jurisUtility.RecordsetFromSQL(sql);
                 pt = this.Location;
-                PresetManager DM = new PresetManager(ds1, _jurisUtility, pt);
+                PresetManager DM = new PresetManager(ds1, _jurisUtility, pt, empsysnbr);
                 DM.Show();
                 this.Close();
 
@@ -469,7 +470,7 @@ namespace JurisUtilityBase
         private void clearFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pt = this.Location;
-            ClientForm cleared = new ClientForm(_jurisUtility, 0, false, pt);
+            ClientForm cleared = new ClientForm(_jurisUtility, 0, false, pt, empsysnbr);
             cleared.Show();
             this.Close();
         }
@@ -497,7 +498,7 @@ namespace JurisUtilityBase
         private void clearFieldsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pt = this.Location;
-            MatterForm cleared = new MatterForm(_jurisUtility,  0, "", 0, pt);
+            MatterForm cleared = new MatterForm(_jurisUtility,  0, "", 0, pt, empsysnbr);
             cleared.Show();
             this.Close();
         }
@@ -643,7 +644,7 @@ namespace JurisUtilityBase
             sql = "select ID, name as [Default Name], PopulateMatter as [Populate Matter],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where DefType = 'C'";
             DataSet ds1 = _jurisUtility.RecordsetFromSQL(sql);
             pt = this.Location;
-            PresetManager DM = new PresetManager(ds1, _jurisUtility, pt);
+            PresetManager DM = new PresetManager(ds1, _jurisUtility, pt, empsysnbr);
             DM.Show();
             this.Close();
 
@@ -1085,7 +1086,7 @@ namespace JurisUtilityBase
                                                 //save info to move over to matter
                                                 saveInfoToMoveToMatter();
                                                 pt = this.Location;
-                                                MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid, pt);
+                                                MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid, pt, empsysnbr);
                                                 cleared.Show();
                                                 //move data over
                                                 this.Close();
@@ -1097,7 +1098,7 @@ namespace JurisUtilityBase
                                                 sql = "delete from Defaults where id = 999998";
                                                 _jurisUtility.ExecuteNonQuery(0, sql);
                                                 pt = this.Location;
-                                                ClientForm newClient = new ClientForm(_jurisUtility, presetID, false, pt);
+                                                ClientForm newClient = new ClientForm(_jurisUtility, presetID, false, pt, empsysnbr);
                                                 newClient.Show();
                                                 this.Close();
                                             }

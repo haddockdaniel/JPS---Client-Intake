@@ -21,7 +21,7 @@ namespace JurisUtilityBase
             get { return Resources.SqlConnectionString; }
         }
 
-        private readonly SqlConnection[] _connections = new SqlConnection[3];
+        private readonly System.Data.SqlClient.SqlConnection[] _connections = new System.Data.SqlClient.SqlConnection[3];
         private readonly SqlCommand[] _commands = new SqlCommand[3];
         private Instance _instance;
         private readonly Instances _instances;
@@ -118,12 +118,13 @@ namespace JurisUtilityBase
 
         public void CommitTransaction(int connection)
         {
-            _connections[connection].CommitTransaction();
+            //_connections[connection].CommitTransaction();
             _commands[connection].Transaction.Commit();
         }
 
         public DataSet ExecuteSql(int connection, string sql)
         {
+
             return _connections[connection].Execute(sql);
         }
 

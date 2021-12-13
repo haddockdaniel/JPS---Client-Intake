@@ -81,6 +81,8 @@
             this.label24 = new System.Windows.Forms.Label();
             this.richTextBox25 = new System.Windows.Forms.RichTextBox();
             this.label25 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -584,11 +586,30 @@
             this.label25.Text = "label25";
             this.label25.Visible = false;
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(128, 12);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(229, 21);
+            this.comboBox1.TabIndex = 1;
+            this.comboBox1.Visible = false;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(128, 12);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(229, 20);
+            this.textBox1.TabIndex = 1;
+            this.textBox1.Visible = false;
+            // 
             // CliBillingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1137, 624);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.richTextBox21);
             this.Controls.Add(this.label21);
             this.Controls.Add(this.richTextBox22);
@@ -643,7 +664,7 @@
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CliBillingForm";
-            this.Text = "Client Billing Fields";
+            this.Text = "Billing and UDF Fields";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -703,5 +724,7 @@
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.RichTextBox richTextBox25;
         private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

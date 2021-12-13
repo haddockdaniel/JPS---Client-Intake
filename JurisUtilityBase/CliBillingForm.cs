@@ -26,9 +26,10 @@ namespace JurisUtilityBase
             //small = 395, 663
             //large = 765, 663
             //x large = 1153, 663
-            string sysparam = "  SELECT SpTxtValue, SpName FROM SysParam where spname like 'FldClientBF%' and sptxtvalue not like 'Billing Field %' " + 
+            string sysparam = " SELECT SpTxtValue, SpName FROM SysParam where spname like 'FldClientUDF%' and sptxtvalue not like 'C UDF%' " + 
                                   " union all " +
-                                  " SELECT SpTxtValue, SpName FROM SysParam where spname like 'FldClientUDF%' and sptxtvalue not like 'C UDF%' " ;
+                                  "SELECT SpTxtValue, SpName FROM SysParam where spname like 'FldClientBF%' and sptxtvalue not like 'Billing Field %'";
+            
             DataSet dds2 = JU.RecordsetFromSQL(sysparam);
             if (dds2 != null && dds2.Tables.Count > 0)
             {
@@ -58,7 +59,33 @@ namespace JurisUtilityBase
                 foreach (DataRow dr in dds2.Tables[0].Rows)
                 {
                     string[] test = dr[0].ToString().Split(',');
-                    
+                    string  fieldType = dr[1].ToString();
+
+                    bf = new BillingField();
+                    if (dr[1].ToString().Contains("FldClientBF")) //billing field
+                    {
+                        bf.length = Convert.ToInt32(test[2].ToString());
+                        bf.name = "CliBillingField" + dr[1].ToString().Replace("FldClientBF", "");
+                        bf.whichBox = "richTextBox" + rowNum.ToString();
+                        bf.text = ""; // save for when they type text in
+                        bf.isRequired = false;
+                        bf.UDFtype = "";
+                    }
+                    else //UDF
+                    {
+                        bf.length = Convert.ToInt32(test[2].ToString());
+                        bf.name = test[0].ToString().Replace(" ", "");
+                        bf.whichBox = "richTextBox" + rowNum.ToString();
+                        bf.text = ""; // save for when they type text in
+                        if (test[3].ToString().Equals("Y"))
+                            bf.isRequired = true;
+                        else
+                            bf.isRequired = false;
+                        bf.UDFtype = test[1].ToString();
+                    }
+
+
+
                     foreach (var label in this.Controls.OfType<Label>())
                     {
                         if (label.Name.Equals("label" + rowNum.ToString()))
@@ -76,28 +103,7 @@ namespace JurisUtilityBase
                             textbox.Visible = true;
                         }
                      }
-                    bf = new BillingField();
-                    if (dr[1].ToString().Contains("FldClientBF")) //billing field
-                    {
-                        bf.length = Convert.ToInt32(test[2].ToString());
-                        bf.name = "CliBillingField" + dr[1].ToString().Replace("FldClientBF", "");
-                        bf.whichBox = "richTextBox" + rowNum.ToString();
-                        bf.text = ""; // save for when they type text in
-                        bf.isRequired = false;
-                        bf.UDFtype = "";
-                    }
-                    else //UDF
-                    {
-                        bf.length = Convert.ToInt32(test[2].ToString());
-                        bf.name = test[0].ToString().Replace(" ", "");
-                        bf.whichBox = "richTextBox" + rowNum.ToString();
-                        bf.text = ""; // save for when they type text in
-                        if (test[0].ToString().Equals("Y"))
-                            bf.isRequired = true;
-                        else
-                            bf.isRequired = false;
-                        bf.UDFtype = test[1].ToString();
-                    }
+
                     bfList.Add(bf);
                     rowNum++;
 

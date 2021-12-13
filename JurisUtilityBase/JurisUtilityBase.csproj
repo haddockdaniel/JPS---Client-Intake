@@ -205,6 +205,7 @@
     <Compile Include="CMIActivation.Designer.cs">
       <DependentUpon>CMIActivation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Employee.cs" />
     <Compile Include="Encrypt.cs" />
     <Compile Include="JurisUtility.cs" />
     <Compile Include="MatBillingForm.cs">
@@ -236,6 +237,12 @@
     </Compile>
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserLogin.Designer.cs">
+      <DependentUpon>UserLogin.cs</DependentUpon>
     </Compile>
     <Compile Include="UtilityBaseMain.cs">
       <SubType>Form</SubType>
@@ -280,6 +287,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserLogin.resx">
+      <DependentUpon>UserLogin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UtilityBaseMain.resx">
       <DependentUpon>UtilityBaseMain.cs</DependentUpon>

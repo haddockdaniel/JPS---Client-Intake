@@ -10,7 +10,7 @@ namespace JurisUtilityBase
 {
     public partial class MatterForm : Form
     {
-        public MatterForm(JurisUtility jutil, int clisys, string cc, int adrSys, System.Drawing.Point ppt)
+        public MatterForm(JurisUtility jutil, int clisys, string cc, int adrSys, System.Drawing.Point ppt, int empsys)
         {
             InitializeComponent();
             _jurisUtility = jutil;
@@ -18,6 +18,7 @@ namespace JurisUtilityBase
             clisysnbr = clisys;
             clicode = cc;
             pt = ppt;
+            empsysnbr = empsys;
         }
 
         private System.Drawing.Point pt;
@@ -37,6 +38,7 @@ namespace JurisUtilityBase
         int matsysnbr = 0;
         string noteName = "";
         string noteText = "";
+        int empsysnbr = 0;
 
 
         //load all default items
@@ -452,7 +454,7 @@ namespace JurisUtilityBase
         private void clearFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pt = this.Location;
-            MatterForm cleared = new MatterForm(_jurisUtility, 0, "", 0, pt);
+            MatterForm cleared = new MatterForm(_jurisUtility, 0, "", 0, pt, empsysnbr);
             cleared.Show();
             this.Close();
         }
@@ -1014,7 +1016,7 @@ namespace JurisUtilityBase
                                     if (fc == DialogResult.Yes)
                                     {
                                         pt = this.Location;
-                                        MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addySysNbr, pt);
+                                        MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addySysNbr, pt, empsysnbr);
                                         cleared.Show();
                                         //move data over
                                         this.Close();
@@ -1026,7 +1028,7 @@ namespace JurisUtilityBase
                                         _jurisUtility.ExecuteNonQuery(0, sql);
                                         sql = "delete from Defaults where id = 999997";
                                         _jurisUtility.ExecuteNonQuery(0, sql);
-                                        this.Close();
+                                        System.Environment.Exit(0);
                                     }
                                 }
                                 else
@@ -1898,7 +1900,7 @@ namespace JurisUtilityBase
         private void closeAndCreateClientToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pt = this.Location;
-            ClientForm cleared = new ClientForm(_jurisUtility, 0, false, pt);
+            ClientForm cleared = new ClientForm(_jurisUtility, 0, false, pt, empsysnbr);
             cleared.Show();
             this.Close();
         }
