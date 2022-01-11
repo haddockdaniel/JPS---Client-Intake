@@ -104,7 +104,7 @@ namespace JurisUtilityBase
                 comboBoxOffice.SelectedIndex = 0;
             }
 
-            //pract Class
+            //pract Class00
             comboBoxPC.ClearItems();
             myRSPC2.Clear();
             SQLPC2 = "select PrctClsCode  + '    ' + right(PrctClsDesc, 30) as PC from PracticeClass order by PrctClsCode";
@@ -1719,6 +1719,7 @@ namespace JurisUtilityBase
         private void loadClientInfoForMatter()
         {
             //get client info to load into form
+            //add resp and orig
             string sql = "SELECT   CliNickName ,CliReportingName ,CliPhoneNbr  ,CliFaxNbr ,CliContactName  ,OfcOfficeCode + '    ' + right(OfcDesc, 30)  , " +
                 " empid + '    ' + empname ,PrctClsCode  + '    ' + right(PrctClsDesc, 30)  ,CliFeeSch " +
                 " ,case when CliTaskCodeXref is null then 'null' else CliTaskCodeXref end as CliTaskCodeXref ,CliExpSch  ,case when CliExpCodeXref is null then 'null' else CliExpCodeXref end as CliExpCodeXref "
@@ -1755,21 +1756,21 @@ namespace JurisUtilityBase
                     if (!dr[11].ToString().Equals("null"))
                         comboBoxEXRef.SelectedIndex = comboBoxEXRef.FindStringExact(dr[11].ToString().Split(' ')[0]);
                     comboBoxBillLayout.SelectedIndex = comboBoxBillLayout.FindStringExact(dr[12].ToString().Split(' ')[0]);
-                    comboBoxBAgree.SelectedIndex = comboBoxBAgree.FindString(dr[13].ToString());
+                    comboBoxBAgree.SelectedIndex = comboBoxBAgree.FindString(dr[13].ToString()); //fix
                     if (dr[14].ToString().Equals("Y"))
                         checkBoxIncludeExp.Checked = true;
                     else
                         checkBoxIncludeExp.Checked = false;
-                    comboBoxRetainerType.SelectedIndex = comboBoxRetainerType.FindString(dr[15].ToString());
-                    comboBoxExpFreq.SelectedIndex = comboBoxExpFreq.FindString(dr[16].ToString());
-                    comboBoxFeeFreq.SelectedIndex = comboBoxFeeFreq.FindString(dr[17].ToString());
+                    comboBoxRetainerType.SelectedIndex = comboBoxRetainerType.FindString(dr[15].ToString());//fix
+                    comboBoxExpFreq.SelectedIndex = comboBoxExpFreq.FindString(dr[16].ToString());//fix
+                    comboBoxFeeFreq.SelectedIndex = comboBoxFeeFreq.FindString(dr[17].ToString());//fix
                     textBoxMonthOpt.Text = dr[18].ToString();
                     textBoxCycleOpt.Text = dr[19].ToString();
                     textBoxIntPctOpt.Text = dr[20].ToString();
                     textBoxIntDaysOpt.Text = dr[21].ToString();
-                    comboBoxDisc.SelectedIndex = comboBoxDisc.FindString(dr[22].ToString());
+                    comboBoxDisc.SelectedIndex = comboBoxDisc.FindString(dr[22].ToString());//fix
                     textBoxDiscPctOpt.Text = dr[23].ToString();
-                    comboBoxSurcharge.SelectedIndex = comboBoxSurcharge.FindString(dr[24].ToString());
+                    comboBoxSurcharge.SelectedIndex = comboBoxSurcharge.FindString(dr[24].ToString());//fix
                     textBoxSurPctOpt.Text = dr[25].ToString();
                     if (dr[26].ToString().Equals("Y"))
                         checkBoxTax1.Checked = true;
@@ -1950,7 +1951,7 @@ namespace JurisUtilityBase
             getNextMatterNumber();
             loadAddys();
             cl.Close();
-            this.Show();
+            this.Show(); //billto name based on flag = c
         }
 
         private void textBoxMatterCode_TextChanged(object sender, EventArgs e)

@@ -71,18 +71,6 @@
             this.label12 = new System.Windows.Forms.Label();
             this.richTextBox11 = new System.Windows.Forms.RichTextBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.richTextBox21 = new System.Windows.Forms.RichTextBox();
-            this.label21 = new System.Windows.Forms.Label();
-            this.richTextBox22 = new System.Windows.Forms.RichTextBox();
-            this.label22 = new System.Windows.Forms.Label();
-            this.richTextBox23 = new System.Windows.Forms.RichTextBox();
-            this.label23 = new System.Windows.Forms.Label();
-            this.richTextBox24 = new System.Windows.Forms.RichTextBox();
-            this.label24 = new System.Windows.Forms.Label();
-            this.richTextBox25 = new System.Windows.Forms.RichTextBox();
-            this.label25 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -280,7 +268,7 @@
             this.buttonAddData.BackColor = System.Drawing.Color.LightGray;
             this.buttonAddData.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonAddData.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonAddData.Location = new System.Drawing.Point(25, 563);
+            this.buttonAddData.Location = new System.Drawing.Point(604, 563);
             this.buttonAddData.Name = "buttonAddData";
             this.buttonAddData.Size = new System.Drawing.Size(128, 36);
             this.buttonAddData.TabIndex = 26;
@@ -293,7 +281,7 @@
             this.buttonCancel.BackColor = System.Drawing.Color.LightGray;
             this.buttonCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCancel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonCancel.Location = new System.Drawing.Point(227, 563);
+            this.buttonCancel.Location = new System.Drawing.Point(379, 563);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(128, 36);
             this.buttonCancel.TabIndex = 27;
@@ -491,135 +479,11 @@
             this.label11.Text = "label11";
             this.label11.Visible = false;
             // 
-            // richTextBox21
-            // 
-            this.richTextBox21.Location = new System.Drawing.Point(885, 174);
-            this.richTextBox21.Name = "richTextBox21";
-            this.richTextBox21.Size = new System.Drawing.Size(229, 48);
-            this.richTextBox21.TabIndex = 24;
-            this.richTextBox21.Text = "";
-            this.richTextBox21.Visible = false;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(748, 9);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(41, 13);
-            this.label21.TabIndex = 140;
-            this.label21.Text = "label21";
-            this.label21.Visible = false;
-            // 
-            // richTextBox22
-            // 
-            this.richTextBox22.Location = new System.Drawing.Point(885, 228);
-            this.richTextBox22.Name = "richTextBox22";
-            this.richTextBox22.Size = new System.Drawing.Size(229, 48);
-            this.richTextBox22.TabIndex = 25;
-            this.richTextBox22.Text = "";
-            this.richTextBox22.Visible = false;
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(745, 66);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(41, 13);
-            this.label22.TabIndex = 139;
-            this.label22.Text = "label22";
-            this.label22.Visible = false;
-            // 
-            // richTextBox23
-            // 
-            this.richTextBox23.Location = new System.Drawing.Point(885, 66);
-            this.richTextBox23.Name = "richTextBox23";
-            this.richTextBox23.Size = new System.Drawing.Size(229, 48);
-            this.richTextBox23.TabIndex = 22;
-            this.richTextBox23.Text = "";
-            this.richTextBox23.Visible = false;
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(745, 123);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(41, 13);
-            this.label23.TabIndex = 138;
-            this.label23.Text = "label23";
-            this.label23.Visible = false;
-            // 
-            // richTextBox24
-            // 
-            this.richTextBox24.Location = new System.Drawing.Point(885, 120);
-            this.richTextBox24.Name = "richTextBox24";
-            this.richTextBox24.Size = new System.Drawing.Size(229, 48);
-            this.richTextBox24.TabIndex = 23;
-            this.richTextBox24.Text = "";
-            this.richTextBox24.Visible = false;
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(745, 174);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(41, 13);
-            this.label24.TabIndex = 137;
-            this.label24.Text = "label24";
-            this.label24.Visible = false;
-            // 
-            // richTextBox25
-            // 
-            this.richTextBox25.Location = new System.Drawing.Point(885, 12);
-            this.richTextBox25.Name = "richTextBox25";
-            this.richTextBox25.Size = new System.Drawing.Size(229, 48);
-            this.richTextBox25.TabIndex = 21;
-            this.richTextBox25.Text = "";
-            this.richTextBox25.Visible = false;
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(745, 231);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(41, 13);
-            this.label25.TabIndex = 136;
-            this.label25.Text = "label25";
-            this.label25.Visible = false;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(128, 12);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(229, 21);
-            this.comboBox1.TabIndex = 1;
-            this.comboBox1.Visible = false;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(128, 12);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(229, 20);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.Visible = false;
-            // 
             // CliBillingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1137, 624);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.richTextBox21);
-            this.Controls.Add(this.label21);
-            this.Controls.Add(this.richTextBox22);
-            this.Controls.Add(this.label22);
-            this.Controls.Add(this.richTextBox23);
-            this.Controls.Add(this.label23);
-            this.Controls.Add(this.richTextBox24);
-            this.Controls.Add(this.label24);
-            this.Controls.Add(this.richTextBox25);
-            this.Controls.Add(this.label25);
+            this.ClientSize = new System.Drawing.Size(772, 624);
             this.Controls.Add(this.richTextBox19);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.richTextBox20);
@@ -664,7 +528,7 @@
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CliBillingForm";
-            this.Text = "Billing and UDF Fields";
+            this.Text = "Billing Fields";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -714,17 +578,5 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.RichTextBox richTextBox11;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.RichTextBox richTextBox21;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.RichTextBox richTextBox22;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.RichTextBox richTextBox23;
-        private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.RichTextBox richTextBox24;
-        private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.RichTextBox richTextBox25;
-        private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.TextBox textBox1;
     }
 }

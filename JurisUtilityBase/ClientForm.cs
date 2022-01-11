@@ -1460,14 +1460,6 @@ namespace JurisUtilityBase
 
         }
 
-        private void buttonCliBilling_Click(object sender, EventArgs e)
-        {
-            CliBillingForm cliB = new CliBillingForm(_jurisUtility, empsysnbr);
-            if (cliB.loadFields())
-                cliB.ShowDialog();
-            else
-                cliB.Close();
-        }
 
         private bool loadClientBillFields()
         {
@@ -1536,5 +1528,22 @@ namespace JurisUtilityBase
         }
 
 
+        private void buttonCliBilling_Click(object sender, EventArgs e)
+        {
+            CliBillingForm cliB = new CliBillingForm(_jurisUtility, empsysnbr);
+            if (cliB.loadFields())
+                cliB.ShowDialog();
+            else
+                cliB.Close();
+        }
+
+        private void buttonCliUDF_Click(object sender, EventArgs e)
+        {
+            CliUDFFields cliB = new CliUDFFields(_jurisUtility, empsysnbr);
+            if (cliB.loadFields())
+                cliB.ShowDialog();
+            else
+                cliB.Close();
+        }
     }
 }

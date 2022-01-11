@@ -879,7 +879,7 @@
             // labelDPct
             // 
             this.labelDPct.AutoSize = true;
-            this.labelDPct.Location = new System.Drawing.Point(664, 590);
+            this.labelDPct.Location = new System.Drawing.Point(664, 522);
             this.labelDPct.Name = "labelDPct";
             this.labelDPct.Size = new System.Drawing.Size(62, 13);
             this.labelDPct.TabIndex = 176;
@@ -924,17 +924,17 @@
             // 
             // textBoxIntPctOpt
             // 
-            this.textBoxIntPctOpt.Location = new System.Drawing.Point(663, 611);
+            this.textBoxIntPctOpt.Location = new System.Drawing.Point(665, 611);
             this.textBoxIntPctOpt.MaxLength = 6;
             this.textBoxIntPctOpt.Name = "textBoxIntPctOpt";
-            this.textBoxIntPctOpt.Size = new System.Drawing.Size(63, 20);
+            this.textBoxIntPctOpt.Size = new System.Drawing.Size(61, 20);
             this.textBoxIntPctOpt.TabIndex = 55;
             this.textBoxIntPctOpt.Text = "0.00";
             // 
             // label45
             // 
             this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(662, 595);
+            this.label45.Location = new System.Drawing.Point(664, 595);
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(62, 13);
             this.label45.TabIndex = 182;

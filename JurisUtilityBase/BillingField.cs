@@ -16,5 +16,7 @@ namespace JurisUtilityBase
         public bool isRequired { get; set; } //specifically for UDFs
 
         public string UDFtype { get; set; }
+
+        public bool delete { get; set; }
     }
 }

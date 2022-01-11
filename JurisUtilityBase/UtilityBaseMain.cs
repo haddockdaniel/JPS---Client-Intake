@@ -36,10 +36,6 @@ namespace JurisUtilityBase
 
         public string JBillsDbName { get; set; }
 
-        public int FldClient { get; set; }
-
-        public int FldMatter { get; set; }
-
         #endregion
 
         #region Constructor
@@ -49,6 +45,32 @@ namespace JurisUtilityBase
             InitializeComponent();
             _jurisUtility = new JurisUtility();
             isActivated = false;
+            //MessageBox.Show(JEncrypt(@"vMPR", "Athens"));
+        }
+
+        public static string JEncrypt(string sSecret, string sPassWord)
+        {
+
+
+            int l = 0;
+            int X = 0;
+            int @char = 0;
+            string sTmp = String.Empty;
+
+            // Secret$ = the string you wish to encrypt or decrypt. 
+            // PassWord$ = the password with which to encrypt the string. 
+
+            sTmp = sSecret;
+            l = Strings.Len(sPassWord);
+            for (X = 1; X <= Strings.Len(sTmp); X++)
+            {
+                @char = Strings.Asc(Strings.Mid(sPassWord, (X % l) - l * Conversion.BoolToInt((X % l) == 0), 1));
+                Gizmox.CSharp.StringType.MidStmtStr(ref sTmp, X, 1, Strings.Chr(Strings.Asc(Strings.Mid(sTmp, X, 1)) ^ @char).ToString());
+            }
+
+
+
+            return sTmp;
         }
 
 
@@ -227,7 +249,7 @@ namespace JurisUtilityBase
                  }
                 else
                 {
-                    MessageBox.Show("No user name supplied");
+                    MessageBox.Show("No valid login supplied", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 }
 
             }
