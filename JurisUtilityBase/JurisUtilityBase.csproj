@@ -232,6 +232,12 @@
     <Compile Include="MatterForm.designer.cs">
       <DependentUpon>MatterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MatUDFFields.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MatUDFFields.Designer.cs">
+      <DependentUpon>MatUDFFields.cs</DependentUpon>
+    </Compile>
     <Compile Include="PrinterDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -296,6 +302,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MatterForm.resx">
       <DependentUpon>MatterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MatUDFFields.resx">
+      <DependentUpon>MatUDFFields.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PrinterDialog.resx">
       <DependentUpon>PrinterDialog.cs</DependentUpon>

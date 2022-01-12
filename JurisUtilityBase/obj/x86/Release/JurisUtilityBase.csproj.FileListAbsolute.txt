@@ -98,3 +98,4 @@ D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBas
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.UserLogin.resources
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.MatLookUp.resources
 D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.CliUDFFields.resources
+D:\Projects\JPS - Client Intake\JurisUtilityBase\obj\x86\Release\JurisUtilityBase.MatUDFFields.resources

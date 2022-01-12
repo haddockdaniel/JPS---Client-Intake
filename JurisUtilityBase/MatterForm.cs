@@ -746,6 +746,7 @@ namespace JurisUtilityBase
                 textBoxFlatRetAmtOpt.Text = "100";
                 incorrectFields.Add("Flat Fee/Retainer Amt");
             }
+            //retry if matter exists
 
 
             //ensure no apostrophes or double quotes as they break sql
@@ -919,147 +920,192 @@ namespace JurisUtilityBase
 
         private void createMatter()
         {
-            if (checkFields())
+            if (!doesMatterExist())
             {
-
-
-
-                string txref = "null";
-                if (checkBoxTaskXRef.Checked)
-                    txref = "'" + this.comboBoxTXRef.GetItemText(this.comboBoxTXRef.SelectedItem).Split(' ')[0] + "'";
-
-                string exref = "null";
-                if (checkBoxExpXRef.Checked)
-                    exref = "'" + this.comboBoxEXRef.GetItemText(this.comboBoxEXRef.SelectedItem).Split(' ')[0] + "'";
-
-                string inclExp = ((bool?)checkBoxIncludeExp.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
-                string tax1 = ((bool?)checkBoxTax1.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
-                string tax2 = ((bool?)checkBoxTax2.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
-                string tax3 = ((bool?)checkBoxTax3.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
-                string budg = ((bool?)checkBoxBudget.Checked) == true ? '1'.ToString() : '0'.ToString();
-                string reqTask = ((bool?)checkBoxReqTaskCodes.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
-                string reqAct = ((bool?)checkBoxReqActCodes.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
-
-
-                string resp = "Empty";
-                if (checkBoxRT.Checked)
-                    resp = " (select empsysnbr from employee where empid = '" + this.comboBoxRT.GetItemText(this.comboBoxRT.SelectedItem).Split(' ')[0] + "')";
-
-                string retType = ((bool?)comboBoxRetainerType.Visible) == true ? this.comboBoxRetainerType.GetItemText(this.comboBoxRetainerType.SelectedItem).Split(' ')[0] : string.Empty;
-
-
-
-
-                int billto = createAddy();
-
-                if (billto != 0)
+                if (checkFields())
                 {
-                    string formattedMatCode = formatMatterCode(textBoxMatterCode.Text);
-                    string desc = richTextBoxDescOpt.Text.Replace("\r", "|").Replace("\n", "|");
-                    desc = desc.Replace("||", "|");
-                    desc = desc.Replace("'", "").Replace("\"", "").Replace(@"\", " ").Replace("%", "").Replace("[", "").Replace("]", "").Replace("_", " ").Replace("^", "");
-                    string rem = richTextBoxRemarksOpt.Text.Replace("\r", "|").Replace("\n", "|");
-                    rem = rem.Replace("||", "|");
-                    rem= rem.Replace("'", "").Replace("\"", "").Replace(@"\", " ").Replace("%", "").Replace("[", "").Replace("]", "").Replace("_", " ").Replace("^", "");
-
-                    string sql = "Insert into Matter(MatSysNbr,MatCliNbr,MatBillTo,MatCode,MatNickName,MatReportingName,MatDescription, " +
-                        " MatRemarks,MatPhoneNbr,MatFaxNbr,MatContactName,MatDateOpened,MatStatusFlag,MatLockFlag, "
-                       + "  MatDateClosed,MatOfficeCode,MatPracticeClass,MatFeeSch,MatTaskCodeXref,MatExpSch,MatExpCodeXref,MatQuickAction, " +
-                       " MatBillAgreeCode,MatFlatFeeIncExp,MatRetainerType,MatFltFeeOrRetainer,MatExpFreqCode,MatFeeFreqCode,MatBillMonth,MatBillCycle,"
-                      + "   MatExpThreshold,MatFeeThreshold,MatInterestPcnt,MatInterestDays,MatDiscountOption,MatDiscountPcnt,MatSurchargeOption,MatSurchargePcnt,MatSplitMethod,MatSplitThreshold,"
-                       + "  MatSplitPriorAmtBld,MatBudgetOption,MatBudgetPhase,MatReqPhaseOnTrans,MatReqTaskCdOnTime,MatReqActyCdOnTime,MatReqTaskCdOnExp,MatTax1Exempt,MatTax2Exempt,MatTax3Exempt,MatDateLastWork,MatDateLastExp"
-                       + "  , MatDateLastBill,MatDateLastStmt,MatDateLastPaymt,MatLastPaymtAmt,MatARLastBill,MatPaySinceLastBill,MatAdjSinceLastBill,MatPPDBalance, " +
-                       " MatVisionAddr,MatThresholdOption,MatType,MatBillingField01,MatBillingField02,"
-                      + "   MatBillingField03,MatBillingField04,MatBillingField05,MatBillingField06,MatBillingField07,MatBillingField08,MatBillingField09,MatBillingField10,MatBillingField11,MatBillingField12,MatBillingField13,MatBillingField14,MatBillingField15,MatBillingField16,"
-                       + "  MatBillingField17,MatBillingField18,MatBillingField19,MatBillingField20,MatCTerms,MatCStatus,MatCStatus2) "
-                       + "     values( case when (select max(matsysnbr) from matter) is null then 1 else ((select max(matsysnbr) from matter) + 1) end, " + clisysnbr + ", " + billto.ToString() + ",  "
-                       + "       '" + formattedMatCode + "', '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "', replace('" + desc + "', '|', char(13) + char(10)), " +
-                       " replace('" + rem + "', '|', char(13) + char(10)),'" + textBoxPhoneOpt.Text.Trim() + "', '" + textBoxFaxOpt.Text.Trim() + "', '" + textBoxContactOpt.Text.Trim() + "', '" + dateTimePickerOpened.Value.ToString("MM/dd/yyyy") + "','O' ,'0', "
-                     + " '01/01/1900','" + this.comboBoxOffice.GetItemText(this.comboBoxOffice.SelectedItem).Split(' ')[0] + "','" + this.comboBoxPC.GetItemText(this.comboBoxPC.SelectedItem).Split(' ')[0] + "','" + this.comboBoxFeeSched.GetItemText(this.comboBoxFeeSched.SelectedItem).Split(' ')[0] + "'," + txref + ",'" + this.comboBoxExpSched.GetItemText(this.comboBoxExpSched.SelectedItem).Split(' ')[0] + "'," + exref + ",0, "
-                      + "'" + this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0] + "','" + inclExp + "','" + retType + "', " + textBoxFlatRetAmtOpt.Text + ", '" + this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0] + "' ," + textBoxMonthOpt.Text + "," + textBoxCycleOpt.Text + ", "
-                     + " 0.00,0.00," + textBoxIntPctOpt.Text + "," + textBoxIntDaysOpt.Text + "," + this.comboBoxDisc.GetItemText(this.comboBoxDisc.SelectedItem).Split(' ')[0] + "," + textBoxDiscPctOpt.Text + ", " + this.comboBoxSurcharge.GetItemText(this.comboBoxSurcharge.SelectedItem).Split(' ')[0] + ", " + textBoxSurPctOpt.Text + ", 0, 0.00,"
-                      + "0.00," + budg + ",0, 'N','" + reqTask + "','" + reqAct + "','N','" + tax1 + "','" + tax2 + "','" + tax3 + "',"
-
-                    + " '01/01/1900','01/01/1900','01/01/1900','01/01/1900','01/01/1900',0.00,0.00,0.00,0.00,0.00,0,0,0,"
-                     + " '','','','','','','', '','','','','','','','','', '', '', '', '', 0, 0, '')";
 
 
-                    isError = _jurisUtility.ExecuteNonQuery(0, sql);
-                    if (!isError) //error adding matter
+
+                    string txref = "null";
+                    if (checkBoxTaskXRef.Checked)
+                        txref = "'" + this.comboBoxTXRef.GetItemText(this.comboBoxTXRef.SelectedItem).Split(' ')[0] + "'";
+
+                    string exref = "null";
+                    if (checkBoxExpXRef.Checked)
+                        exref = "'" + this.comboBoxEXRef.GetItemText(this.comboBoxEXRef.SelectedItem).Split(' ')[0] + "'";
+
+                    string inclExp = ((bool?)checkBoxIncludeExp.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
+                    string tax1 = ((bool?)checkBoxTax1.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
+                    string tax2 = ((bool?)checkBoxTax2.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
+                    string tax3 = ((bool?)checkBoxTax3.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
+                    string budg = ((bool?)checkBoxBudget.Checked) == true ? '1'.ToString() : '0'.ToString();
+                    string reqTask = ((bool?)checkBoxReqTaskCodes.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
+                    string reqAct = ((bool?)checkBoxReqActCodes.Checked) == true ? 'Y'.ToString() : 'N'.ToString();
+
+
+                    string resp = "Empty";
+                    if (checkBoxRT.Checked)
+                        resp = " (select empsysnbr from employee where empid = '" + this.comboBoxRT.GetItemText(this.comboBoxRT.SelectedItem).Split(' ')[0] + "')";
+
+                    string retType = ((bool?)comboBoxRetainerType.Visible) == true ? this.comboBoxRetainerType.GetItemText(this.comboBoxRetainerType.SelectedItem).Split(' ')[0] : string.Empty;
+
+
+
+
+                    int billto = createAddy();
+
+                    if (billto != 0)
                     {
-                        sql = "update BillingAddress_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
-                        _jurisUtility.ExecuteNonQuery(0, sql);
+                        string formattedMatCode = formatMatterCode(textBoxMatterCode.Text);
+                        string desc = richTextBoxDescOpt.Text.Replace("\r", "|").Replace("\n", "|");
+                        desc = desc.Replace("||", "|");
+                        desc = desc.Replace("'", "").Replace("\"", "").Replace(@"\", " ").Replace("%", "").Replace("[", "").Replace("]", "").Replace("_", " ").Replace("^", "");
+                        string rem = richTextBoxRemarksOpt.Text.Replace("\r", "|").Replace("\n", "|");
+                        rem = rem.Replace("||", "|");
+                        rem = rem.Replace("'", "").Replace("\"", "").Replace(@"\", " ").Replace("%", "").Replace("[", "").Replace("]", "").Replace("_", " ").Replace("^", "");
 
-                        sql = "update Billto_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
-                        _jurisUtility.ExecuteNonQuery(0, sql);
+                        string sql = "Insert into Matter(MatSysNbr,MatCliNbr,MatBillTo,MatCode,MatNickName,MatReportingName,MatDescription, " +
+                            " MatRemarks,MatPhoneNbr,MatFaxNbr,MatContactName,MatDateOpened,MatStatusFlag,MatLockFlag, "
+                           + "  MatDateClosed,MatOfficeCode,MatPracticeClass,MatFeeSch,MatTaskCodeXref,MatExpSch,MatExpCodeXref,MatQuickAction, " +
+                           " MatBillAgreeCode,MatFlatFeeIncExp,MatRetainerType,MatFltFeeOrRetainer,MatExpFreqCode,MatFeeFreqCode,MatBillMonth,MatBillCycle,"
+                          + "   MatExpThreshold,MatFeeThreshold,MatInterestPcnt,MatInterestDays,MatDiscountOption,MatDiscountPcnt,MatSurchargeOption,MatSurchargePcnt,MatSplitMethod,MatSplitThreshold,"
+                           + "  MatSplitPriorAmtBld,MatBudgetOption,MatBudgetPhase,MatReqPhaseOnTrans,MatReqTaskCdOnTime,MatReqActyCdOnTime,MatReqTaskCdOnExp,MatTax1Exempt,MatTax2Exempt,MatTax3Exempt,MatDateLastWork,MatDateLastExp"
+                           + "  , MatDateLastBill,MatDateLastStmt,MatDateLastPaymt,MatLastPaymtAmt,MatARLastBill,MatPaySinceLastBill,MatAdjSinceLastBill,MatPPDBalance, " +
+                           " MatVisionAddr,MatThresholdOption,MatType,MatBillingField01,MatBillingField02,"
+                          + "   MatBillingField03,MatBillingField04,MatBillingField05,MatBillingField06,MatBillingField07,MatBillingField08,MatBillingField09,MatBillingField10,MatBillingField11,MatBillingField12,MatBillingField13,MatBillingField14,MatBillingField15,MatBillingField16,"
+                           + "  MatBillingField17,MatBillingField18,MatBillingField19,MatBillingField20,MatCTerms,MatCStatus,MatCStatus2) "
+                           + "     values( case when (select max(matsysnbr) from matter) is null then 1 else ((select max(matsysnbr) from matter) + 1) end, " + clisysnbr + ", " + billto.ToString() + ",  "
+                           + "       '" + formattedMatCode + "', '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "', replace('" + desc + "', '|', char(13) + char(10)), " +
+                           " replace('" + rem + "', '|', char(13) + char(10)),'" + textBoxPhoneOpt.Text.Trim() + "', '" + textBoxFaxOpt.Text.Trim() + "', '" + textBoxContactOpt.Text.Trim() + "', '" + dateTimePickerOpened.Value.ToString("MM/dd/yyyy") + "','O' ,'0', "
+                         + " '01/01/1900','" + this.comboBoxOffice.GetItemText(this.comboBoxOffice.SelectedItem).Split(' ')[0] + "','" + this.comboBoxPC.GetItemText(this.comboBoxPC.SelectedItem).Split(' ')[0] + "','" + this.comboBoxFeeSched.GetItemText(this.comboBoxFeeSched.SelectedItem).Split(' ')[0] + "'," + txref + ",'" + this.comboBoxExpSched.GetItemText(this.comboBoxExpSched.SelectedItem).Split(' ')[0] + "'," + exref + ",0, "
+                          + "'" + this.comboBoxBAgree.GetItemText(this.comboBoxBAgree.SelectedItem).Split(' ')[0] + "','" + inclExp + "','" + retType + "', " + textBoxFlatRetAmtOpt.Text + ", '" + this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0] + "', '" + this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0] + "' ," + textBoxMonthOpt.Text + "," + textBoxCycleOpt.Text + ", "
+                         + " 0.00,0.00," + textBoxIntPctOpt.Text + "," + textBoxIntDaysOpt.Text + "," + this.comboBoxDisc.GetItemText(this.comboBoxDisc.SelectedItem).Split(' ')[0] + "," + textBoxDiscPctOpt.Text + ", " + this.comboBoxSurcharge.GetItemText(this.comboBoxSurcharge.SelectedItem).Split(' ')[0] + ", " + textBoxSurPctOpt.Text + ", 0, 0.00,"
+                          + "0.00," + budg + ",0, 'N','" + reqTask + "','" + reqAct + "','N','" + tax1 + "','" + tax2 + "','" + tax3 + "',"
 
-                        sql = "update BillCopy_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
-                        _jurisUtility.ExecuteNonQuery(0, sql);
+                        + " '01/01/1900','01/01/1900','01/01/1900','01/01/1900','01/01/1900',0.00,0.00,0.00,0.00,0.00,0,0,0,"
+                         + " '','','','','','','', '','','','','','','','','', '', '', '', '', 0, 0, '')";
 
-                        matsysnbr = getMatSysNbr();
-                        if (!resp.Equals("Empty"))
-                            isError = addRespToTable(resp);
-                        if (!isError) //error adding resp atty
+
+                        isError = _jurisUtility.ExecuteNonQuery(0, sql);
+                        if (!isError) //error adding matter
                         {
-                            sql = "update MatterResponsibleTimekeeper_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                            sql = "update BillingAddress_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
                             _jurisUtility.ExecuteNonQuery(0, sql);
-                            isError = addOrig();
-                            if (!isError)//error adding originators
+
+                            sql = "update Billto_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                            _jurisUtility.ExecuteNonQuery(0, sql);
+
+                            sql = "update BillCopy_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                            _jurisUtility.ExecuteNonQuery(0, sql);
+
+                            matsysnbr = getMatSysNbr();
+                            if (!resp.Equals("Empty"))
+                                isError = addRespToTable(resp);
+                            if (!isError) //error adding resp atty
                             {
-                                sql = "update MatOrigAtty_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                                sql = "update MatterResponsibleTimekeeper_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
                                 _jurisUtility.ExecuteNonQuery(0, sql);
-                                isError = loadMatterBillFields();
-                                if (!isError)
+                                isError = addOrig();
+                                if (!isError)//error adding originators
                                 {
-                                    //handles making of matter and editing it for billing fields/udfs
-                                    sql = "update matter_log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                                    sql = "update MatOrigAtty_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
                                     _jurisUtility.ExecuteNonQuery(0, sql);
-
-                                    sql = "update sysparam set spnbrvalue = " + matsysnbr.ToString() + " where spname = 'LastSysNbrMatter'";
-                                    _jurisUtility.ExecuteNonQuery(0, sql);
-
-                                    sql = "update sysparam set spnbrvalue = (select max(billtosysnbr) from billto) where spname = 'LastSysNbrBillTo'";
-                                    _jurisUtility.ExecuteNonQuery(0, sql);
-
-                                    sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
-                                    _jurisUtility.ExecuteNonQuery(0, sql);
-
-                                    //if they added a notecard
-
-                                    sql = "insert into [matterNote] ([MNMatter] ,[mNNoteIndex],[mNObject],[mNNoteText],[mNNoteObject]) values(" + matsysnbr.ToString() + ", replace('" + noteName + "', '|', char(13) + char(10)), '', replace('" + noteText + "', '|', char(13) + char(10)), null)";
-                                    _jurisUtility.ExecuteNonQuery(0, sql);
-
-                                    sql = "update MatterNote_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
-                                    _jurisUtility.ExecuteNonQuery(0, sql);
-
-                                    DialogResult fc = MessageBox.Show("Matter " + textBoxCode.Text + "/" + textBoxMatterCode.Text + " was added successfully." + "\r\n" + "Would you like to add another Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                                    if (fc == DialogResult.Yes)
+                                    isError = loadMatterBillFields();
+                                    if (!isError)
                                     {
-                                        pt = this.Location;
-                                        MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addySysNbr, pt, empsysnbr);
-                                        cleared.Show();
-                                        //move data over
-                                        this.Close();
+                                        isError = loadMatterUDFs();
+                                        if (!isError)
+                                        {
+                                            //handles making of matter and editing it for billing fields/udfs
+                                            sql = "update matter_log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                                            _jurisUtility.ExecuteNonQuery(0, sql);
 
+                                            sql = "update sysparam set spnbrvalue = " + matsysnbr.ToString() + " where spname = 'LastSysNbrMatter'";
+                                            _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                            sql = "update sysparam set spnbrvalue = (select max(billtosysnbr) from billto) where spname = 'LastSysNbrBillTo'";
+                                            _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                            sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
+                                            _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                            //if they added a notecard
+
+                                            sql = "insert into [matterNote] ([MNMatter] ,[mNNoteIndex],[mNObject],[mNNoteText],[mNNoteObject]) values(" + matsysnbr.ToString() + ", replace('" + noteName + "', '|', char(13) + char(10)), '', replace('" + noteText + "', '|', char(13) + char(10)), null)";
+                                            _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                            sql = "update MatterNote_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                                            _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                            DialogResult fc = MessageBox.Show("Matter " + textBoxCode.Text + "/" + textBoxMatterCode.Text + " was added successfully." + "\r\n" + "Would you like to add another Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                            if (fc == DialogResult.Yes)
+                                            {
+                                                pt = this.Location;
+                                                MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addySysNbr, pt, empsysnbr);
+                                                cleared.Show();
+                                                //move data over
+                                                this.Close();
+
+                                            }
+                                            else
+                                            {
+                                                sql = "delete from DefaultSettings where defaultid = 999997 and empsys = " + empsysnbr.ToString(); //stored BF info
+                                                _jurisUtility.ExecuteNonQuery(0, sql);
+                                                sql = "delete from Defaults where id = 999997  and userid = " + empsysnbr.ToString();
+                                                _jurisUtility.ExecuteNonQuery(0, sql);
+                                                sql = "delete from DefaultSettings where defaultid = 999996 and empsys = " + empsysnbr.ToString(); //stored UDF info
+                                                _jurisUtility.ExecuteNonQuery(0, sql);
+                                                sql = "delete from Defaults where id = 999996  and userid = " + empsysnbr.ToString();
+                                                _jurisUtility.ExecuteNonQuery(0, sql);
+                                                System.Environment.Exit(0);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            MessageBox.Show("There was an issue adding the UDF Fields." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            isError = false;
+                                            undoOrig();
+                                            undoResp();
+                                            undoMatter();
+                                            undoBillCopy(billto);
+                                            undoBillTo(billto);
+
+                                            if (removeAddy)
+                                            {
+                                                undoAddy(addySysNbr);
+                                                addySysNbr = 0;
+                                                removeAddy = false;
+                                            }
+                                        }
                                     }
                                     else
                                     {
-                                        sql = "delete from DefaultSettings where defaultid = 999997 and empsys = " + empsysnbr.ToString(); //stored BF info
-                                        _jurisUtility.ExecuteNonQuery(0, sql);
-                                        sql = "delete from Defaults where id = 999997  and userid = " + empsysnbr.ToString();
-                                        _jurisUtility.ExecuteNonQuery(0, sql);
-                                        System.Environment.Exit(0);
+                                        MessageBox.Show("There was an issue adding the Billing Fields." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        isError = false;
+                                        undoOrig();
+                                        undoResp();
+                                        undoMatter();
+                                        undoBillCopy(billto);
+                                        undoBillTo(billto);
+
+                                        if (removeAddy)
+                                        {
+                                            undoAddy(addySysNbr);
+                                            addySysNbr = 0;
+                                            removeAddy = false;
+                                        }
                                     }
                                 }
-                                else
+                                else //error adding rig attys
                                 {
-                                    MessageBox.Show("There was an issue adding the Billing/UDF Fields." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MessageBox.Show("There was an issue adding the Originating Attys." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     isError = false;
-                                    undoOrig();
                                     undoResp();
                                     undoMatter();
                                     undoBillCopy(billto);
                                     undoBillTo(billto);
+
 
                                     if (removeAddy)
                                     {
@@ -1069,15 +1115,13 @@ namespace JurisUtilityBase
                                     }
                                 }
                             }
-                            else //error adding rig attys
+                            else //error adding resp attys
                             {
-                                MessageBox.Show("There was an issue adding the Originating Attys." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("There was an issue adding the Responsible Attys." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 isError = false;
-                                undoResp();
-                                undoMatter();
                                 undoBillCopy(billto);
+                                undoMatter();
                                 undoBillTo(billto);
-
 
                                 if (removeAddy)
                                 {
@@ -1087,12 +1131,11 @@ namespace JurisUtilityBase
                                 }
                             }
                         }
-                        else //error adding resp attys
+                        else //error adding the matter
                         {
-                            MessageBox.Show("There was an issue adding the Responsible Attys." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("There was an issue adding the matter." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             isError = false;
                             undoBillCopy(billto);
-                            undoMatter();
                             undoBillTo(billto);
 
                             if (removeAddy)
@@ -1102,27 +1145,13 @@ namespace JurisUtilityBase
                                 removeAddy = false;
                             }
                         }
+
+
                     }
-                    else //error adding the matter
-                    {
-                        MessageBox.Show("There was an issue adding the matter." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        isError = false;
-                        undoBillCopy(billto);
-                        undoBillTo(billto);
-
-                        if (removeAddy)
-                        {
-                            undoAddy(addySysNbr);
-                            addySysNbr = 0;
-                            removeAddy = false;
-                        }
-                    }
-
-
                 }
             }
-
-
+            else
+                MessageBox.Show("That matter code already exists for this client. " + "\r\n" + " Please update the matter ode so it is unique", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private bool addRespToTable(string empsys)
@@ -1601,6 +1630,31 @@ namespace JurisUtilityBase
             return matsysnbr;
         }
 
+        private bool doesMatterExist()
+        {
+            int ms = 0;
+            if (clisysnbr == 0)
+                clisysnbr = getCliSysNbr();
+            string code = formatMatterCode(textBoxMatterCode.Text);
+            if (codeIsNumericMatter)
+                textBoxMatterCode.Text = code.Substring(code.Length - lengthOfCodeMatter, lengthOfCodeMatter);
+            string sql = "select matsysnbr from matter where matclinbr = " + clisysnbr.ToString() + " and matcode = '" + code + "'";
+            DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+            if (dds != null && dds.Tables.Count > 0)
+            {
+                foreach (DataRow dr in dds.Tables[0].Rows)
+                {
+                    ms = Convert.ToInt32(dr[0].ToString());
+                    break;
+                }
+
+            }
+            if (ms == 0)
+                return false;
+            else
+                return true;
+        }
+
         private void getDefaultsForClientMatter()
         {
             //matter
@@ -1868,7 +1922,7 @@ namespace JurisUtilityBase
             getMatSysNbr();
             if (matsysnbr != 0)
             {
-                string sql = "select name, data from DefaultSettings where defaultid = 999997  and empsys = " + empsysnbr.ToString()
+                string sql = "select name, data from DefaultSettings where defaultid = 999997  and empsys = " + empsysnbr.ToString();
                 DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
                 if (dds != null && dds.Tables.Count > 0)
                 {
@@ -1877,6 +1931,35 @@ namespace JurisUtilityBase
                         sql = "update matter set " + dr[0].ToString() + " = replace('" + dr[1].ToString() + "', '|', char(13) + char(10)) where matsysnbr = " + matsysnbr.ToString();
                         if (_jurisUtility.ExecuteNonQuery(0, sql))
                             return true;
+                    }
+                } //else its not there so add it
+                return false;
+            } //we dont have a valid client so do nothing
+            else
+                return false;
+        }
+
+        private bool loadMatterUDFs()
+        {
+            getMatSysNbr();
+            if (matsysnbr != 0)
+            {
+                string sql = "select name, data from DefaultSettings where defaultid = 999996  and empsys = " + empsysnbr.ToString();
+                DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+                if (dds != null && dds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in dds.Tables[0].Rows)
+                    {
+                        if (dr[1].ToString().Equals("int"))
+                            sql = "update matter set [" + dr[0].ToString() + "] = " + dr[1].ToString() + " where matsysnbr = " + matsysnbr.ToString();
+                        else
+                            sql = "update matter set [" + dr[0].ToString() + "] = '" + dr[1].ToString() + "' where matsysnbr = " + matsysnbr.ToString();
+                        MessageBox.Show(sql);
+                        if (_jurisUtility.ExecuteNonQuery(0, sql))
+                        {
+                            MessageBox.Show(_jurisUtility.errorMessage);
+                            return true;
+                        }
                     }
                 } //else its not there so add it
                 return false;
@@ -1973,6 +2056,17 @@ namespace JurisUtilityBase
             {
                 MessageBox.Show("A client must be selected first", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+            MatUDFFields matB = new MatUDFFields(_jurisUtility, empsysnbr);
+            if (matB.loadFields())
+            {
+                matB.ShowDialog();
+            }
+            else
+                matB.Close();
         }
     }
 

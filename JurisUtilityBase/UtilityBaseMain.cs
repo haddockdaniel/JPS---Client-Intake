@@ -230,9 +230,9 @@ namespace JurisUtilityBase
                 {
                     //if the setting was stored (login success), open program...else...exit
                     empsys = emp.empsysnbr;
-                        sql = "delete from DefaultSettings where defaultid in (999999, 999998, 999997, 999994) and empsys = " + empsys.ToString(); // only remove that user id
+                        sql = "delete from DefaultSettings where defaultid in (999999, 999998, 999997, 999994, 999996) and empsys = " + empsys.ToString(); // only remove that user id
                         _jurisUtility.ExecuteNonQuery(0, sql);
-                        sql = "delete from Defaults where id in (999999, 999998, 999997, 999994) and userid = " + empsys.ToString();
+                        sql = "delete from Defaults where id in (999999, 999998, 999997, 999994, 999996) and userid = " + empsys.ToString();
                         _jurisUtility.ExecuteNonQuery(0, sql);
                         if (radioButtonCliOnly.Checked)
                         {
