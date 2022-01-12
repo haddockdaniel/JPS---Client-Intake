@@ -18,5 +18,7 @@ namespace JurisUtilityBase
         public string UDFtype { get; set; }
 
         public bool delete { get; set; }
+
+        public string DBentryType {get;set;}
     }
 }

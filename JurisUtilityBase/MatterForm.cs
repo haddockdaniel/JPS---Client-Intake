@@ -398,7 +398,7 @@ namespace JurisUtilityBase
         private void loadInfoFromClientForm()
         {
             checkForTables();
-            string sql = "select name, data, entrytype from DefaultSettings where defaultid = 999999";
+            string sql = "select name, data, entrytype from DefaultSettings where defaultid = 999999 and empsys = " + empsysnbr.ToString();
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
             if (dds != null && dds.Tables.Count > 0)
             {
@@ -472,7 +472,7 @@ namespace JurisUtilityBase
             sql = "IF  NOT EXISTS (SELECT * FROM sys.objects " +
             " WHERE object_id = OBJECT_ID(N'[dbo].[DefaultSettings]') AND type in (N'U')) " +
             " BEGIN " +
-            " Create Table [dbo].[DefaultSettings] (DefaultID int, name varchar(50), data varchar(255), entryType varchar(50)) " +
+            " Create Table [dbo].[DefaultSettings] (DefaultID int, name varchar(50), data varchar(255), entryType varchar(50), empsys int) " +
             " END";
 
             _jurisUtility.ExecuteSqlCommand(0, sql);
@@ -1044,9 +1044,9 @@ namespace JurisUtilityBase
                                     }
                                     else
                                     {
-                                        sql = "delete from DefaultSettings where defaultid = 999997"; //stored BF info
+                                        sql = "delete from DefaultSettings where defaultid = 999997 and empsys = " + empsysnbr.ToString(); //stored BF info
                                         _jurisUtility.ExecuteNonQuery(0, sql);
-                                        sql = "delete from Defaults where id = 999997";
+                                        sql = "delete from Defaults where id = 999997  and userid = " + empsysnbr.ToString();
                                         _jurisUtility.ExecuteNonQuery(0, sql);
                                         System.Environment.Exit(0);
                                     }
@@ -1868,7 +1868,7 @@ namespace JurisUtilityBase
             getMatSysNbr();
             if (matsysnbr != 0)
             {
-                string sql = "select name, data from DefaultSettings where defaultid = 999997";
+                string sql = "select name, data from DefaultSettings where defaultid = 999997  and empsys = " + empsysnbr.ToString()
                 DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
                 if (dds != null && dds.Tables.Count > 0)
                 {

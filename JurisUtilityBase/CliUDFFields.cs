@@ -82,15 +82,43 @@ namespace JurisUtilityBase
                     if (test[3].ToString().Equals("R") || test[3].ToString().Equals("N"))
                     {
                         bf.whichBox = "textBox" + rowNum.ToString();
+                        switch (test[1].ToString())
+                        {
+                            case "C":
+                                bf.DBentryType = "text";
+                                break;
+                            case "D":
+                                bf.DBentryType = "date";
+                                break;
+                            case "N":
+                                bf.DBentryType = "int";
+                                break;
+                            default:
+                                bf.DBentryType = "text";
+                                break;
+
+                        }
                         bf.text = ""; // save for when they type text in
                         if (test[3].ToString().Equals("Y"))
                             bf.isRequired = true;
                         else
                             bf.isRequired = false;
-                        
+
+                        foreach (var cb in this.Controls.OfType<ComboBox>())
+                        {
+                            if (cb.Name.Equals("comboBox" + rowNum.ToString()))
+                                cb.Visible = false;
+
+                        }
                     }
                     else
                     {
+                        foreach (var cb in this.Controls.OfType<TextBox>())
+                        {
+                            if (cb.Name.Equals("textBox" + rowNum.ToString()))
+                                cb.Visible = false;
+
+                        }
                         if (test[3].ToString().Equals("T")) //timekeeper
                         {
                             foreach (var cb in this.Controls.OfType<ComboBox>())
@@ -106,6 +134,8 @@ namespace JurisUtilityBase
                                             cb.Items.Add(dd["emp"].ToString());
                                         cb.SelectedIndex = 0;
                                     }
+                                    bf.isRequired = false;
+                                    bf.whichBox = cb.Name;
                                 }
                             }
                         }
@@ -124,6 +154,8 @@ namespace JurisUtilityBase
                                             cb.Items.Add(dd["PC"].ToString());
                                         cb.SelectedIndex = 0;
                                     }
+                                    bf.isRequired = false;
+                                    bf.whichBox = cb.Name;
                                 }
                             }
                         }
@@ -160,7 +192,7 @@ namespace JurisUtilityBase
         {
 
             string sql = "insert into defaults (ID, name, userid, CreationDate, IsStandard, AllData ) " +
-        " values (999994, 'UDFClient', 'N', getdate(), " + empsysnbr.ToString() + ", '')";
+        " values (999994, 'UDFClient', " + empsysnbr.ToString() + ", getdate(), 'N', '')";
 
             JU.ExecuteNonQuery(0, sql);
 
@@ -169,7 +201,7 @@ namespace JurisUtilityBase
             {
                 if (!string.IsNullOrEmpty(bb.text) && !bb.delete)
                 {
-                    sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType) values (999994, '" + bb.name.Replace(" ", "") + "', '" + bb.text + "', 'richTextBox' )";
+                    sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType, empsys) values (999994, '" + bb.name.Replace(" ", "") + "', '" + bb.text + "', '" + bb.DBentryType +"', " + empsysnbr.ToString() + ")";
                     JU.ExecuteNonQuery(0, sql);
                 }
             }
@@ -188,12 +220,15 @@ namespace JurisUtilityBase
                 if (validateUDFRequired())
                 {
                     if (verifyDropDowns())
-
+                    {
+                        saveData();
+                        this.Close();
+                    }
                 }
 
 
             }
-            //this.comboBoxPC.GetItemText(this.comboBoxPC.SelectedItem).Split(' ')[0]
+            //
         }
 
         private bool validateUDFTypes()
@@ -245,12 +280,28 @@ namespace JurisUtilityBase
         {
             foreach (BillingField bb in bfList) // did they leave a drop down blank? If so, ignore it
             {
+                foreach (var cb in this.Controls.OfType<ComboBox>())
+                {
+                    if (cb.Name.Equals(bb.whichBox))
+                    {
+                        string selection = cb.GetItemText(cb.SelectedItem).Split(' ')[0];
+                        if (selection.Contains("Blank/None"))
+                            bb.delete = true;
+                        else
+                            bb.text = selection;
 
-
-
+                    }
+                }
+                foreach (var cb in this.Controls.OfType<TextBox>())
+                {
+                    if (cb.Name.Equals(bb.whichBox))
+                    {
+                        bb.text = cb.Text;
+                    }
+                }
             }
-
-                return true;
+            bfList.RemoveAll(x => x.delete == true);
+            return true;
         }
 
         private bool isNumber(string test)

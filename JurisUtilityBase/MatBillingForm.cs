@@ -144,7 +144,7 @@ namespace JurisUtilityBase
         {
 
             string sql = "insert into defaults (ID, name, userid, CreationDate, IsStandard, AllData) " +
-        " values (999997, 'BFMatter', 'N', getdate(), " + empsysnbr.ToString() +  ", '')";
+        " values (999997, 'BFMatter', " + empsysnbr.ToString() +", getdate(), 'N', '')";
 
             JU.ExecuteNonQuery(0, sql);
 
@@ -153,7 +153,7 @@ namespace JurisUtilityBase
             {
                 if (!string.IsNullOrEmpty(bb.text))
                 {
-                    sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType) values (999997, '" + bb.name + "', '" + bb.text + "', 'richTextBox' )";
+                    sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType, empsys) values (999997, '" + bb.name + "', '" + bb.text + "', 'richTextBox', " + empsysnbr.ToString() + " )";
                     JU.ExecuteNonQuery(0, sql);
                 }
             }

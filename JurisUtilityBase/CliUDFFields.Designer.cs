@@ -180,6 +180,7 @@ namespace JurisUtilityBase
             this.buttonAddData.TabIndex = 6;
             this.buttonAddData.Text = "Add To Client";
             this.buttonAddData.UseVisualStyleBackColor = false;
+            this.buttonAddData.Click += new System.EventHandler(this.buttonAddData_Click);
             // 
             // buttonCancel
             // 
@@ -192,6 +193,7 @@ namespace JurisUtilityBase
             this.buttonCancel.TabIndex = 7;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = false;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // CliUDFFields
             // 
