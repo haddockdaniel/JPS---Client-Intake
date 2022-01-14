@@ -543,11 +543,11 @@ namespace JurisUtilityBase
         {
             checkForTables();
             string sql = "insert into defaults (ID, name, userid, CreationDate, IsStandard, AllData ) " +
-                " values ((case when (select max(ID) from defaults) is null then 1 else ((select max(ID) from defaults) + 1) end), '" + name + "', " + empsysnbr.ToString() + ", getdate(), 'N', '')";
+                " values ((case when (select max(ID) from defaults where id < 9999990) is null then 1 else ((select max(ID) from defaults where id < 9999990) + 1) end), '" + name + "', " + empsysnbr.ToString() + ", getdate(), 'N', '')";
 
             _jurisUtility.ExecuteNonQuery(0, sql);
 
-            sql = "select max(id) from defaults";
+            sql = "select max(id) from defaults where id < 9999990 and userid = " + empsysnbr.ToString();
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
             int defID = 0;
             if (dds != null && dds.Tables.Count > 0)
@@ -921,6 +921,11 @@ namespace JurisUtilityBase
                         buttonCreateClient.Enabled = true;
                         return false;
                     }
+                    if (checkBoxConsolidation.Checked && string.IsNullOrEmpty(textBoxConsolidation.Text))
+                {
+                    MessageBox.Show("A Consolidation name is required. Please add a name or uncheck the box", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
                     if (testOrigPct())
                             return true;
                         else
@@ -1051,7 +1056,7 @@ namespace JurisUtilityBase
                                     sql = "update BillingAddress_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
                                     _jurisUtility.ExecuteNonQuery(0, sql);
 
-                                    sql = "select max(biladrsysnbr) from billingaddress";
+                                    sql = "select max(biladrsysnbr) from billingaddress where BilAdrCliNbr = " + clisysnbr.ToString();
                                     DataSet dds = new DataSet();
                                     
                                     dds = _jurisUtility.RecordsetFromSQL(sql);
@@ -1072,62 +1077,78 @@ namespace JurisUtilityBase
                                             isError = loadClientUDFFields();
                                             if (!isError)
                                             {
-                                                //handles making of client and editing it for billing fields/udfs
-                                                sql = "update client_log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
-                                                _jurisUtility.ExecuteNonQuery(0, sql);
-
-                                                string SQL = "Insert into DocumentTree(dtdocid, dtsystemcreated, dtdocclass,dtdoctype,  dtparentid, dttitle, dtkeyl) "
-                                                + " select (select max(dtdocid)  from documenttree) + 1 , 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
-                                                + " from Client where clisysnbr = " + clisysnbr.ToString();
-                                                _jurisUtility.ExecuteNonQuery(0, SQL);
-
-                                                SQL = " Update sysparam set spnbrvalue=(select max(dtdocid) from documenttree) where spname='LastSysNbrDocTree'";
-                                                _jurisUtility.ExecuteNonQuery(0, SQL);
-
-                                                SQL = " update sysparam set spnbrvalue = (select max(CliSysNbr) from client) where spname = 'LastSysNbrClient'";
-                                                _jurisUtility.ExecuteNonQuery(0, SQL);
-
-                                                sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
-                                                _jurisUtility.ExecuteNonQuery(0, sql);
-
-                                                //add notecard if thye selected it
-                                                sql = "insert into [ClientNote] ([CNClient] ,[CNNoteIndex],[CNObject],[CNNoteText],[CNNoteObject]) values(" + clisysnbr.ToString() + ", replace('" + noteName + "', '|', char(13) + char(10)), '', replace('" + noteText + "', '|', char(13) + char(10)), null)";
-                                                _jurisUtility.ExecuteNonQuery(0, sql);
-
-                                                sql = "update ClientNote_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
-                                                _jurisUtility.ExecuteNonQuery(0, sql);
-
-                                                //after adding the client, load the preset back in
-                                                if (presetID != 0)
-                                                    checkForTables();
-
-                                                DialogResult fc = MessageBox.Show("Client " + textBoxCode.Text + " was added successfully." + "\r\n" + "Would you like to Add a Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                                                if (fc == DialogResult.Yes)
+                                                isError = createConsolidation(resp);
+                                                if (!isError)
                                                 {
-                                                    //save info to move over to matter
-                                                    saveInfoToMoveToMatter();
-                                                    pt = this.Location;
-                                                    MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid, pt, empsysnbr);
-                                                    cleared.Show();
-                                                    this.Hide();
-                                                    //move data over
-                                                    this.Close();
+                                                    //handles making of client and editing it for billing fields/udfs
+                                                    sql = "update client_log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                                                    _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                                    string SQL = "Insert into DocumentTree(dtdocid, dtsystemcreated, dtdocclass,dtdoctype,  dtparentid, dttitle, dtkeyl) "
+                                                    + " select (select max(dtdocid)  from documenttree) + 1 , 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
+                                                    + " from Client where clisysnbr = " + clisysnbr.ToString();
+                                                    _jurisUtility.ExecuteNonQuery(0, SQL);
+
+                                                    SQL = " Update sysparam set spnbrvalue=(select max(dtdocid) from documenttree) where spname='LastSysNbrDocTree'";
+                                                    _jurisUtility.ExecuteNonQuery(0, SQL);
+
+                                                    SQL = " update sysparam set spnbrvalue = (select max(CliSysNbr) from client) where spname = 'LastSysNbrClient'";
+                                                    _jurisUtility.ExecuteNonQuery(0, SQL);
+
+                                                    sql = "update sysparam set spnbrvalue = (select max(biladrsysnbr) from billingaddress) where spname = 'LastSysNbrBillAddress'";
+                                                    _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                                    sql = "update sysparam set spnbrvalue = (select max(billtosysnbr) from billto) where spname = 'LastSysNbrBillTo'";
+                                                    _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                                    //add notecard if thye selected it
+                                                    sql = "insert into [ClientNote] ([CNClient] ,[CNNoteIndex],[CNObject],[CNNoteText],[CNNoteObject]) values(" + clisysnbr.ToString() + ", replace('" + noteName + "', '|', char(13) + char(10)), '', replace('" + noteText + "', '|', char(13) + char(10)), null)";
+                                                    _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                                    sql = "update ClientNote_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                                                    _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                                    //after adding the client, load the preset back in
+                                                    if (presetID != 0)
+                                                        checkForTables();
+
+                                                    DialogResult fc = MessageBox.Show("Client " + textBoxCode.Text + " was added successfully." + "\r\n" + "Would you like to Add a Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                                    if (fc == DialogResult.Yes)
+                                                    {
+                                                        //save info to move over to matter
+                                                        saveInfoToMoveToMatter();
+                                                        pt = this.Location;
+                                                        MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid, pt, empsysnbr);
+                                                        cleared.Show();
+                                                        this.Hide();
+                                                        //move data over
+                                                        this.Close();
+                                                    }
+                                                    else
+                                                    {
+                                                        sql = "delete from DefaultSettings where defaultid = 999998 and empsys = " + empsysnbr.ToString(); //stored BF info
+                                                        _jurisUtility.ExecuteNonQuery(0, sql);
+                                                        sql = "delete from Defaults where id = 999998 and userid = " + empsysnbr.ToString();
+                                                        _jurisUtility.ExecuteNonQuery(0, sql);
+                                                        sql = "delete from DefaultSettings where defaultid = 999994 and empsys = " + empsysnbr.ToString(); //stored UDF info
+                                                        _jurisUtility.ExecuteNonQuery(0, sql);
+                                                        sql = "delete from Defaults where id = 999994  and userid = " + empsysnbr.ToString();
+                                                        _jurisUtility.ExecuteNonQuery(0, sql);
+                                                        pt = this.Location;
+                                                        ClientForm newClient = new ClientForm(_jurisUtility, presetID, false, pt, empsysnbr);
+                                                        newClient.Show();
+                                                        this.Hide();
+                                                        this.Close();
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    sql = "delete from DefaultSettings where defaultid = 999998 and empsys = " + empsysnbr.ToString(); //stored BF info
-                                                    _jurisUtility.ExecuteNonQuery(0, sql);
-                                                    sql = "delete from Defaults where id = 999998 and userid = " + empsysnbr.ToString();
-                                                    _jurisUtility.ExecuteNonQuery(0, sql);
-                                                    sql = "delete from DefaultSettings where defaultid = 999994 and empsys = " + empsysnbr.ToString(); //stored UDF info
-                                                    _jurisUtility.ExecuteNonQuery(0, sql);
-                                                    sql = "delete from Defaults where id = 999994  and userid = " + empsysnbr.ToString();
-                                                    _jurisUtility.ExecuteNonQuery(0, sql);
-                                                    pt = this.Location;
-                                                    ClientForm newClient = new ClientForm(_jurisUtility, presetID, false, pt, empsysnbr);
-                                                    newClient.Show();
-                                                    this.Hide();
-                                                    this.Close();
+                                                    MessageBox.Show("There was an issue adding the consolidation." + "\r\n" + "No changes were made to your database" + "\r\n" + _jurisUtility.errorMessage, "Insert Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                                    isError = false;
+                                                    undoOrig();
+                                                    undoResp();
+                                                    undoAddy(addyid);
+                                                    undoClient();
                                                 }
                                             }
                                             else
@@ -1265,6 +1286,55 @@ namespace JurisUtilityBase
 
         }
 
+        private bool createConsolidation(string respAtty)
+        {
+            if (checkBoxConsolidation.Checked)
+            {
+                string sql = "insert into billto ([BillToSysNbr] ,[BillToCliNbr] ,[BillToUsageFlg] ,[BillToNickName] ,[BillToBillingAtty] ,[BillToBillFormat],[BillToEditFormat] ,[BillToRespAtty]) " +
+                    "  values (case when (select max(BillToSysNbr) from billto) is null then 1 else ((select max(BillToSysNbr) from billto) + 1) end, " + clisysnbr.ToString() + ", 'C', '" + textBoxConsolidation.Text + "', " +
+                    "(select empsysnbr from employee where empid = '" + this.comboBoxBT.GetItemText(this.comboBoxBT.SelectedItem).Split(' ')[0] + "'), '" + this.comboBoxBillLayout.GetItemText(this.comboBoxBillLayout.SelectedItem).Split(' ')[0] + "', " +
+                    "'" + this.comboBoxPreBillLayout.GetItemText(this.comboBoxPreBillLayout.SelectedItem).Split(' ')[0] + "', " + respAtty + ")";
+                isError = _jurisUtility.ExecuteNonQuery(0, sql); //did we enconter an error creating billto?
+                if (!isError)
+                {
+                    sql = "select max(billtosysnbr) from billto where billtoclinbr = " + clisysnbr.ToString();
+                    int billto = 0;
+                    DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+                    if (dds != null && dds.Tables.Count > 0)
+                    {
+                        foreach (DataRow dr in dds.Tables[0].Rows)
+                        {
+                            billto = Convert.ToInt32(dr[0].ToString());
+                        }
+
+                    }
+                    int addyid = 0;
+                    sql = "select max(biladrsysnbr) from billingaddress where BilAdrCliNbr = " + clisysnbr.ToString();
+                    dds.Clear();
+
+                    dds = _jurisUtility.RecordsetFromSQL(sql);
+                    if (dds != null && dds.Tables.Count > 0)
+                    {
+                        foreach (DataRow dr in dds.Tables[0].Rows)
+                            addyid = Convert.ToInt32(dr[0].ToString());
+
+                    }
+
+
+                    //billcopy
+                    sql = "Insert into BillCopy(BilCpyBillTo,BilCpyBilAdr,BilCpyComment,BilCpyNbrOfCopies,BilCpyPrintFormat,BilCpyEmailFormat,BilCpyExportFormat,BilCpyARFormat) "
+                    + " values ( " + billto.ToString() + ", " + addyid.ToString() + " ,'',1,1,0,0,0 )";
+
+                    isError = _jurisUtility.ExecuteNonQuery(0, sql);
+                    
+                }
+                return isError;
+            }
+            else
+                return false;
+
+        }
+
         private bool createAddy()
         {
             bool isError = false;
@@ -1275,7 +1345,7 @@ namespace JurisUtilityBase
 
             string sql = "Insert into BillingAddress(BilAdrSysNbr, BilAdrCliNbr, BilAdrUsageFlg, BilAdrNickName, BilAdrPhone, " +
                 " BilAdrFax, BilAdrContact, BilAdrName, BilAdrAddress, BilAdrCity, BilAdrState, BilAdrZip, BilAdrCountry, BilAdrType, BilAdrEmail) " +
-    " values (case when(select max(biladrsysnbr) from billingaddress) is null then 1 else ((select max(biladrsysnbr) from billingaddress) +1) end, " + clisysnbr + ", " +
+    " values (case when(select max(biladrsysnbr) from billingaddress) is null then 1 else ((select max(biladrsysnbr) from billingaddress) +1) end, " + clisysnbr.ToString() + ", " +
     " 'C', '" + textBoxBANName.Text + "', '" + textBoxBAPhoneOpt.Text + "', "
      + "  '" + textBoxBAFaxOpt.Text + "', '" + textBoxBAContactOpt.Text + "', " +
     " '" + textBoxBANameOpt.Text + "', " +
@@ -1286,7 +1356,7 @@ namespace JurisUtilityBase
             if (!isError)
             {
                 int addyid = 0;
-                sql = "select max(biladrsysnbr) from billingaddress";
+                sql = "select max(biladrsysnbr) from billingaddress where BilAdrCliNbr = " + clisysnbr.ToString(); ;
                 DataSet dds = new DataSet();
 
                 dds = _jurisUtility.RecordsetFromSQL(sql);
@@ -1507,7 +1577,6 @@ namespace JurisUtilityBase
                 DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
                 if (dds != null && dds.Tables.Count > 0)
                 {
-                    MessageBox.Show(dds.Tables.Count.ToString());
                     foreach (DataRow dr in dds.Tables[0].Rows)
                     {
                         if (dr[1].ToString().Equals("int"))

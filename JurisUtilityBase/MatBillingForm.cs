@@ -46,6 +46,8 @@ namespace JurisUtilityBase
                     buttonCancel.TabIndex = numOfFields + 2;
                     richTextBox11.TabIndex = 250;
                     richTextBox12.TabIndex = 251;
+                    buttonAddData.Location = new Point(229, 565);
+                    buttonCancel.Location = new Point(12, 565);
                 }
                 int rowNum = 1;
                 foreach (DataRow dr in dds2.Tables[0].Rows)

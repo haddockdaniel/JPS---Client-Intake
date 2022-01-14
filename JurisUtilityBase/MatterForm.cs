@@ -39,6 +39,7 @@ namespace JurisUtilityBase
         string noteName = "";
         string noteText = "";
         int empsysnbr = 0;
+        int colsolBillTo = 0;
 
 
         //load all default items
@@ -447,7 +448,7 @@ namespace JurisUtilityBase
                 }
 
             } //else its not there so add it
-
+            loadConsolidations();
 
         }
 
@@ -950,10 +951,15 @@ namespace JurisUtilityBase
 
                     string retType = ((bool?)comboBoxRetainerType.Visible) == true ? this.comboBoxRetainerType.GetItemText(this.comboBoxRetainerType.SelectedItem).Split(' ')[0] : string.Empty;
 
+                    int billto = 0;
+                    if (checkBoxConsolidation.Checked)
+                    {
+                        var len = this.comboBoxConsolidation.GetItemText(this.comboBoxConsolidation.SelectedItem).Split(' ').Length - 1;
+                        billto = Convert.ToInt32(this.comboBoxConsolidation.GetItemText(this.comboBoxConsolidation.SelectedItem).Split(' ')[len]);
 
-
-
-                    int billto = createAddy();
+                    }
+                    else
+                        billto = createAddy();
 
                     if (billto != 0)
                     {
@@ -1277,7 +1283,7 @@ namespace JurisUtilityBase
                                 isError = _jurisUtility.ExecuteNonQuery(0, sql); //did we enconter an error creating billto?
                                 if (!isError)
                                 {
-                                    sql = "select max(billtosysnbr) from billto";
+                                    sql = "select max(billtosysnbr) from billto where BillToCliNbr = " + clisysnbr.ToString();
                                     dds.Clear();
                                     int billto = 0;
                                     dds = _jurisUtility.RecordsetFromSQL(sql);
@@ -1343,7 +1349,7 @@ namespace JurisUtilityBase
 
                             if (!isError)
                             {
-                                sql = "select max(biladrsysnbr) from billingaddress";
+                                sql = "select max(biladrsysnbr) from billingaddress where BilAdrCliNbr = " + clisysnbr.ToString();
                                 dds.Clear();
                                 int addyid = 0;
                                 dds = _jurisUtility.RecordsetFromSQL(sql);
@@ -1369,7 +1375,7 @@ namespace JurisUtilityBase
                                 isError = _jurisUtility.ExecuteNonQuery(0, sql); //did we enconter an error creating billto?
                                 if (!isError)
                                 {
-                                    sql = "select max(billtosysnbr) from billto";
+                                    sql = "select max(billtosysnbr) from billto where BillToCliNbr = " + clisysnbr.ToString();
                                     dds.Clear();
                                     int billto = 0;
                                     dds = _jurisUtility.RecordsetFromSQL(sql);
@@ -1582,12 +1588,35 @@ namespace JurisUtilityBase
                     loadClientInfoForMatter();
                     getNextMatterNumber();
                     loadAddys();
+                    loadConsolidations();
                 }
             }
             else if (clisysnbr != 0)
             {
                 getNextMatterNumber();
                 loadAddys();
+                loadConsolidations();
+            }
+
+        }
+
+
+        private void loadConsolidations()
+        {
+            string sql = "select BillToNickName + '                                    ' + BillToSysNbr as id from billto where BillToCliNbr = " + clisysnbr.ToString() + " and BillToUsageFlg = 'C'";
+            DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+            if (dds != null && dds.Tables.Count > 0)
+            {
+                comboBoxConsolidation.Enabled = true;
+                checkBoxConsolidation.Enabled = true;
+                foreach (DataRow dr in dds.Tables[0].Rows)
+                    comboBoxConsolidation.Items.Add(dr["id"].ToString());
+                comboBoxConsolidation.SelectedIndex = 0;
+            }
+            else
+            {
+                comboBoxConsolidation.Enabled = false;
+                checkBoxConsolidation.Enabled = false;
             }
 
         }
@@ -2033,6 +2062,7 @@ namespace JurisUtilityBase
             loadClientInfoForMatter();
             getNextMatterNumber();
             loadAddys();
+            loadConsolidations();
             cl.Close();
             this.Show(); //billto name based on flag = c
         }
@@ -2067,6 +2097,42 @@ namespace JurisUtilityBase
             }
             else
                 matB.Close();
+        }
+
+        private void checkBoxConsolidation_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxConsolidation.Checked)
+            {
+                checkBoxChooseAddy.Enabled = false;
+                comboBoxAddyChoose.Enabled = false;
+                textBoxBANName.Enabled = false;
+                richTextBoxBAAddy.Enabled = false;
+                textBoxBAPhoneOpt.Enabled = false;
+                textBoxBAFaxOpt.Enabled = false;
+                textBoxBAContactOpt.Enabled = false;
+                textBoxBANameOpt.Enabled = false;
+                textBoxBACityOpt.Enabled = false;
+                textBoxBAStateOpt.Enabled = false;
+                textBoxBAZipOpt.Enabled = false;
+                textBoxBACountryOpt.Enabled = false;
+                textBoxBAEmailOpt.Enabled = false;
+            }
+            else
+            {
+                checkBoxChooseAddy.Enabled = true;
+                comboBoxAddyChoose.Enabled = true;
+                textBoxBANName.Enabled = true;
+                richTextBoxBAAddy.Enabled = true;
+                textBoxBAPhoneOpt.Enabled = true;
+                textBoxBAFaxOpt.Enabled = true;
+                textBoxBAContactOpt.Enabled = true;
+                textBoxBANameOpt.Enabled = true;
+                textBoxBACityOpt.Enabled = true;
+                textBoxBAStateOpt.Enabled = true;
+                textBoxBAZipOpt.Enabled = true;
+                textBoxBACountryOpt.Enabled = true;
+                textBoxBAEmailOpt.Enabled = true;
+            }
         }
     }
 

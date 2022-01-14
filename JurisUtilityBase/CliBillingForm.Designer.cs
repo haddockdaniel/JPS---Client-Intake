@@ -268,7 +268,7 @@
             this.buttonAddData.BackColor = System.Drawing.Color.LightGray;
             this.buttonAddData.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonAddData.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonAddData.Location = new System.Drawing.Point(604, 563);
+            this.buttonAddData.Location = new System.Drawing.Point(430, 565);
             this.buttonAddData.Name = "buttonAddData";
             this.buttonAddData.Size = new System.Drawing.Size(128, 36);
             this.buttonAddData.TabIndex = 26;
@@ -281,7 +281,7 @@
             this.buttonCancel.BackColor = System.Drawing.Color.LightGray;
             this.buttonCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCancel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonCancel.Location = new System.Drawing.Point(379, 563);
+            this.buttonCancel.Location = new System.Drawing.Point(213, 565);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(128, 36);
             this.buttonCancel.TabIndex = 27;

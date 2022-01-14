@@ -36,6 +36,8 @@ namespace JurisUtilityBase
 
         public string JBillsDbName { get; set; }
 
+        private int empsys = 0;
+
         #endregion
 
         #region Constructor
@@ -217,7 +219,6 @@ namespace JurisUtilityBase
             if (isActivated) // fail safe in case I missed something
             {
                 //now delete it as it isnt a preset and is only temp because we arent moving client info over to a matter screen
-                int empsys =  0;
                 this.Location = pt;
                 //force user to login
                 UserLogin ul = new UserLogin(_jurisUtility, pt);
@@ -230,6 +231,8 @@ namespace JurisUtilityBase
                 {
                     //if the setting was stored (login success), open program...else...exit
                     empsys = emp.empsysnbr;
+                    if (!isUserAlreadyLoggedOn())
+                    {
                         sql = "delete from DefaultSettings where defaultid in (999999, 999998, 999997, 999994, 999996) and empsys = " + empsys.ToString(); // only remove that user id
                         _jurisUtility.ExecuteNonQuery(0, sql);
                         sql = "delete from Defaults where id in (999999, 999998, 999997, 999994, 999996) and userid = " + empsys.ToString();
@@ -238,15 +241,23 @@ namespace JurisUtilityBase
                         {
                             ClientForm cf = new ClientForm(_jurisUtility, 0, false, pt, empsys);
                             this.Hide();
-                            cf.Show();
+                            //cf.Closed += (s, args) => this.Close();
+                            cf.ShowDialog();
                         }
                         else
                         {
                             MatterForm mf = new MatterForm(_jurisUtility, 0, "", 0, pt, empsys);
                             this.Hide();
-                            mf.Show();
+                            //mf.Closed += (s, args) => this.Close();
+                            mf.ShowDialog();
                         }
-                 }
+                    }
+                    else
+                    {
+                        MessageBox.Show("That User is already Logged In", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        System.Environment.Exit(0);
+                    }
+                }
                 else
                 {
                     MessageBox.Show("No valid login supplied", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
@@ -261,7 +272,32 @@ namespace JurisUtilityBase
 
         }
 
+        private bool isUserAlreadyLoggedOn()
+        {
+            string sql = "select name from defaults where id = 999993 and userid = " + empsys.ToString();
+            DataSet myRSPC2 = _jurisUtility.RecordsetFromSQL(sql);
 
+            if (myRSPC2.Tables[0].Rows.Count == 0) //if there is no 999993 record with that empsys number then they arent loged on
+            {
+                sql = "insert into defaults (ID, name, userid, CreationDate, IsStandard, AllData ) " +
+                " values (999993, 'BFMatter', " + empsys.ToString() + ", getdate(), 'N', '')";
+
+                _jurisUtility.ExecuteNonQuery(0, sql);
+                return false;
+            }
+            else // if it does exist...someone is logged on as that user...
+            {
+
+                return true;
+            }
+
+
+
+
+
+
+
+        }
 
         private bool VerifyFirmName()
         {
@@ -393,8 +429,67 @@ namespace JurisUtilityBase
           
         }
 
+        private void UtilityBaseMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            MessageBox.Show("Hit");
+            string sql = "delete from Defaults where id in (999993) and userid = " + empsys.ToString();
+            _jurisUtility.ExecuteNonQuery(0, sql);
+        }
 
+        private void pictureBox1_DoubleClick(object sender, EventArgs e)
+        {
+            string name = Microsoft.VisualBasic.Interaction.InputBox("Enter Admin Password", "Admin Log On", "");
+            if (name.Equals("AthensDBO"))
+            {
+                menuStrip1.Visible = true;
+            }
+            else
+            {
+                System.Environment.Exit(0);
+            }
+        }
 
+        private void clearAllUsersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult ddr = MessageBox.Show("This will fix stuck users on the backend." + "\r\n" + "Ensure everyone has closed the tool before clicking Yes. Continue?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (ddr == DialogResult.Yes)
+            {
+                string sql = "delete from Defaults where id in (999993)";
+                _jurisUtility.ExecuteNonQuery(0, sql);
+            }
+        }
 
+        private void clearAllTemplatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult ddr = MessageBox.Show("This will delete all existing templates." + "\r\n" + "Ensure everyone is logged out of the tool before clicking Yes. Continue?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (ddr == DialogResult.Yes)
+            {
+                string sql = "delete fromDefaultSettings where DefaultID < 999990";
+                _jurisUtility.ExecuteNonQuery(0, sql);
+
+                sql = "delete from Defaults where id < 999990";
+                _jurisUtility.ExecuteNonQuery(0, sql);
+
+            }
+        }
+
+        private void clearAllTempDataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult ddr = MessageBox.Show("This will remove any remaining temp data added by the tool in the event of a crash" + "\r\n" + "Ensure everyone is logged out of the tool before clicking Yes. Continue?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (ddr == DialogResult.Yes)
+            {
+                string sql = "delete fromDefaultSettings where DefaultID > 999990";
+                _jurisUtility.ExecuteNonQuery(0, sql);
+
+                sql = "delete from Defaults where id > 999990";
+                _jurisUtility.ExecuteNonQuery(0, sql);
+
+            }
+        }
+
+        private void UtilityBaseMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+        }
     }
 }
