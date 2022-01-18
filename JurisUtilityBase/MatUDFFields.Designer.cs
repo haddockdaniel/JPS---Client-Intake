@@ -58,7 +58,7 @@ namespace JurisUtilityBase
             this.buttonAddData.Name = "buttonAddData";
             this.buttonAddData.Size = new System.Drawing.Size(128, 36);
             this.buttonAddData.TabIndex = 25;
-            this.buttonAddData.Text = "Add To Client";
+            this.buttonAddData.Text = "Add To Matter";
             this.buttonAddData.UseVisualStyleBackColor = false;
             this.buttonAddData.Click += new System.EventHandler(this.buttonAddData_Click);
             // 

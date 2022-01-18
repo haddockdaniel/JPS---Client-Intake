@@ -1353,6 +1353,7 @@
             this.comboBoxConsolidation.Name = "comboBoxConsolidation";
             this.comboBoxConsolidation.Size = new System.Drawing.Size(187, 21);
             this.comboBoxConsolidation.TabIndex = 41;
+            this.comboBoxConsolidation.SelectedIndexChanged += new System.EventHandler(this.comboBoxConsolidation_SelectedIndexChanged);
             // 
             // checkBoxConsolidation
             // 

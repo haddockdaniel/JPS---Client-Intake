@@ -17,15 +17,17 @@ namespace JurisUtilityBase
             InitializeComponent();
             JUtil = ju;
             pt = pp;
-            this.Location = pt;
+            //this.Location = pt;
             emp = new Employee();
             emp.empsysnbr = 0;
+            this.CenterToScreen();
         }
 
         private bool success = false;
         JurisUtility JUtil;
         private System.Drawing.Point pt;
         public Employee emp;
+        
 
         private void buttonReport_Click(object sender, EventArgs e)
         {
@@ -127,8 +129,7 @@ namespace JurisUtilityBase
 
         private void UserLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!success)
-                MessageBox.Show("No valid log on was entered. The module will now exit.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+
         }
     }
 }

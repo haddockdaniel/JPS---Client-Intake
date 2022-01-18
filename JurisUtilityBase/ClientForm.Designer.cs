@@ -1026,28 +1026,28 @@
             // moveToolStripMenuItem
             // 
             this.moveToolStripMenuItem.Name = "moveToolStripMenuItem";
-            this.moveToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.moveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.moveToolStripMenuItem.Text = "Save As Template";
             this.moveToolStripMenuItem.Click += new System.EventHandler(this.saveAsDefaultToolStripMenuItem_Click);
             // 
             // loadDefaultsToolStripMenuItem
             // 
             this.loadDefaultsToolStripMenuItem.Name = "loadDefaultsToolStripMenuItem";
-            this.loadDefaultsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.loadDefaultsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadDefaultsToolStripMenuItem.Text = "Manage Templates";
             this.loadDefaultsToolStripMenuItem.Click += new System.EventHandler(this.loadDefaultsToolStripMenuItem_Click);
             // 
             // clearFormToolStripMenuItem
             // 
             this.clearFormToolStripMenuItem.Name = "clearFormToolStripMenuItem";
-            this.clearFormToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.clearFormToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.clearFormToolStripMenuItem.Text = "Clear Form";
             this.clearFormToolStripMenuItem.Click += new System.EventHandler(this.clearFormToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Visible = false;
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
@@ -1398,6 +1398,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ClientForm";
             this.Text = "Client Intake Form";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClientForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ClientForm_FormClosed);
             this.Load += new System.EventHandler(this.ClientForm_Load);
             this.menuStrip1.ResumeLayout(false);

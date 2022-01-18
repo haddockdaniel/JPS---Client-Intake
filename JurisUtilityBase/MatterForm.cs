@@ -4,7 +4,7 @@ using System.Linq;
 using System.Data;
 using System.Windows.Forms;
 using Gizmox.Controls;
-
+using System.Runtime.InteropServices;
 
 namespace JurisUtilityBase
 {
@@ -39,7 +39,12 @@ namespace JurisUtilityBase
         string noteName = "";
         string noteText = "";
         int empsysnbr = 0;
-        int colsolBillTo = 0;
+
+        bool exitToMain = false;
+        public const uint WM_NCHITTEST = 0x0084;
+        public const int HTCLOSE = 20;
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int SendMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
 
 
         //load all default items
@@ -583,7 +588,8 @@ namespace JurisUtilityBase
 
         private void buttonExit_Click(object sender, EventArgs e)
         {
-            System.Environment.Exit(1);
+            exitToMain = true;
+            this.Close();
         }
 
         private void comboBoxBAgree_SelectedIndexChanged(object sender, EventArgs e)
@@ -1537,7 +1543,8 @@ namespace JurisUtilityBase
 
         private void ExitDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Environment.Exit(0);
+            exitToMain = true;
+            this.Close();
         }
 
         private int getAddyID()
@@ -1568,7 +1575,10 @@ namespace JurisUtilityBase
                 if (codeIsNumericClient && !isNumeric(textBoxCode.Text))
                     MessageBox.Show("Client Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
+                {
                     verifyAndLoadClient();
+                    loadConsolidations();
+                }
             }
 
         }
@@ -1603,21 +1613,31 @@ namespace JurisUtilityBase
 
         private void loadConsolidations()
         {
-            string sql = "select BillToNickName + '                                    ' + BillToSysNbr as id from billto where BillToCliNbr = " + clisysnbr.ToString() + " and BillToUsageFlg = 'C'";
-            DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
-            if (dds != null && dds.Tables.Count > 0)
+            if (clisysnbr != 0)
             {
-                comboBoxConsolidation.Enabled = true;
-                checkBoxConsolidation.Enabled = true;
-                foreach (DataRow dr in dds.Tables[0].Rows)
-                    comboBoxConsolidation.Items.Add(dr["id"].ToString());
-                comboBoxConsolidation.SelectedIndex = 0;
+                comboBoxConsolidation.ClearItems();
+                string sql = "select BillToNickName + '                                                                      ' + cast(BillToSysNbr as varchar(15)) as id from billto where BillToCliNbr = " + clisysnbr.ToString() + " and BillToUsageFlg = 'C'";
+                DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+                if (dds != null && dds.Tables.Count > 0)
+                {
+                    comboBoxConsolidation.Enabled = true;
+                    checkBoxConsolidation.Enabled = true;
+                    foreach (DataRow dr in dds.Tables[0].Rows)
+                        comboBoxConsolidation.Items.Add(dr["id"].ToString());
+                    comboBoxConsolidation.SelectedIndex = 0;
+                }
+                else
+                {
+                    comboBoxConsolidation.Enabled = false;
+                    checkBoxConsolidation.Enabled = false;
+                }
             }
             else
             {
                 comboBoxConsolidation.Enabled = false;
                 checkBoxConsolidation.Enabled = false;
             }
+            
 
         }
 
@@ -1983,10 +2003,8 @@ namespace JurisUtilityBase
                             sql = "update matter set [" + dr[0].ToString() + "] = " + dr[1].ToString() + " where matsysnbr = " + matsysnbr.ToString();
                         else
                             sql = "update matter set [" + dr[0].ToString() + "] = '" + dr[1].ToString() + "' where matsysnbr = " + matsysnbr.ToString();
-                        MessageBox.Show(sql);
                         if (_jurisUtility.ExecuteNonQuery(0, sql))
                         {
-                            MessageBox.Show(_jurisUtility.errorMessage);
                             return true;
                         }
                     }
@@ -2027,7 +2045,19 @@ namespace JurisUtilityBase
 
         private void MatterForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            int nX = System.Windows.Forms.Cursor.Position.X;
+            int nY = System.Windows.Forms.Cursor.Position.Y;
+            if (SendMessage(this.Handle, WM_NCHITTEST, 0, MakeLong((short)nX, (short)nY)) == HTCLOSE)
+            {
+                exitToMain = true;
+            }
+            if (exitToMain)
+            {
+                string sql = "delete from Defaults where id in (999993) and userid = " + empsysnbr.ToString();
+                _jurisUtility.ExecuteNonQuery(0, sql);
+                System.Environment.Exit(1);
 
+            }
         }
 
         private void closeAndCreateClientToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2133,6 +2163,16 @@ namespace JurisUtilityBase
                 textBoxBACountryOpt.Enabled = true;
                 textBoxBAEmailOpt.Enabled = true;
             }
+        }
+
+        public int MakeLong(short lowPart, short highPart) // to catch clicking the Red X to close
+        {
+            return (int)(((ushort)lowPart) | (uint)(highPart << 16));
+        }
+
+        private void comboBoxConsolidation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 

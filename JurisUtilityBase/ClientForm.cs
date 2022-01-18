@@ -4,6 +4,7 @@ using System.Linq;
 using System.Data;
 using System.Windows.Forms;
 using Gizmox.Controls;
+using System.Runtime.InteropServices;
 
 
 namespace JurisUtilityBase
@@ -32,6 +33,11 @@ namespace JurisUtilityBase
         string noteName = "";
         string noteText = "";
         int empsysnbr = 0;
+        bool exitToMain = false;
+        public const uint WM_NCHITTEST = 0x0084;
+        public const int HTCLOSE = 20;
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int SendMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
 
         //load all default items
         private void ClientForm_Load(object sender, EventArgs e)
@@ -656,7 +662,8 @@ namespace JurisUtilityBase
 
         private void buttonExit_Click(object sender, EventArgs e)
         {
-            System.Environment.Exit(1);
+            exitToMain = true;
+            this.Close();
         }
 
         private void comboBoxBAgree_SelectedIndexChanged(object sender, EventArgs e)
@@ -1515,7 +1522,7 @@ namespace JurisUtilityBase
 
         private void ExitDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Environment.Exit(0);
+            exitToMain = true;
         }
 
         private void textBoxNName_Leave(object sender, EventArgs e)
@@ -1629,7 +1636,7 @@ namespace JurisUtilityBase
         private void ClientForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (this.Visible)
-                System.Environment.Exit(0);
+                this.Hide();
         }
 
         private void buttonAddNoteCard_Click(object sender, EventArgs e)
@@ -1659,6 +1666,28 @@ namespace JurisUtilityBase
                 cliB.ShowDialog();
             else
                 cliB.Close();
+        }
+
+        private void ClientForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            int nX = System.Windows.Forms.Cursor.Position.X;
+            int nY = System.Windows.Forms.Cursor.Position.Y;
+            if (SendMessage(this.Handle, WM_NCHITTEST, 0, MakeLong((short)nX, (short)nY)) == HTCLOSE)
+            {
+                exitToMain = true;
+            }
+            if (exitToMain)
+            {
+                string sql = "delete from Defaults where id in (999993) and userid = " + empsysnbr.ToString();
+                _jurisUtility.ExecuteNonQuery(0, sql);
+                System.Environment.Exit(1);
+
+            }
+        }
+
+        public int MakeLong(short lowPart, short highPart) // to catch clicking the Red X to close
+        {
+            return (int)(((ushort)lowPart) | (uint)(highPart << 16));
         }
     }
 }

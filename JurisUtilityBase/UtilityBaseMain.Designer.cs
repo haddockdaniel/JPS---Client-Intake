@@ -176,21 +176,21 @@
             // clearAllUsersToolStripMenuItem
             // 
             this.clearAllUsersToolStripMenuItem.Name = "clearAllUsersToolStripMenuItem";
-            this.clearAllUsersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearAllUsersToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.clearAllUsersToolStripMenuItem.Text = "Clear All Users";
             this.clearAllUsersToolStripMenuItem.Click += new System.EventHandler(this.clearAllUsersToolStripMenuItem_Click);
             // 
             // clearAllTemplatesToolStripMenuItem
             // 
             this.clearAllTemplatesToolStripMenuItem.Name = "clearAllTemplatesToolStripMenuItem";
-            this.clearAllTemplatesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearAllTemplatesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.clearAllTemplatesToolStripMenuItem.Text = "Clear All Templates";
             this.clearAllTemplatesToolStripMenuItem.Click += new System.EventHandler(this.clearAllTemplatesToolStripMenuItem_Click);
             // 
             // clearAllTempDataToolStripMenuItem
             // 
             this.clearAllTempDataToolStripMenuItem.Name = "clearAllTempDataToolStripMenuItem";
-            this.clearAllTempDataToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearAllTempDataToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.clearAllTempDataToolStripMenuItem.Text = "Clear All Temp Data";
             this.clearAllTempDataToolStripMenuItem.Click += new System.EventHandler(this.clearAllTempDataToolStripMenuItem_Click);
             // 
@@ -221,6 +221,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UtilityBaseMain_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.UtilityBaseMain_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Enter += new System.EventHandler(this.UtilityBaseMain_Enter);
             ((System.ComponentModel.ISupportInitialize)(this.JurisLogoImageBox)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

@@ -38,6 +38,8 @@ namespace JurisUtilityBase
 
         private int empsys = 0;
 
+        private bool firstFocus = true;
+
         #endregion
 
         #region Constructor
@@ -235,21 +237,23 @@ namespace JurisUtilityBase
                     {
                         sql = "delete from DefaultSettings where defaultid in (999999, 999998, 999997, 999994, 999996) and empsys = " + empsys.ToString(); // only remove that user id
                         _jurisUtility.ExecuteNonQuery(0, sql);
-                        sql = "delete from Defaults where id in (999999, 999998, 999997, 999994, 999996) and userid = " + empsys.ToString();
+                        sql = "delete from Defaults where id in (999999, 999998, 999997, 999994, 999996) and userid = " + empsys.ToString();    
                         _jurisUtility.ExecuteNonQuery(0, sql);
                         if (radioButtonCliOnly.Checked)
                         {
                             ClientForm cf = new ClientForm(_jurisUtility, 0, false, pt, empsys);
+                            firstFocus = false;
                             this.Hide();
                             //cf.Closed += (s, args) => this.Close();
-                            cf.ShowDialog();
+                            cf.Show();
                         }
                         else
                         {
                             MatterForm mf = new MatterForm(_jurisUtility, 0, "", 0, pt, empsys);
+                            firstFocus = false;
                             this.Hide();
                             //mf.Closed += (s, args) => this.Close();
-                            mf.ShowDialog();
+                            mf.Show();
                         }
                     }
                     else
@@ -261,6 +265,7 @@ namespace JurisUtilityBase
                 else
                 {
                     MessageBox.Show("No valid login supplied", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    this.Show();
                 }
 
             }
@@ -280,7 +285,7 @@ namespace JurisUtilityBase
             if (myRSPC2.Tables[0].Rows.Count == 0) //if there is no 999993 record with that empsys number then they arent loged on
             {
                 sql = "insert into defaults (ID, name, userid, CreationDate, IsStandard, AllData ) " +
-                " values (999993, 'BFMatter', " + empsys.ToString() + ", getdate(), 'N', '')";
+                " values (999993, 'LogIn', " + empsys.ToString() + ", getdate(), 'N', '')";
 
                 _jurisUtility.ExecuteNonQuery(0, sql);
                 return false;
@@ -431,9 +436,7 @@ namespace JurisUtilityBase
 
         private void UtilityBaseMain_FormClosed(object sender, FormClosedEventArgs e)
         {
-            MessageBox.Show("Hit");
-            string sql = "delete from Defaults where id in (999993) and userid = " + empsys.ToString();
-            _jurisUtility.ExecuteNonQuery(0, sql);
+
         }
 
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
@@ -490,6 +493,16 @@ namespace JurisUtilityBase
         private void UtilityBaseMain_FormClosing(object sender, FormClosingEventArgs e)
         {
 
+        }
+
+        private void UtilityBaseMain_Enter(object sender, EventArgs e)
+        {
+            if (!firstFocus)
+            {
+                this.Show();
+
+                firstFocus = true;
+            }
         }
     }
 }
