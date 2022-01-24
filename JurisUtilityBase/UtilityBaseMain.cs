@@ -49,6 +49,7 @@ namespace JurisUtilityBase
             InitializeComponent();
             _jurisUtility = new JurisUtility();
             isActivated = false;
+
             //MessageBox.Show(JEncrypt(@"vMPR", "Athens"));
         }
 
@@ -114,6 +115,26 @@ namespace JurisUtilityBase
 
         private void Form1_Load(object sender, EventArgs e)
         {
+        }
+
+        private void checkForTables()
+        {
+            string sql = "IF  NOT EXISTS (SELECT * FROM sys.objects " +
+            " WHERE object_id = OBJECT_ID(N'[dbo].[Defaults]') AND type in (N'U')) " +
+            " BEGIN " +
+            " Create Table [dbo].[Defaults](ID int, name varchar(300), UserID int,  CreationDate datetime, IsStandard char, AllData varchar(250)) " +
+            " END";
+
+            _jurisUtility.ExecuteSqlCommand(0, sql);
+
+            sql = "IF  NOT EXISTS (SELECT * FROM sys.objects " +
+            " WHERE object_id = OBJECT_ID(N'[dbo].[DefaultSettings]') AND type in (N'U')) " +
+            " BEGIN " +
+            " Create Table [dbo].[DefaultSettings] (DefaultID int, name varchar(50), data varchar(255), entryType varchar(50), empsys int) " +
+            " END";
+
+            _jurisUtility.ExecuteSqlCommand(0, sql);
+
         }
 
         private void listBoxCompanies_SelectedIndexChanged(object sender, EventArgs e)
@@ -223,6 +244,7 @@ namespace JurisUtilityBase
                 //now delete it as it isnt a preset and is only temp because we arent moving client info over to a matter screen
                 this.Location = pt;
                 //force user to login
+                checkForTables();
                 UserLogin ul = new UserLogin(_jurisUtility, pt);
                 this.Hide();
                 Employee emp = new Employee();
