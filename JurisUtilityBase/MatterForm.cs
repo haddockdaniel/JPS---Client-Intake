@@ -1620,11 +1620,11 @@ namespace JurisUtilityBase
                 DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
                 if (dds != null && dds.Tables.Count > 0)
                 {
-                    comboBoxConsolidation.Enabled = true;
+                    
                     checkBoxConsolidation.Enabled = true;
                     foreach (DataRow dr in dds.Tables[0].Rows)
                         comboBoxConsolidation.Items.Add(dr["id"].ToString());
-                    comboBoxConsolidation.SelectedIndex = 0;
+                    comboBoxConsolidation.Enabled = true;
                 }
                 else
                 {
@@ -1637,7 +1637,8 @@ namespace JurisUtilityBase
                 comboBoxConsolidation.Enabled = false;
                 checkBoxConsolidation.Enabled = false;
             }
-            
+            if (comboBoxConsolidation.Enabled)
+                comboBoxConsolidation.SelectedIndex = 0;
 
         }
 

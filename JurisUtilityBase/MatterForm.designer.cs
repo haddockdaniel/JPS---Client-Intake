@@ -1350,6 +1350,7 @@
             this.comboBoxConsolidation.Enabled = false;
             this.comboBoxConsolidation.FormattingEnabled = true;
             this.comboBoxConsolidation.Location = new System.Drawing.Point(577, 27);
+            this.comboBoxConsolidation.MaxDropDownItems = 50;
             this.comboBoxConsolidation.Name = "comboBoxConsolidation";
             this.comboBoxConsolidation.Size = new System.Drawing.Size(187, 21);
             this.comboBoxConsolidation.TabIndex = 41;

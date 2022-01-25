@@ -883,8 +883,9 @@ namespace JurisUtilityBase
                         {
                             if (string.IsNullOrEmpty(textbox.Text)) //if there is nothing in it, is it required?
                             {
-                                if (!textbox.Name.EndsWith("Opt"))
+                                if (!textbox.Name.EndsWith("Opt") && !textbox.Name.Equals("textBoxConsolidation"))
                                 {
+                                MessageBox.Show(textbox.Name);
                                     MessageBox.Show("All fields in black text are required." + "\r\n" + "Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     buttonCreateClient.Enabled = true;
                                     return false;
