@@ -42,6 +42,11 @@ namespace JurisUtilityBase
         //load all default items
         private void ClientForm_Load(object sender, EventArgs e)
         {
+            if (!checkIfLoginInfoIsStillInDB())
+            {
+                MessageBox.Show("An Admin cleared all logins so you must log in again." + "\r\n" + "The application wil now close. Please reopen and log in.", "Credential Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Environment.Exit(0);
+            }
             this.Location = pt;
             dateTimePickerOpened.Value = DateTime.Now; //OpenedDate
 
@@ -51,7 +56,7 @@ namespace JurisUtilityBase
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
             if (presetID == 0) // if there is no preset passe by presetmamager then use default
             {
-                if (dds != null && dds.Tables.Count > 0)
+                if (dds != null && dds.Tables.Count > 0 && dds.Tables[0].Rows.Count > 0)
                 {
                     foreach (DataRow dr in dds.Tables[0].Rows)
                         presetID = Convert.ToInt32(dr[0].ToString());
@@ -73,7 +78,7 @@ namespace JurisUtilityBase
             string[] temp = null;
             try
             {
-                if (dds != null && dds.Tables.Count > 0)
+                if (dds != null && dds.Tables.Count > 0 && dds.Tables[0].Rows.Count > 0)
                 {
                     foreach (DataRow dr in dds.Tables[0].Rows)
                     {
@@ -93,7 +98,7 @@ namespace JurisUtilityBase
             string SQLPC2 = "select OfcOfficeCode + '    ' + right(OfcDesc, 30) as OfficeCode from OfficeCode order by OfcOfficeCode";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
-            if (myRSPC2.Tables[0].Rows.Count == 0)
+            if (myRSPC2 == null || myRSPC2.Tables.Count == 0 || myRSPC2.Tables[0].Rows.Count == 0)
                 errorList.Add("There are no Office Codes. Correct and run the tool again");
             else
             {
@@ -108,7 +113,7 @@ namespace JurisUtilityBase
             SQLPC2 = "select PrctClsCode  + '    ' + right(PrctClsDesc, 30) as PC from PracticeClass order by PrctClsCode";
              myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
-            if (myRSPC2.Tables[0].Rows.Count == 0)
+            if (myRSPC2 == null || myRSPC2.Tables.Count == 0 || myRSPC2.Tables[0].Rows.Count == 0)
                 errorList.Add("There are no Practice Classes. Correct and run the tool again");
             else
             {
@@ -129,7 +134,7 @@ namespace JurisUtilityBase
             SQLPC2 = "select empinitials,empid + '    ' + empname as emp from employee where empvalidastkpr='Y' order by empinitials, empid";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
-            if (myRSPC2.Tables[0].Rows.Count == 0)
+            if (myRSPC2 == null || myRSPC2.Tables.Count == 0 || myRSPC2.Tables[0].Rows.Count == 0)
                 errorList.Add("There are no valid Timekeepers. Correct and run the tool again");
             else
             {
@@ -160,7 +165,7 @@ namespace JurisUtilityBase
             myRSPC2.Clear();
             SQLPC2 = "select SpTxtValue from sysparam where spname = 'CfgTransOpts'";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
-            if (myRSPC2.Tables[0].Rows.Count == 0)
+            if (myRSPC2 == null || myRSPC2.Tables.Count == 0 || myRSPC2.Tables[0].Rows.Count == 0)
                 errorList.Add("Fee or Exp Schedule Standard in sysparam invalid (CfgTransOpts). Correct and run the tool again");
             else
             {
@@ -174,7 +179,7 @@ namespace JurisUtilityBase
             SQLPC2 = "select FeeSchCode as FS from FeeSchedule where FeeSchActive = 'Y' order by FeeSchCode ";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
-            if (myRSPC2.Tables[0].Rows.Count == 0)
+            if (myRSPC2 == null || myRSPC2.Tables.Count == 0 || myRSPC2.Tables[0].Rows.Count == 0)
                 errorList.Add("There are no Fee Schedules. Correct and run the tool again");
             else
             {
@@ -188,7 +193,7 @@ namespace JurisUtilityBase
             SQLPC2 = "select ExpSchCode as ES from ExpenseSchedule order by ExpSchCode";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
-            if (myRSPC2.Tables[0].Rows.Count == 0)
+            if (myRSPC2 == null || myRSPC2.Tables.Count == 0 || myRSPC2.Tables[0].Rows.Count == 0)
                 errorList.Add("There are no Expense Schedules. Correct and run the tool again");
             else
             {
@@ -203,7 +208,7 @@ namespace JurisUtilityBase
             SQLPC2 = "select TCXLList as FS from TaskCodeXrefList order by TCXLList ";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
-            if (myRSPC2.Tables[0].Rows.Count == 0)
+            if (myRSPC2 == null || myRSPC2.Tables.Count == 0 || myRSPC2.Tables[0].Rows.Count == 0)
             {
                 checkBoxTaskXRef.Checked = false;
                 checkBoxTaskXRef.Enabled = false;
@@ -221,7 +226,7 @@ namespace JurisUtilityBase
             SQLPC2 = "select ECXLList as FS from ExpCodeXrefList order by ECXLList ";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
-            if (myRSPC2.Tables[0].Rows.Count == 0)
+            if (myRSPC2 == null || myRSPC2.Tables.Count == 0 || myRSPC2.Tables[0].Rows.Count == 0)
             {
                 checkBoxExpXRef.Checked = false;
                 checkBoxExpXRef.Enabled = false;
@@ -240,7 +245,7 @@ namespace JurisUtilityBase
             SQLPC2 = "select BLCode as ES from BillLayout where blcode <> '{--}' order by BLCode";
             myRSPC2 = _jurisUtility.RecordsetFromSQL(SQLPC2);
 
-            if (myRSPC2.Tables[0].Rows.Count == 0)
+            if (myRSPC2 == null || myRSPC2.Tables.Count == 0 || myRSPC2.Tables[0].Rows.Count == 0)
                 errorList.Add("There are no Bill Layouts. Correct and run the tool again");
             else
             {
@@ -335,6 +340,24 @@ namespace JurisUtilityBase
                     buttonCreateClient.Click += buttonModify;
                 }
             }
+        }
+
+        public bool checkIfLoginInfoIsStillInDB()
+        {
+            string sql = "select name from defaults where id = 999993 and userid = " + empsysnbr.ToString();
+            DataSet myRSPC2 = _jurisUtility.RecordsetFromSQL(sql);
+
+            if (myRSPC2 == null || myRSPC2.Tables.Count == 0 || myRSPC2.Tables[0].Rows.Count == 0) //if no record exists...they shouldnt be usin the tool - catch if they are still in the tool when someone clears the logins
+            {
+                return false;
+            }
+            else
+            {
+
+                return true; //record exists still so they are allowed to keep working
+            }
+
+
         }
 
         private void getSettings()
