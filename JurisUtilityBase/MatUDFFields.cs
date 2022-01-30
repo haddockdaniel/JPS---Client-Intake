@@ -35,7 +35,7 @@ namespace JurisUtilityBase
             string sysparam = " SELECT SpTxtValue, SpName FROM SysParam where spname like 'FldMatterUDF%' and sptxtvalue not like 'M UDF%' ";
 
             DataSet dds2 = JU.RecordsetFromSQL(sysparam);
-            if (dds2 != null && dds2.Tables.Count > 0)
+            if (dds2 != null && dds2.Tables.Count > 0 && dds2.Tables[0].Rows.Count > 0)
             {
                 int numOfFields = dds2.Tables[0].Rows.Count;
                 if (numOfFields == 0)
