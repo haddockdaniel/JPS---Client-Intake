@@ -199,9 +199,14 @@ namespace JurisUtilityBase
 
             foreach (BillingField bb in bfList)
             {
-                if (!string.IsNullOrEmpty(bb.text) && !bb.delete)
+                if (!string.IsNullOrEmpty(bb.text) )
                 {
                     sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType, empsys) values (999994, '" + bb.name.Replace(" ", "") + "', '" + bb.text + "', '" + bb.DBentryType +"', " + empsysnbr.ToString() + ")";
+                    JU.ExecuteNonQuery(0, sql);
+                }
+                else
+                {
+                    sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType, empsys) values (999994, '" + bb.name.Replace(" ", "") + "', '?', '" + bb.DBentryType + "', " + empsysnbr.ToString() + ")";
                     JU.ExecuteNonQuery(0, sql);
                 }
             }
@@ -289,7 +294,7 @@ namespace JurisUtilityBase
                     {
                         string selection = cb.GetItemText(cb.SelectedItem).Split(' ')[0];
                         if (selection.Contains("Blank/None"))
-                            bb.delete = true;
+                            bb.text = "?";
                         else
                             bb.text = selection;
 
@@ -303,7 +308,6 @@ namespace JurisUtilityBase
                     }
                 }
             }
-            bfList.RemoveAll(x => x.delete == true);
             return true;
         }
 
@@ -337,7 +341,8 @@ namespace JurisUtilityBase
                 {
                     if (textbox.Name.Equals(bb.whichBox))
                     {
-                        if (bb.length > textbox.Text.Length)
+
+                        if (textbox.Text.Length > bb.length)
                         {
                             MessageBox.Show("UDF Field " + bb.name + " is too long. Limit it to " + bb.length.ToString() + " charcters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;

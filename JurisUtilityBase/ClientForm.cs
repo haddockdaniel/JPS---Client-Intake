@@ -850,7 +850,10 @@ namespace JurisUtilityBase
 
                 }
                 if (!checkForRequiredUDFs())
+                {
+                    buttonCreateClient.Enabled = true;
                     return false;
+                }
 
             }
 
@@ -991,10 +994,9 @@ namespace JurisUtilityBase
                     string[] test = dr[0].ToString().Split(',');
                     if (test[3].ToString().Equals("R"))
                     {
-                        sysparam = "select * from DefaultSettings where id = 999994 and [name] = '" + test[0].ToString().Replace(" ", "") + "'";
-                        dds2.Clear();
-                        dds2 = _jurisUtility.RecordsetFromSQL(sysparam);
-                        if (dds2 == null || dds2.Tables.Count == 0 && dds2.Tables[0].Rows.Count == 0)
+                        sysparam = "select * from DefaultSettings where DefaultID = 999994 and [name] = '" + test[0].ToString().Replace(" ", "") + "'";
+                        DataSet dds3 = _jurisUtility.RecordsetFromSQL(sysparam);
+                        if (dds3 == null || dds3.Tables.Count == 0)
                         {
                             MessageBox.Show("At least 1 UDF field is required. Please populate the required UDF field(s).", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;

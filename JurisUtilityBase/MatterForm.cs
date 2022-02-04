@@ -793,28 +793,36 @@ namespace JurisUtilityBase
             if (textBoxCode.Text.Length > lengthOfCodeClient)
             {
                 MessageBox.Show("Client Code is longer than allowed. Your settings allow for " + lengthOfCodeClient.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                buttonCreateClient.Enabled = true;
                 return false;
 
             }
             if (codeIsNumericClient && !isNumeric(textBoxCode.Text))
             {
                 MessageBox.Show("Client Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                buttonCreateClient.Enabled = true;
                 return false;
             }
 
             if (textBoxMatterCode.Text.Length > lengthOfCodeMatter)
             {
                 MessageBox.Show("Matter Code is longer than allowed. Your settings allow for " + lengthOfCodeMatter.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                buttonCreateClient.Enabled = true;
                 return false;
 
             }
             if (codeIsNumericMatter && !isNumeric(textBoxMatterCode.Text))
             {
                 MessageBox.Show("Matter Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                buttonCreateClient.Enabled = true;
                 return false;
             }
             if (!checkForRequiredUDFs())
+            {
+                buttonCreateClient.Enabled = true;
                 return false;
+            }
 
             clisysnbr = getCliSysNbr();
 
@@ -825,6 +833,7 @@ namespace JurisUtilityBase
                 if (dds1 != null && dds1.Tables.Count > 0 && dds1.Tables[0].Rows.Count != 0)
                 {
                     MessageBox.Show("That address nickname is already used for that client" + "\r\n" + "Enter a new and unique nickname", "Constraint Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    buttonCreateClient.Enabled = true;
                     return false;
                 }
             }
@@ -834,6 +843,7 @@ namespace JurisUtilityBase
                 if (!checkBoxChooseAddy.Checked && (string.IsNullOrEmpty(richTextBoxBAAddy.Text) || string.IsNullOrEmpty(textBoxBANName.Text)))
                 {
                     MessageBox.Show("When an existing address is not selected, the Nickname and Address field are required." + "\r\n" + "Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    buttonCreateClient.Enabled = true;
                     return false;
                 }
                 foreach (var textbox in this.Controls.OfType<TextBox>())
@@ -845,6 +855,7 @@ namespace JurisUtilityBase
                             if (!textbox.Name.EndsWith("Opt"))
                             {
                                 MessageBox.Show("All fields in black text are required. Please correct this issue and retry", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                buttonCreateClient.Enabled = true;
                                 return false;
                             }
                         }
@@ -889,7 +900,10 @@ namespace JurisUtilityBase
                 if (testOrigPct())
                     return true;
                 else
+                {
+                    buttonCreateClient.Enabled = true;
                     return false;
+                }
 
             }
 
@@ -899,7 +913,7 @@ namespace JurisUtilityBase
                 foreach (string dd in incorrectFields)
                     items = items + dd + " ";
                 MessageBox.Show("All numeric fields must have a number in them." + "\r\n" + "The following fields are invalid and will be reset" + "\r\n" + items + "\r\n" + "Please adjust if needed and continue.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                buttonCreateClient.Enabled = true;
 
                 return false;
             }
@@ -918,7 +932,7 @@ namespace JurisUtilityBase
                     string[] test = dr[0].ToString().Split(',');
                     if (test[3].ToString().Equals("R"))
                     {
-                        sysparam = "select * from DefaultSettings where id = 999996 and [name] = '" + test[0].ToString().Replace(" ", "") + "'";
+                        sysparam = "select * from DefaultSettings where defaultid = 999996 and [name] = '" + test[0].ToString().Replace(" ", "") + "'";
                         dds2.Clear();
                         dds2 = _jurisUtility.RecordsetFromSQL(sysparam);
                         if (dds2 == null || dds2.Tables.Count == 0 && dds2.Tables[0].Rows.Count == 0)

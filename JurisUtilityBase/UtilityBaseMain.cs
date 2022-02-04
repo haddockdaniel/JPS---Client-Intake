@@ -514,7 +514,8 @@ namespace JurisUtilityBase
 
         private void UtilityBaseMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            string sql = "delete from Defaults where id in (999993) and userid = " + empsys.ToString();
+            _jurisUtility.ExecuteNonQuery(0, sql);
         }
 
         private void UtilityBaseMain_Enter(object sender, EventArgs e)
