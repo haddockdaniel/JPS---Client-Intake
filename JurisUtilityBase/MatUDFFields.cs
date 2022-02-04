@@ -136,6 +136,7 @@ namespace JurisUtilityBase
                                     }
                                     bf.isRequired = false;
                                     bf.whichBox = cb.Name;
+                                    bf.DBentryType = "dropdown";
                                 }
                             }
                         }
@@ -156,6 +157,7 @@ namespace JurisUtilityBase
                                     }
                                     bf.isRequired = false;
                                     bf.whichBox = cb.Name;
+                                    bf.DBentryType = "dropdown";
                                 }
                             }
                         }
@@ -221,8 +223,11 @@ namespace JurisUtilityBase
                 {
                     if (verifyDropDowns())
                     {
-                        saveData();
-                        this.Close();
+                        if (validateLengths())
+                        {
+                            saveData();
+                            this.Close();
+                        }
                     }
                 }
 
@@ -324,6 +329,28 @@ namespace JurisUtilityBase
             }
             catch
             { return false; }
+        }
+
+        private bool validateLengths()
+        {
+            foreach (BillingField bb in bfList)
+            {
+                foreach (var textbox in this.Controls.OfType<TextBox>())
+                {
+                    if (textbox.Name.Equals(bb.whichBox))
+                    {
+                        if (bb.length > textbox.Text.Length)
+                        {
+                            MessageBox.Show("UDF Field " + bb.name + " is too long. Limit it to " + bb.length.ToString() + " charcters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+
+                        }
+                    }
+                }
+
+            }
+            return true;
+
         }
     }
 }

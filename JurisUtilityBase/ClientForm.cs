@@ -484,7 +484,7 @@ namespace JurisUtilityBase
             if (ds == DialogResult.Yes)
             {
                 checkForTables();
-                string sql = "select ID, name as [Default Name],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where  userid =  " + empsysnbr.ToString();
+                string sql = "select ID, name as [Default Name],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where id < 9999990 and  userid =  " + empsysnbr.ToString();
                 ds1 = _jurisUtility.RecordsetFromSQL(sql);
                 pt = this.Location;
                 PresetManager DM = new PresetManager(ds1, _jurisUtility, pt, empsysnbr);
@@ -849,6 +849,8 @@ namespace JurisUtilityBase
                     }
 
                 }
+                if (!checkForRequiredUDFs())
+                    return false;
 
             }
 
@@ -977,7 +979,36 @@ namespace JurisUtilityBase
                 }
         }
 
-        private bool isInteger(string test)
+        private bool checkForRequiredUDFs()
+        {
+            string sysparam = " SELECT SpTxtValue, SpName FROM SysParam where spname like 'FldClientUDF%' and sptxtvalue not like 'C UDF%' ";
+
+            DataSet dds2 = _jurisUtility.RecordsetFromSQL(sysparam);
+            if (dds2 != null && dds2.Tables.Count > 0 && dds2.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in dds2.Tables[0].Rows) // if any defined UDF fields are 'R', see if they actually added them through UDF button
+                {
+                    string[] test = dr[0].ToString().Split(',');
+                    if (test[3].ToString().Equals("R"))
+                    {
+                        sysparam = "select * from DefaultSettings where id = 999994 and [name] = '" + test[0].ToString().Replace(" ", "") + "'";
+                        dds2.Clear();
+                        dds2 = _jurisUtility.RecordsetFromSQL(sysparam);
+                        if (dds2 == null || dds2.Tables.Count == 0 && dds2.Tables[0].Rows.Count == 0)
+                        {
+                            MessageBox.Show("At least 1 UDF field is required. Please populate the required UDF field(s).", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+
+    
+
+    private bool isInteger(string test)
         {
             try
             {
@@ -1614,7 +1645,6 @@ namespace JurisUtilityBase
                         sql = "update client set [" + dr[0].ToString() + "] = " + dr[1].ToString() + " where clisysnbr = " + clisysnbr.ToString();
                         else
                         sql = "update client set [" + dr[0].ToString() + "] = '" + dr[1].ToString() + "' where clisysnbr = " + clisysnbr.ToString();
-                        MessageBox.Show(sql);
                         if (_jurisUtility.ExecuteNonQuery(0, sql))
                         {
                             MessageBox.Show(_jurisUtility.errorMessage);

@@ -813,6 +813,8 @@ namespace JurisUtilityBase
                 MessageBox.Show("Matter Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
+            if (!checkForRequiredUDFs())
+                return false;
 
             clisysnbr = getCliSysNbr();
 
@@ -902,6 +904,32 @@ namespace JurisUtilityBase
                 return false;
             }
 
+        }
+
+        private bool checkForRequiredUDFs()
+        {
+            string sysparam = " SELECT SpTxtValue, SpName FROM SysParam where spname like 'FldMatterUDF%' and sptxtvalue not like 'M UDF%' ";
+
+            DataSet dds2 = _jurisUtility.RecordsetFromSQL(sysparam);
+            if (dds2 != null && dds2.Tables.Count > 0 && dds2.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in dds2.Tables[0].Rows) // if any defined UDF fields are 'R', see if they actually added them through UDF button
+                {
+                    string[] test = dr[0].ToString().Split(',');
+                    if (test[3].ToString().Equals("R"))
+                    {
+                        sysparam = "select * from DefaultSettings where id = 999996 and [name] = '" + test[0].ToString().Replace(" ", "") + "'";
+                        dds2.Clear();
+                        dds2 = _jurisUtility.RecordsetFromSQL(sysparam);
+                        if (dds2 == null || dds2.Tables.Count == 0 && dds2.Tables[0].Rows.Count == 0)
+                        {
+                            MessageBox.Show("At least 1 UDF field is required. Please populate the required UDF field(s).", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         private bool isInteger(string test)

@@ -81,7 +81,7 @@ namespace JurisUtilityBase
                 {
                     sql = "update defaults set name = '" + name + "' where id = " + ID.ToString();
                     _jurisUtility.ExecuteSqlCommand(0, sql);
-                    sql = "select ID, name as [Default Name],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where  userid = " + empsysnbr.ToString();
+                    sql = "select ID, name as [Default Name],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where id < 9999990 and userid = " + empsysnbr.ToString();
                     DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                     pt = this.Location;
                     PresetManager DM = new PresetManager(ds, _jurisUtility, pt, empsysnbr);
