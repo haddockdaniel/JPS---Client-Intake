@@ -484,10 +484,10 @@ namespace JurisUtilityBase
             if (ds == DialogResult.Yes)
             {
                 checkForTables();
-                string sql = "select ID, name as [Default Name],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where id < 9999990 and  userid =  " + empsysnbr.ToString();
+                string sql = "select ID, name as [Default Name],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where id < 999990 and  userid =  " + empsysnbr.ToString();
                 ds1 = _jurisUtility.RecordsetFromSQL(sql);
                 pt = this.Location;
-                PresetManager DM = new PresetManager(ds1, _jurisUtility, pt, empsysnbr);
+                PresetManager DM = new PresetManager(ds1, _jurisUtility, pt, empsysnbr); 
                 DM.Show();
                 this.Hide();
                 this.Close();
@@ -572,11 +572,11 @@ namespace JurisUtilityBase
         {
             checkForTables();
             string sql = "insert into defaults (ID, name, userid, CreationDate, IsStandard, AllData ) " +
-                " values ((case when (select max(ID) from defaults where id < 9999990) is null then 1 else ((select max(ID) from defaults where id < 9999990) + 1) end), '" + name + "', " + empsysnbr.ToString() + ", getdate(), 'N', '')";
+                " values ((case when (select max(ID) from defaults where id < 999990) is null then 1 else ((select max(ID) from defaults where id < 999990) + 1) end), '" + name + "', " + empsysnbr.ToString() + ", getdate(), 'N', '')";
 
             _jurisUtility.ExecuteNonQuery(0, sql);
 
-            sql = "select max(id) from defaults where id < 9999990 and userid = " + empsysnbr.ToString();
+            sql = "select max(id) from defaults where id < 999990 and userid = " + empsysnbr.ToString();
             DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
             int defID = 0;
             if (dds != null && dds.Tables.Count > 0)
@@ -996,7 +996,7 @@ namespace JurisUtilityBase
                     {
                         sysparam = "select * from DefaultSettings where DefaultID = 999994 and [name] = '" + test[0].ToString().Replace(" ", "") + "'";
                         DataSet dds3 = _jurisUtility.RecordsetFromSQL(sysparam);
-                        if (dds3 == null || dds3.Tables.Count == 0)
+                        if (dds3 == null || dds3.Tables.Count == 0 || dds3.Tables[0].Rows.Count == 0)
                         {
                             MessageBox.Show("At least 1 UDF field is required. Please populate the required UDF field(s).", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
@@ -1580,6 +1580,7 @@ namespace JurisUtilityBase
         private void ExitDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
             exitToMain = true;
+            this.Close();
         }
 
         private void textBoxNName_Leave(object sender, EventArgs e)
@@ -1662,23 +1663,26 @@ namespace JurisUtilityBase
 
         private void textBoxCode_Leave(object sender, EventArgs e)
         {
-            if (textBoxCode.Text.Length > lengthOfCode)
-                MessageBox.Show("Client Code is longer than allowed." + "\r\n" + "Your settings allow for " + lengthOfCode.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            else if (codeIsNumeric && !isNumeric(textBoxCode.Text))
-                MessageBox.Show("Client Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else
+            if (!string.IsNullOrEmpty(textBoxCode.Text))
             {
-                string code = formatClientCode(textBoxCode.Text);
-                string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + code + "'";
-                DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
-                if (dds != null && dds.Tables.Count > 0)
-                {
-                    foreach (DataRow dr in dds.Tables[0].Rows) //client already exists
-                    {
-                        MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code." + "\r\n" + "Codes must match the format in which they appear in Juris." + "\r\n" + "This includes leading zeroes", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                if (textBoxCode.Text.Length > lengthOfCode)
+                    MessageBox.Show("Client Code is longer than allowed." + "\r\n" + "Your settings allow for " + lengthOfCode.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+                else if (codeIsNumeric && !isNumeric(textBoxCode.Text))
+                    MessageBox.Show("Client Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                {
+                    string code = formatClientCode(textBoxCode.Text);
+                    string sql = "select clisysnbr from client where dbo.jfn_FormatClientCode(clicode) = '" + code + "'";
+                    DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
+                    if (dds != null && dds.Tables.Count > 0)
+                    {
+                        foreach (DataRow dr in dds.Tables[0].Rows) //client already exists
+                        {
+                            MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code." + "\r\n" + "Codes must match the format in which they appear in Juris." + "\r\n" + "This includes leading zeroes", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
+                    }
                 }
             }
 

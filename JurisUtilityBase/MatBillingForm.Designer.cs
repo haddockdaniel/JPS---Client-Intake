@@ -528,7 +528,7 @@
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MatBillingForm";
-            this.Text = "Billing and UDF Fields";
+            this.Text = "Billing Fields";
             this.ResumeLayout(false);
             this.PerformLayout();
 

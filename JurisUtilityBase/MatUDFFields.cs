@@ -343,7 +343,7 @@ namespace JurisUtilityBase
                 {
                     if (textbox.Name.Equals(bb.whichBox))
                     {
-                        if (bb.length > textbox.Text.Length)
+                        if (textbox.Text.Length > bb.length)
                         {
                             MessageBox.Show("UDF Field " + bb.name + " is too long. Limit it to " + bb.length.ToString() + " charcters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;

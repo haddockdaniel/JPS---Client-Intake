@@ -863,25 +863,25 @@ namespace JurisUtilityBase
                     }
 
                 }
-                if (Convert.ToInt32(textBoxMonthOpt.Text) < 1 || Convert.ToInt32(textBoxMonthOpt.Text) > 12 && (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("M") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("M") || this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("A") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("A")))
+                if ((Convert.ToInt32(textBoxMonthOpt.Text) < 1 || Convert.ToInt32(textBoxMonthOpt.Text) > 12) && (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("M") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("M") || this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("A") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("A")))
                 {
                     MessageBox.Show("When Monthly or Annual is selected, the Month must be 1 through 12.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     buttonCreateClient.Enabled = true;
                     return false;
                 }
-                if (Convert.ToInt32(textBoxMonthOpt.Text) < 1 || Convert.ToInt32(textBoxMonthOpt.Text) > 6 && (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("S") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("S")))
+                if ((Convert.ToInt32(textBoxMonthOpt.Text) < 1 || Convert.ToInt32(textBoxMonthOpt.Text) > 6) && (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("S") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("S")))
                 {
                     MessageBox.Show("When Semi Annual is selected, the Month must be 1 through 6.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     buttonCreateClient.Enabled = true;
                     return false;
                 }
-                if (Convert.ToInt32(textBoxMonthOpt.Text) < 1 || Convert.ToInt32(textBoxMonthOpt.Text) > 12 && (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("Q") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("Q")))
+                if ((Convert.ToInt32(textBoxMonthOpt.Text) < 1 || Convert.ToInt32(textBoxMonthOpt.Text) > 12) && (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("Q") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("Q")))
                 {
                     MessageBox.Show("When Quarterly is selected, the Month must be 1 through 4.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     buttonCreateClient.Enabled = true;
                     return false;
                 }
-                if (Convert.ToInt32(textBoxCycleOpt.Text) < 1 || Convert.ToInt32(textBoxCycleOpt.Text) > 999 && (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("C") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("C")))
+                if ((Convert.ToInt32(textBoxCycleOpt.Text) < 1 || Convert.ToInt32(textBoxCycleOpt.Text) > 999) && (this.comboBoxFeeFreq.GetItemText(this.comboBoxFeeFreq.SelectedItem).Split(' ')[0].Equals("C") || this.comboBoxExpFreq.GetItemText(this.comboBoxExpFreq.SelectedItem).Split(' ')[0].Equals("C")))
                 {
                     MessageBox.Show("When Cycle is selected, the Month must be 1 through 999.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     buttonCreateClient.Enabled = true;
@@ -929,13 +929,13 @@ namespace JurisUtilityBase
             {
                 foreach (DataRow dr in dds2.Tables[0].Rows) // if any defined UDF fields are 'R', see if they actually added them through UDF button
                 {
+
                     string[] test = dr[0].ToString().Split(',');
                     if (test[3].ToString().Equals("R"))
                     {
                         sysparam = "select * from DefaultSettings where defaultid = 999996 and [name] = '" + test[0].ToString().Replace(" ", "") + "'";
-                        dds2.Clear();
-                        dds2 = _jurisUtility.RecordsetFromSQL(sysparam);
-                        if (dds2 == null || dds2.Tables.Count == 0 && dds2.Tables[0].Rows.Count == 0)
+                        DataSet dd3 = _jurisUtility.RecordsetFromSQL(sysparam);
+                        if (dd3 == null || dd3.Tables.Count == 0 || dd3.Tables[0].Rows.Count == 0)
                         {
                             MessageBox.Show("At least 1 UDF field is required. Please populate the required UDF field(s).", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
@@ -1633,15 +1633,18 @@ namespace JurisUtilityBase
         {
             textBoxNName.Text = "";
             textBoxRName.Text = "";
-            if (textBoxCode.Text.Length > lengthOfCodeClient)
-                MessageBox.Show("Client Code is longer than allowed. Your settings allow for " + lengthOfCodeClient.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else
+            if (!string.IsNullOrEmpty(textBoxCode.Text))
             {
-                if (codeIsNumericClient && !isNumeric(textBoxCode.Text))
-                    MessageBox.Show("Client Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (textBoxCode.Text.Length > lengthOfCodeClient)
+                    MessageBox.Show("Client Code is longer than allowed. Your settings allow for " + lengthOfCodeClient.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
                 {
-                    verifyAndLoadClient();
+                    if (codeIsNumericClient && !isNumeric(textBoxCode.Text))
+                        MessageBox.Show("Client Code is not numeric. Your settings require a numeric code.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    else
+                    {
+                        verifyAndLoadClient();
+                    }
                 }
             }
 

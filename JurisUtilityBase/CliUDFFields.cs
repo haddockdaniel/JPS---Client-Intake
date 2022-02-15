@@ -99,7 +99,7 @@ namespace JurisUtilityBase
 
                         }
                         bf.text = ""; // save for when they type text in
-                        if (test[3].ToString().Equals("Y"))
+                        if (test[3].ToString().Equals("R"))
                             bf.isRequired = true;
                         else
                             bf.isRequired = false;
@@ -272,7 +272,7 @@ namespace JurisUtilityBase
             {
                 foreach (var textbox in this.Controls.OfType<TextBox>())
                 {
-                    if (textbox.Name.Equals(bb.whichBox) && bb.isRequired && string.IsNullOrEmpty(textbox.Text))
+                    if (textbox.Name.Equals(bb.whichBox) && bb.isRequired && string.IsNullOrEmpty(textbox.Text.Trim()))
                     {
                         MessageBox.Show("UDF Field " + bb.name + " is set to Required. Please add data", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;

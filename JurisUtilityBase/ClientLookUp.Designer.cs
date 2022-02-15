@@ -31,7 +31,6 @@ namespace JurisUtilityBase
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClientLookUp));
             this.radioButtonByName = new System.Windows.Forms.RadioButton();
-            this.radioButtonByCliNum = new System.Windows.Forms.RadioButton();
             this.textBoxClient = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.buttonCreateClient = new System.Windows.Forms.Button();
@@ -50,16 +49,6 @@ namespace JurisUtilityBase
             this.radioButtonByName.TabStop = true;
             this.radioButtonByName.Text = "Search by Name";
             this.radioButtonByName.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonByCliNum
-            // 
-            this.radioButtonByCliNum.AutoSize = true;
-            this.radioButtonByCliNum.Location = new System.Drawing.Point(225, 32);
-            this.radioButtonByCliNum.Name = "radioButtonByCliNum";
-            this.radioButtonByCliNum.Size = new System.Drawing.Size(113, 17);
-            this.radioButtonByCliNum.TabIndex = 1;
-            this.radioButtonByCliNum.Text = "Search by Number";
-            this.radioButtonByCliNum.UseVisualStyleBackColor = true;
             // 
             // textBoxClient
             // 
@@ -120,7 +109,6 @@ namespace JurisUtilityBase
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.textBoxClient);
-            this.Controls.Add(this.radioButtonByCliNum);
             this.Controls.Add(this.radioButtonByName);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ClientLookUp";
@@ -134,7 +122,6 @@ namespace JurisUtilityBase
         #endregion
 
         private System.Windows.Forms.RadioButton radioButtonByName;
-        private System.Windows.Forms.RadioButton radioButtonByCliNum;
         private System.Windows.Forms.TextBox textBoxClient;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button buttonCreateClient;

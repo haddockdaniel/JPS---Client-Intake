@@ -26,11 +26,7 @@ namespace JurisUtilityBase
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            string sql = "";
-            if (radioButtonByCliNum.Checked)
-                sql = "select clisysnbr, dbo.jfn_FormatClientCode(clicode) as clicode, clireportingname from client where clicode like '%" + textBoxClient.Text + "%'";
-            else
-                sql = "select clisysnbr, dbo.jfn_FormatClientCode(clicode) as clicode, clireportingname from client where clireportingname like '%" + textBoxClient.Text + "%'";
+            string sql = "select clisysnbr, dbo.jfn_FormatClientCode(clicode) as clicode, clireportingname from client where clireportingname like '%" + textBoxClient.Text + "%'";
             DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
 
             dataGridView1.DataSource = ds.Tables[0];
