@@ -527,5 +527,11 @@ namespace JurisUtilityBase
                 firstFocus = true;
             }
         }
+
+        private void clearSingleUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LogOffUserSelect lu = new LogOffUserSelect(_jurisUtility);
+            lu.ShowDialog();
+        }
     }
 }

@@ -1265,6 +1265,7 @@
             // checkBoxConsolidation
             // 
             this.checkBoxConsolidation.AutoSize = true;
+            this.checkBoxConsolidation.ForeColor = System.Drawing.Color.RoyalBlue;
             this.checkBoxConsolidation.Location = new System.Drawing.Point(415, 29);
             this.checkBoxConsolidation.Name = "checkBoxConsolidation";
             this.checkBoxConsolidation.Size = new System.Drawing.Size(123, 17);

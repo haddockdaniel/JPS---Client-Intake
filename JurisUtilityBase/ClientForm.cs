@@ -45,7 +45,8 @@ namespace JurisUtilityBase
             if (!checkIfLoginInfoIsStillInDB())
             {
                 MessageBox.Show("An Admin cleared all logins so you must log in again." + "\r\n" + "The application wil now close. Please reopen and log in.", "Credential Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                System.Environment.Exit(0);
+                exitToMain = true;
+                this.Close();
             }
             this.Location = pt;
             dateTimePickerOpened.Value = DateTime.Now; //OpenedDate
@@ -327,12 +328,13 @@ namespace JurisUtilityBase
                 foreach (string ee in errorList)
                     allErrors = allErrors + ee + "\r\n";
                 MessageBox.Show("There were issues loading the Form. See below for details:" + "\r\n" + allErrors, "Form Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                System.Environment.Exit(1);
+                exitToMain = true;
+                this.Close();
             }
             else
             {
                 if (presetID != 0)
-                    loadDfaultPreset();
+                    loadDefaultPreset();
                 if (isModification)
                 {
                     buttonCreateClient.Text = "Save Template";
@@ -407,7 +409,7 @@ namespace JurisUtilityBase
 
         }
 
-        private void loadDfaultPreset()
+        private void loadDefaultPreset()
         {
             checkForTables();
             //make sure default numbers are set 
@@ -528,6 +530,10 @@ namespace JurisUtilityBase
 
         private void clearFieldsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string sql = "delete from DefaultSettings where defaultid = 999999 and empsys = " + empsysnbr.ToString(); //stored client info
+            _jurisUtility.ExecuteNonQuery(0, sql);
+            sql = "delete from Defaults where id = 999999  and userid = " + empsysnbr.ToString();
+            _jurisUtility.ExecuteNonQuery(0, sql);
             pt = this.Location;
             MatterForm cleared = new MatterForm(_jurisUtility,  0, "", 0, pt, empsysnbr);
             cleared.Show();
@@ -994,11 +1000,16 @@ namespace JurisUtilityBase
                     string[] test = dr[0].ToString().Split(',');
                     if (test[3].ToString().Equals("R"))
                     {
-                        sysparam = "select * from DefaultSettings where DefaultID = 999994 and [name] = '" + test[0].ToString().Replace(" ", "") + "'";
+                        sysparam = "select * from DefaultSettings where DefaultID = 999994 and [name] = '" + test[0].ToString().Replace(" ", "") + "' and empsys = " + empsysnbr.ToString();
                         DataSet dds3 = _jurisUtility.RecordsetFromSQL(sysparam);
                         if (dds3 == null || dds3.Tables.Count == 0 || dds3.Tables[0].Rows.Count == 0)
                         {
+                            
                             MessageBox.Show("At least 1 UDF field is required. Please populate the required UDF field(s).", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            sysparam = "delete from DefaultSettings where DefaultID = 999994 and empsys = " + empsysnbr.ToString();
+                            _jurisUtility.ExecuteNonQueryCommand(0, sysparam);
+                            sysparam = "delete from Defaults where ID = 999994 and userid = " + empsysnbr.ToString();
+                            _jurisUtility.ExecuteNonQueryCommand(0, sysparam);
                             return false;
                         }
                     }
@@ -1180,8 +1191,16 @@ namespace JurisUtilityBase
                                                     if (fc == DialogResult.Yes)
                                                     {
                                                         //save info to move over to matter
-                                                        saveInfoToMoveToMatter();
-                                                        pt = this.Location;
+                                                        //saveInfoToMoveToMatter();
+                                                        pt = this.Location; //delete udfs/mbfs in temp
+                                                        sql = "delete from DefaultSettings where defaultid = 999994 and empsys = " + empsysnbr.ToString(); //stored UDF info
+                                                        _jurisUtility.ExecuteNonQuery(0, sql);
+                                                        sql = "delete from Defaults where id = 999994  and userid = " + empsysnbr.ToString();
+                                                        _jurisUtility.ExecuteNonQuery(0, sql);
+                                                        sql = "delete from DefaultSettings where defaultid = 999998 and empsys = " + empsysnbr.ToString(); //stored BF info
+                                                        _jurisUtility.ExecuteNonQuery(0, sql);
+                                                        sql = "delete from Defaults where id = 999998 and userid = " + empsysnbr.ToString();
+                                                        _jurisUtility.ExecuteNonQuery(0, sql);
                                                         MatterForm cleared = new MatterForm(_jurisUtility, clisysnbr, textBoxCode.Text, addyid, pt, empsysnbr);
                                                         cleared.Show();
                                                         this.Hide();
@@ -1644,13 +1663,14 @@ namespace JurisUtilityBase
                 {
                     foreach (DataRow dr in dds.Tables[0].Rows)
                     {
-                        if (dr[1].ToString().Equals("int"))
-                        sql = "update client set [" + dr[0].ToString() + "] = " + dr[1].ToString() + " where clisysnbr = " + clisysnbr.ToString();
+                        if (dr[1].ToString().Equals("null"))
+                            sql = "update client set [" + dr[0].ToString() + "] = null where clisysnbr = " + clisysnbr.ToString();
+                        else if (dr[2].ToString().Equals("int"))
+                            sql = "update client set [" + dr[0].ToString() + "] = " + dr[1].ToString() + " where clisysnbr = " + clisysnbr.ToString();
                         else
-                        sql = "update client set [" + dr[0].ToString() + "] = '" + dr[1].ToString() + "' where clisysnbr = " + clisysnbr.ToString();
+                            sql = "update client set [" + dr[0].ToString() + "] = '" + dr[1].ToString() + "' where clisysnbr = " + clisysnbr.ToString();
                         if (_jurisUtility.ExecuteNonQuery(0, sql))
                         {
-                            MessageBox.Show(_jurisUtility.errorMessage);
                             return true;
                         }
                     }
@@ -1663,7 +1683,7 @@ namespace JurisUtilityBase
 
         private void textBoxCode_Leave(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(textBoxCode.Text))
+            if (!string.IsNullOrEmpty(textBoxCode.Text.Trim()))
             {
                 if (textBoxCode.Text.Length > lengthOfCode)
                     MessageBox.Show("Client Code is longer than allowed." + "\r\n" + "Your settings allow for " + lengthOfCode.ToString() + " characters.", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1681,7 +1701,6 @@ namespace JurisUtilityBase
                         {
                             MessageBox.Show("Client " + textBoxCode.Text + " already exists. Enter a valid client code." + "\r\n" + "Codes must match the format in which they appear in Juris." + "\r\n" + "This includes leading zeroes", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-
                     }
                 }
             }

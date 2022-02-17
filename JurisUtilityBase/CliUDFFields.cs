@@ -49,7 +49,7 @@ namespace JurisUtilityBase
                 foreach (var label in this.Controls.OfType<Label>())
                 {
                     int num = Convert.ToInt32(label.Name.Replace("label", ""));
-                    if (num > numOfFields)
+                    if (num > numOfFields && num != 99)
                         label.Visible = false;
 
                 }
@@ -100,19 +100,32 @@ namespace JurisUtilityBase
                         }
                         bf.text = ""; // save for when they type text in
                         if (test[3].ToString().Equals("R"))
+                        {
                             bf.isRequired = true;
+                            foreach (var aa in this.Controls.OfType<Label>())
+                            {
+                                if (aa.Name.Equals("label" + rowNum.ToString()))
+                                {
+                                    aa.ForeColor = Color.Red;
+
+                                }
+                            }
+                        }
                         else
                             bf.isRequired = false;
 
                         foreach (var cb in this.Controls.OfType<ComboBox>())
                         {
                             if (cb.Name.Equals("comboBox" + rowNum.ToString()))
+                            {
                                 cb.Visible = false;
+                            }
 
                         }
                     }
                     else
                     {
+                        bf.DBentryType = "text";
                         foreach (var cb in this.Controls.OfType<TextBox>())
                         {
                             if (cb.Name.Equals("textBox" + rowNum.ToString()))
@@ -123,41 +136,59 @@ namespace JurisUtilityBase
                         {
                             foreach (var cb in this.Controls.OfType<ComboBox>())
                             {
+                                foreach (var aa in this.Controls.OfType<Label>())
+                                {
+                                    if (aa.Name.Equals("label" + rowNum.ToString()))
+                                    {
+                                        aa.ForeColor = Color.Red;
+
+                                    }
+                                }
                                 if (cb.Name.Equals("comboBox" + rowNum.ToString()))
                                 {
                                     string SQLPC2 = "select empinitials,empid + '    ' + empname as emp from employee where empvalidastkpr='Y' order by empinitials, empid";
                                     DataSet myRSPC2 = JU.RecordsetFromSQL(SQLPC2);
-                                    cb.Items.Add("Blank/None        ");
                                     if (myRSPC2.Tables[0].Rows.Count > 0)
                                     {
                                         foreach (DataRow dd in myRSPC2.Tables[0].Rows)
                                             cb.Items.Add(dd["emp"].ToString());
                                         cb.SelectedIndex = 0;
                                     }
-                                    bf.isRequired = false;
+                                    bf.isRequired = true;
                                     bf.whichBox = cb.Name;
+                                    bf.text = cb.GetItemText(cb.SelectedItem).Split(' ')[0];
                                 }
                             }
                         }
                         else if (test[3].ToString().Equals("P")) // practice class
                         {
+
                             foreach (var cb in this.Controls.OfType<ComboBox>())
                             {
+                                foreach (var aa in this.Controls.OfType<Label>())
+                                {
+                                    if (aa.Name.Equals("label" + rowNum.ToString()))
+                                    {
+                                        aa.ForeColor = Color.Red;
+
+                                    }
+                                }
                                 if (cb.Name.Equals("comboBox" + rowNum.ToString()))
                                 {
                                     string SQLPC2 = "select PrctClsCode  + '    ' + right(PrctClsDesc, 30) as PC from PracticeClass order by PrctClsCode";
                                     DataSet myRSPC2 = JU.RecordsetFromSQL(SQLPC2);
-                                    cb.Items.Add("Blank/None        ");
                                     if (myRSPC2.Tables[0].Rows.Count > 0)
                                     {
                                         foreach (DataRow dd in myRSPC2.Tables[0].Rows)
                                             cb.Items.Add(dd["PC"].ToString());
                                         cb.SelectedIndex = 0;
                                     }
-                                    bf.isRequired = false;
+                                    bf.isRequired = true;
                                     bf.whichBox = cb.Name;
+                                    bf.text = cb.GetItemText(cb.SelectedItem).Split(' ')[0];
                                 }
                             }
+
                         }
                     }
 
@@ -206,7 +237,7 @@ namespace JurisUtilityBase
                 }
                 else
                 {
-                    sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType, empsys) values (999994, '" + bb.name.Replace(" ", "") + "', '?', '" + bb.DBentryType + "', " + empsysnbr.ToString() + ")";
+                    sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType, empsys) values (999994, '" + bb.name.Replace(" ", "") + "', 'null', '" + bb.DBentryType + "', " + empsysnbr.ToString() + ")";
                     JU.ExecuteNonQuery(0, sql);
                 }
             }
@@ -220,9 +251,9 @@ namespace JurisUtilityBase
 
         private void buttonAddData_Click(object sender, EventArgs e)
         {
-            if (validateUDFTypes())
+            if (validateUDFRequired())
             {
-                if (validateUDFRequired())
+                if (validateUDFTypes())
                 {
                     if (verifyDropDowns())
                     {
@@ -247,13 +278,13 @@ namespace JurisUtilityBase
                 {
                     if (textbox.Name.Equals(bb.whichBox))
                     {
-                        if (bb.UDFtype == "N" && !isNumber(textbox.Text))
+                        if (bb.UDFtype == "N" && !isNumber(textbox.Text) && !string.IsNullOrEmpty(textbox.Text))
                         {
                             MessageBox.Show("UDF Field " + bb.name + " is set to Numeric. Please ensure the data is numeric", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
 
                         }
-                        if (bb.UDFtype == "D" && !isDate(textbox.Text))
+                        if (bb.UDFtype == "D" && !isDate(textbox.Text) && !string.IsNullOrEmpty(textbox.Text))
                         {
                             MessageBox.Show("UDF Field " + bb.name + " is set to Date. Please ensure the data is a valid date", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
@@ -279,7 +310,15 @@ namespace JurisUtilityBase
                     }
 
                 }
+                foreach (var textbox in this.Controls.OfType<ComboBox>())
+                {
+                    if (textbox.Name.Equals(bb.whichBox) && bb.isRequired && string.IsNullOrEmpty(textbox.Text.Trim()))
+                    {
+                        MessageBox.Show("UDF Field " + bb.name + " is set to Required. Please add data", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
 
+                }
             }
             return true;
         }
@@ -293,8 +332,11 @@ namespace JurisUtilityBase
                     if (cb.Name.Equals(bb.whichBox))
                     {
                         string selection = cb.GetItemText(cb.SelectedItem).Split(' ')[0];
-                        if (selection.Contains("Blank/None"))
-                            bb.text = "?";
+                        if (string.IsNullOrEmpty(selection))
+                        {
+                            MessageBox.Show("UDF Field " + bb.name + " is set to Required. Please make a selection", "Form Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
                         else
                             bb.text = selection;
 

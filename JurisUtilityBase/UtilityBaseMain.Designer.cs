@@ -44,6 +44,7 @@
             this.clearAllUsersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearAllTemplatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearAllTempDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearSingleUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.JurisLogoImageBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -168,7 +169,8 @@
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clearAllUsersToolStripMenuItem,
             this.clearAllTemplatesToolStripMenuItem,
-            this.clearAllTempDataToolStripMenuItem});
+            this.clearAllTempDataToolStripMenuItem,
+            this.clearSingleUserToolStripMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
             this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.advancedToolStripMenuItem.Text = "Advanced";
@@ -176,23 +178,30 @@
             // clearAllUsersToolStripMenuItem
             // 
             this.clearAllUsersToolStripMenuItem.Name = "clearAllUsersToolStripMenuItem";
-            this.clearAllUsersToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.clearAllUsersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.clearAllUsersToolStripMenuItem.Text = "Clear All Users";
             this.clearAllUsersToolStripMenuItem.Click += new System.EventHandler(this.clearAllUsersToolStripMenuItem_Click);
             // 
             // clearAllTemplatesToolStripMenuItem
             // 
             this.clearAllTemplatesToolStripMenuItem.Name = "clearAllTemplatesToolStripMenuItem";
-            this.clearAllTemplatesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.clearAllTemplatesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.clearAllTemplatesToolStripMenuItem.Text = "Clear All Templates";
             this.clearAllTemplatesToolStripMenuItem.Click += new System.EventHandler(this.clearAllTemplatesToolStripMenuItem_Click);
             // 
             // clearAllTempDataToolStripMenuItem
             // 
             this.clearAllTempDataToolStripMenuItem.Name = "clearAllTempDataToolStripMenuItem";
-            this.clearAllTempDataToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.clearAllTempDataToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.clearAllTempDataToolStripMenuItem.Text = "Clear All Temp Data";
             this.clearAllTempDataToolStripMenuItem.Click += new System.EventHandler(this.clearAllTempDataToolStripMenuItem_Click);
+            // 
+            // clearSingleUserToolStripMenuItem
+            // 
+            this.clearSingleUserToolStripMenuItem.Name = "clearSingleUserToolStripMenuItem";
+            this.clearSingleUserToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearSingleUserToolStripMenuItem.Text = "Clear Single User";
+            this.clearSingleUserToolStripMenuItem.Click += new System.EventHandler(this.clearSingleUserToolStripMenuItem_Click);
             // 
             // UtilityBaseMain
             // 
@@ -250,6 +259,7 @@
         private System.Windows.Forms.ToolStripMenuItem clearAllUsersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearAllTemplatesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearAllTempDataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearSingleUserToolStripMenuItem;
     }
 }
 

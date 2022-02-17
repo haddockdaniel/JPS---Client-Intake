@@ -47,6 +47,7 @@ namespace JurisUtilityBase
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label99 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonAddData
@@ -195,11 +196,22 @@ namespace JurisUtilityBase
             this.label1.TabIndex = 27;
             this.label1.Text = "label1";
             // 
+            // label99
+            // 
+            this.label99.AutoSize = true;
+            this.label99.ForeColor = System.Drawing.Color.Red;
+            this.label99.Location = new System.Drawing.Point(15, 0);
+            this.label99.Name = "label99";
+            this.label99.Size = new System.Drawing.Size(151, 13);
+            this.label99.TabIndex = 32;
+            this.label99.Text = "* Red indicates a required field";
+            // 
             // MatUDFFields
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(382, 270);
+            this.Controls.Add(this.label99);
             this.Controls.Add(this.buttonAddData);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.comboBox5);
@@ -244,5 +256,6 @@ namespace JurisUtilityBase
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label99;
     }
 }
