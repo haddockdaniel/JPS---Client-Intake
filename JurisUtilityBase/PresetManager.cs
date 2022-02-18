@@ -66,7 +66,7 @@ namespace JurisUtilityBase
             if (!string.IsNullOrEmpty(name))
             {
                 //see if default name already exists
-                string sql = "select name from defaults";
+                string sql = "select name from defaults where id < 999990 and userid = " + empsysnbr.ToString();
                 DataSet dds = _jurisUtility.RecordsetFromSQL(sql);
                 bool exists = false;
                 if (dds != null && dds.Tables.Count > 0)
@@ -81,7 +81,7 @@ namespace JurisUtilityBase
                 {
                     sql = "update defaults set name = '" + name + "' where id = " + ID.ToString();
                     _jurisUtility.ExecuteSqlCommand(0, sql);
-                    sql = "select ID, name as [Default Name],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where id < 9999990 and userid = " + empsysnbr.ToString();
+                    sql = "select ID, name as [Default Name],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where id < 999990 and userid = " + empsysnbr.ToString();
                     DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                     pt = this.Location;
                     PresetManager DM = new PresetManager(ds, _jurisUtility, pt, empsysnbr);
@@ -112,7 +112,7 @@ namespace JurisUtilityBase
                     sql = "delete from defaults where id = " + id.ToString();
                     _jurisUtility.ExecuteSqlCommand(0, sql);
                 }
-                sql = "select ID, name as [Default Name],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where  userid = " + empsysnbr.ToString();
+                sql = "select ID, name as [Default Name],  convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where id < 999990 and  userid = " + empsysnbr.ToString();
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                 pt = this.Location;
                 PresetManager DM = new PresetManager(ds, _jurisUtility, pt, empsysnbr);
@@ -135,7 +135,7 @@ namespace JurisUtilityBase
                 _jurisUtility.ExecuteSqlCommand(0, sql);
                 sql = "update defaults set IsStandard = 'Y' where id = " + id.ToString();
                 _jurisUtility.ExecuteSqlCommand(0, sql);
-                sql = "select ID, name as [Default Name], convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where userID = " + empsysnbr.ToString();
+                sql = "select ID, name as [Default Name], convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where id < 999990 and userID = " + empsysnbr.ToString();
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
                 pt = this.Location;
                 PresetManager DM = new PresetManager(ds, _jurisUtility, pt, empsysnbr);
@@ -193,7 +193,7 @@ namespace JurisUtilityBase
             string sql = "";
                 sql = "update defaults set IsStandard = 'N' where userid = " + empsysnbr.ToString();
             _jurisUtility.ExecuteSqlCommand(0, sql);
-                sql = "select ID, name as [Default Name],   convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where  userid = " + empsysnbr.ToString();
+                sql = "select ID, name as [Default Name],   convert(varchar,CreationDate, 101) as [Creation Date], isStandard as [Default] from Defaults where id < 999990 and userid = " + empsysnbr.ToString();
                 DataSet ds = _jurisUtility.RecordsetFromSQL(sql);
             pt = this.Location;
             PresetManager DM = new PresetManager(ds, _jurisUtility, pt, empsysnbr);

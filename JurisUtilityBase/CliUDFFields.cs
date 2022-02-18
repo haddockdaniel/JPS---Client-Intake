@@ -237,7 +237,12 @@ namespace JurisUtilityBase
                 }
                 else
                 {
-                    sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType, empsys) values (999994, '" + bb.name.Replace(" ", "") + "', 'null', '" + bb.DBentryType + "', " + empsysnbr.ToString() + ")";
+                    if (bb.DBentryType.Equals("int"))
+                        sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType, empsys) values (999994, '" + bb.name.Replace(" ", "") + "', '0', '" + bb.DBentryType + "', " + empsysnbr.ToString() + ")";
+                    else if (bb.DBentryType.Equals("date"))
+                        sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType, empsys) values (999994, '" + bb.name.Replace(" ", "") + "', '01/01/1900', '" + bb.DBentryType + "', " + empsysnbr.ToString() + ")";
+                    else
+                        sql = "insert into DefaultSettings (DefaultID, [name], [data], entryType, empsys) values (999994, '" + bb.name.Replace(" ", "") + "', '', '" + bb.DBentryType + "', " + empsysnbr.ToString() + ")";
                     JU.ExecuteNonQuery(0, sql);
                 }
             }

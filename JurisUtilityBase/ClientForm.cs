@@ -32,6 +32,7 @@ namespace JurisUtilityBase
         private System.Drawing.Point pt;
         string noteName = "";
         string noteText = "";
+        bool addNoteCard = false;
         int empsysnbr = 0;
         bool exitToMain = false;
         public const uint WM_NCHITTEST = 0x0084;
@@ -1104,7 +1105,7 @@ namespace JurisUtilityBase
                         + " CliReqTaskCdOnTime,CliReqActyCdOnTime,CliReqTaskCdOnExp,CliPrimaryAddr,CliType,CliEditFormat,CliThresholdOption,CliRespAtty," +
                         "CliBillingField01,CliBillingField02,CliBillingField03,CliBillingField04,CliBillingField05, CliBillingField06,CliBillingField07,CliBillingField08,CliBillingField09,CliBillingField10,CliBillingField11,CliBillingField12,CliBillingField13,CliBillingField14,CliBillingField15,CliBillingField16,CliBillingField17,CliBillingField18,CliBillingField19, CliBillingField20, "
                         + " CliCTerms,CliCStatus,CliCStatus2)  "
-                        + " values( '" + nn.ToString("yyyy-MM-dd HH:mm") + "', left('" + pcName + "', 30), 'CMI Tool',1, 1,40,null,"
+                        + " values( '" + nn.ToString("yyyy-MM-dd HH:mm") + "', left('" + pcName + "', 30), 'CMI Tool'," + empsysnbr.ToString() + ", 1,40,null,"
                         + clisysnbr + ", '" + formatClientCode(textBoxCode.Text) + "', '" + textBoxNName.Text.Trim() + "', '" + textBoxRName.Text.Trim() + "', '" + textBoxSoBOpt.Text.Trim() + "', "
                         + " '" + textBoxPhoneOpt.Text.Trim() + "', '" + textBoxFaxOpt.Text.Trim() + "', '" + textBoxContactOpt.Text.Trim() + "', '" + dateTimePickerOpened.Value.ToString("MM/dd/yyyy") + "', '" + this.comboBoxOffice.GetItemText(this.comboBoxOffice.SelectedItem).Split(' ')[0] + "', "
                         + " (select empsysnbr from employee where empid = '" + this.comboBoxBT.GetItemText(this.comboBoxBT.SelectedItem).Split(' ')[0] + "'), "
@@ -1155,9 +1156,6 @@ namespace JurisUtilityBase
                                                 isError = createConsolidation(resp);
                                                 if (!isError)
                                                 {
-                                                    //handles making of client and editing it for billing fields/udfs
-                                                    sql = "update client_log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
-                                                    _jurisUtility.ExecuteNonQuery(0, sql);
 
                                                     string SQL = "Insert into DocumentTree(dtdocid, dtsystemcreated, dtdocclass,dtdoctype,  dtparentid, dttitle, dtkeyl) "
                                                     + " select (select max(dtdocid)  from documenttree) + 1 , 'Y',4200,'R', 22, Clireportingname, Clisysnbr "
@@ -1177,11 +1175,14 @@ namespace JurisUtilityBase
                                                     _jurisUtility.ExecuteNonQuery(0, sql);
 
                                                     //add notecard if thye selected it
-                                                    sql = "insert into [ClientNote] ([CNClient] ,[CNNoteIndex],[CNObject],[CNNoteText],[CNNoteObject]) values(" + clisysnbr.ToString() + ", replace('" + noteName + "', '|', char(13) + char(10)), '', replace('" + noteText + "', '|', char(13) + char(10)), null)";
-                                                    _jurisUtility.ExecuteNonQuery(0, sql);
+                                                    if (addNoteCard)
+                                                    {
+                                                        sql = "insert into [ClientNote] ([CNClient] ,[CNNoteIndex],[CNObject],[CNNoteText],[CNNoteObject]) values(" + clisysnbr.ToString() + ", replace('" + noteName + "', '|', char(13) + char(10)), '', replace('" + noteText + "', '|', char(13) + char(10)), null)";
+                                                        _jurisUtility.ExecuteNonQuery(0, sql);
 
-                                                    sql = "update ClientNote_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
-                                                    _jurisUtility.ExecuteNonQuery(0, sql);
+                                                        sql = "update ClientNote_Log set jurisuser = " + empsysnbr.ToString() + ", [Application] = 'CMI Tool' where CNClient = " + clisysnbr.ToString();
+                                                        _jurisUtility.ExecuteNonQuery(0, sql);
+                                                    }
 
                                                     //after adding the client, load the preset back in
                                                     if (presetID != 0)
@@ -1663,9 +1664,7 @@ namespace JurisUtilityBase
                 {
                     foreach (DataRow dr in dds.Tables[0].Rows)
                     {
-                        if (dr[1].ToString().Equals("null"))
-                            sql = "update client set [" + dr[0].ToString() + "] = null where clisysnbr = " + clisysnbr.ToString();
-                        else if (dr[2].ToString().Equals("int"))
+                        if (dr[2].ToString().Equals("int"))
                             sql = "update client set [" + dr[0].ToString() + "] = " + dr[1].ToString() + " where clisysnbr = " + clisysnbr.ToString();
                         else
                             sql = "update client set [" + dr[0].ToString() + "] = '" + dr[1].ToString() + "' where clisysnbr = " + clisysnbr.ToString();
@@ -1725,6 +1724,12 @@ namespace JurisUtilityBase
             adn.ShowDialog();
             noteName = adn.name;
             noteText = adn.text;
+            adn.Close();
+            if (string.IsNullOrEmpty(noteName) && string.IsNullOrEmpty(noteText))
+                addNoteCard = false;
+            else
+                addNoteCard = true;
+
             this.Show();
         }
 

@@ -39,6 +39,7 @@ namespace JurisUtilityBase
         string noteName = "";
         string noteText = "";
         int empsysnbr = 0;
+        bool addNoteCard = false;
 
         bool exitToMain = false;
         public const uint WM_NCHITTEST = 0x0084;
@@ -1102,7 +1103,10 @@ namespace JurisUtilityBase
                                         if (!isError)
                                         {
                                             //handles making of matter and editing it for billing fields/udfs
-                                            sql = "update matter_log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
+                                            sql = "update matter_log set jurisuser = " + empsysnbr.ToString() + " where matsysnbr = " + matsysnbr.ToString();
+                                            _jurisUtility.ExecuteNonQuery(0, sql);
+
+                                            sql = "update matter_log set [Application] = 'CMI Tool' where matsysnbr = " + matsysnbr.ToString();
                                             _jurisUtility.ExecuteNonQuery(0, sql);
 
                                             sql = "update sysparam set spnbrvalue = " + matsysnbr.ToString() + " where spname = 'LastSysNbrMatter'";
@@ -1115,12 +1119,14 @@ namespace JurisUtilityBase
                                             _jurisUtility.ExecuteNonQuery(0, sql);
 
                                             //if they added a notecard
+                                            if (addNoteCard)
+                                            {
+                                                sql = "insert into [matterNote] ([MNMatter] ,[mNNoteIndex],[mNObject],[mNNoteText],[mNNoteObject]) values(" + matsysnbr.ToString() + ", replace('" + noteName + "', '|', char(13) + char(10)), '', replace('" + noteText + "', '|', char(13) + char(10)), null)";
+                                                _jurisUtility.ExecuteNonQuery(0, sql);
 
-                                            sql = "insert into [matterNote] ([MNMatter] ,[mNNoteIndex],[mNObject],[mNNoteText],[mNNoteObject]) values(" + matsysnbr.ToString() + ", replace('" + noteName + "', '|', char(13) + char(10)), '', replace('" + noteText + "', '|', char(13) + char(10)), null)";
-                                            _jurisUtility.ExecuteNonQuery(0, sql);
-
-                                            sql = "update MatterNote_Log set jurisuser = " + empsysnbr.ToString() + " where jurisuser is null and convert(varchar,DateTimeStamp, 101) = convert(varchar,getdate(), 101)";
-                                            _jurisUtility.ExecuteNonQuery(0, sql);
+                                                sql = "update MatterNote_Log set jurisuser = " + empsysnbr.ToString() + ", [Application] = 'CMI Tool' where MNMatter = " + matsysnbr.ToString();
+                                                _jurisUtility.ExecuteNonQuery(0, sql);
+                                            }
 
                                             DialogResult fc = MessageBox.Show("Matter " + textBoxCode.Text + "/" + textBoxMatterCode.Text + " was added successfully." + "\r\n" + "Would you like to add another Matter to this Client?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                                             if (fc == DialogResult.Yes)
@@ -2086,13 +2092,10 @@ namespace JurisUtilityBase
                 {
                     foreach (DataRow dr in dds.Tables[0].Rows)
                     {
-                        if (dr[2].ToString().Equals("null"))
-                            sql = "update matter set [" + dr[0].ToString() + "] = null where matsysnbr = " + matsysnbr.ToString();
-                        else if (dr[1].ToString().Equals("int"))
+                        if (dr[1].ToString().Equals("int"))
                             sql = "update matter set [" + dr[0].ToString() + "] = " + dr[2].ToString() + " where matsysnbr = " + matsysnbr.ToString();
                         else
                             sql = "update matter set [" + dr[0].ToString() + "] = '" + dr[2].ToString() + "' where matsysnbr = " + matsysnbr.ToString();
-                        MessageBox.Show(sql);
                         if (_jurisUtility.ExecuteNonQuery(0, sql))
                         {
                             return true;
@@ -2165,6 +2168,11 @@ namespace JurisUtilityBase
             adn.ShowDialog();
             noteName = adn.name;
             noteText = adn.text;
+            adn.Close();
+            if (string.IsNullOrEmpty(noteName) && string.IsNullOrEmpty(noteText))
+                addNoteCard = false;
+            else
+                addNoteCard = true;
             this.Show();
         }
 

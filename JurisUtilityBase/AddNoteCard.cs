@@ -28,7 +28,9 @@ namespace JurisUtilityBase
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            this.Close();
+            name = "";
+            text = "";
+            this.Hide();
         }
 
         private void buttonAddData_Click(object sender, EventArgs e)
