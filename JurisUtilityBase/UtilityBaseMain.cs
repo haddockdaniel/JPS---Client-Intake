@@ -304,7 +304,7 @@ namespace JurisUtilityBase
             string sql = "select name from defaults where id = 999993 and userid = " + empsys.ToString();
             DataSet myRSPC2 = _jurisUtility.RecordsetFromSQL(sql);
 
-            if (myRSPC2.Tables[0].Rows.Count == 0) //if there is no 999993 record with that empsys number then they arent loged on
+            if (myRSPC2 == null || myRSPC2.Tables.Count == 0 || myRSPC2.Tables[0].Rows.Count == 0) //if there is no 999993 record with that empsys number then they arent loged on
             {
                 sql = "insert into defaults (ID, name, userid, CreationDate, IsStandard, AllData ) " +
                 " values (999993, 'LogIn', " + empsys.ToString() + ", getdate(), 'N', '')";

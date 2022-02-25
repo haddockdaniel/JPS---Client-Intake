@@ -58,7 +58,7 @@ namespace JurisUtilityBase
                     bf = new BillingField();
                     bf.delete = false;
                     bf.length = Convert.ToInt32(test[2].ToString());
-                    bf.name = "CliBillingField" + dr[1].ToString().Replace("FldMatterBF", "");
+                    bf.name = "MatBillingField" + dr[1].ToString().Replace("FldMatterBF", "");
                     bf.whichBox = "richTextBox" + rowNum.ToString();
                     bf.text = ""; // save for when they type text in
                     bf.isRequired = false;
