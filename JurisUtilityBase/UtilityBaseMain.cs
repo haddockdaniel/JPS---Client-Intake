@@ -56,36 +56,47 @@ namespace JurisUtilityBase
         public static string JEncrypt(string sSecret, string sPassWord)
         {
 
-
-            int l = 0;
-            int X = 0;
-            int @char = 0;
             string sTmp = String.Empty;
-
-            // Secret$ = the string you wish to encrypt or decrypt. 
-            // PassWord$ = the password with which to encrypt the string. 
-
-            sTmp = sSecret;
-            l = Strings.Len(sPassWord);
-            for (X = 1; X <= Strings.Len(sTmp); X++)
+            try
             {
-                @char = Strings.Asc(Strings.Mid(sPassWord, (X % l) - l * Conversion.BoolToInt((X % l) == 0), 1));
-                Gizmox.CSharp.StringType.MidStmtStr(ref sTmp, X, 1, Strings.Chr(Strings.Asc(Strings.Mid(sTmp, X, 1)) ^ @char).ToString());
+                int l = 0;
+                int X = 0;
+                int @char = 0;
+
+
+                // Secret$ = the string you wish to encrypt or decrypt. 
+                // PassWord$ = the password with which to encrypt the string. 
+
+                sTmp = sSecret;
+                l = Strings.Len(sPassWord);
+                for (X = 1; X <= Strings.Len(sTmp); X++)
+                {
+                    @char = Strings.Asc(Strings.Mid(sPassWord, (X % l) - l * Conversion.BoolToInt((X % l) == 0), 1));
+                    Gizmox.CSharp.StringType.MidStmtStr(ref sTmp, X, 1, Strings.Chr(Strings.Asc(Strings.Mid(sTmp, X, 1)) ^ @char).ToString());
+                }
+
             }
-
-
-
+            catch (Exception ec)
+            {
+                sTmp = "";
+            }
             return sTmp;
         }
 
 
         private bool verifyDBHash(string hash, string dbName)
         {
-            Encrypt eec = new Encrypt();
-            if (dbName.Equals(eec.DecryptString("b14ca5898a4e41ca7bce2ea2315a1916", hash), StringComparison.OrdinalIgnoreCase))
-                return true;
-            else
-                return false;
+            try
+
+            {
+                Encrypt eec = new Encrypt();
+                if (dbName.Equals(eec.DecryptString("b14ca5898a4e41ca7bce2ea2315a1916", hash), StringComparison.OrdinalIgnoreCase))
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ee)
+            { return false; }
 
 
         }
@@ -181,7 +192,6 @@ namespace JurisUtilityBase
                     foreach (DataRow dr in dds.Tables[0].Rows)
                     {
                         hash = dr[0].ToString();
-
                     }
                 }
             }
@@ -532,6 +542,22 @@ namespace JurisUtilityBase
         {
             LogOffUserSelect lu = new LogOffUserSelect(_jurisUtility);
             lu.ShowDialog();
+        }
+
+        private void resetActivationInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult ddr = MessageBox.Show("This will clear all users and deactivate the module." + "\r\n" + "Ensure everyone has closed the tool before clicking Yes. Continue?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (ddr == DialogResult.Yes)
+            {
+                string sql = "delete from Defaults where id in (999993)";
+                _jurisUtility.ExecuteNonQuery(0, sql);
+                sql = "delete from CMIActivation where productid = 1";
+                _jurisUtility.ExecuteNonQuery(0, sql);
+                System.Environment.Exit(0);
+            }
+
+
+
         }
     }
 }

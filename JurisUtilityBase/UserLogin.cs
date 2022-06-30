@@ -104,26 +104,30 @@ namespace JurisUtilityBase
 
         public static string JEncrypt(string sSecret, string sPassWord)
         {
-
-
-            int l = 0;
-            int X = 0;
-            int @char = 0;
             string sTmp = String.Empty;
-
-            // Secret$ = the string you wish to encrypt or decrypt. 
-            // PassWord$ = the password with which to encrypt the string. 
-
-            sTmp = sSecret;
-            l = Strings.Len(sPassWord);
-            for (X = 1; X <= Strings.Len(sTmp); X++)
+            try
             {
-                @char = Strings.Asc(Strings.Mid(sPassWord, (X % l) - l * Conversion.BoolToInt((X % l) == 0), 1));
-                Gizmox.CSharp.StringType.MidStmtStr(ref sTmp, X, 1, Strings.Chr(Strings.Asc(Strings.Mid(sTmp, X, 1)) ^ @char).ToString());
+                int l = 0;
+                int X = 0;
+                int @char = 0;
+                
+
+                // Secret$ = the string you wish to encrypt or decrypt. 
+                // PassWord$ = the password with which to encrypt the string. 
+
+                sTmp = sSecret;
+                l = Strings.Len(sPassWord);
+                for (X = 1; X <= Strings.Len(sTmp); X++)
+                {
+                    @char = Strings.Asc(Strings.Mid(sPassWord, (X % l) - l * Conversion.BoolToInt((X % l) == 0), 1));
+                    Gizmox.CSharp.StringType.MidStmtStr(ref sTmp, X, 1, Strings.Chr(Strings.Asc(Strings.Mid(sTmp, X, 1)) ^ @char).ToString());
+                }
+
             }
-
-
-
+            catch (Exception ec)
+            {
+                sTmp = "";
+            }
             return sTmp;
         }
 
